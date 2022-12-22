@@ -16,7 +16,7 @@ import httpStatus from 'http-status'
 |
 */
 export default class UnAuthorizedException extends Exception {
-    public async handle(error: this, ctx: HttpContextContract) {
-        return ctx.response.status(httpStatus.UNAUTHORIZED).send(ErrorResponse(error.message))
-    }
+  public async handle(error: this, ctx: HttpContextContract) {
+    return ctx.response.status(httpStatus.UNAUTHORIZED).send(ErrorResponse(error.message))
+  }
 }

@@ -20,7 +20,10 @@ type User = {
 
 type Login = Pick<User, 'email' | 'password'>
 type Register = Omit<User, 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
-type UpdateUser = Omit<User, 'email' | 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
+type UpdateUser = Omit<
+  User,
+  'email' | 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'
+>
 
 type Token = {
   token: string

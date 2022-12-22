@@ -6,16 +6,18 @@ import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import AuthService from 'App/Services/AuthService'
 import { SuccessResponse } from 'App/Helpers'
+import MailService from 'App/Services/MailService'
 
 export default class AuthController {
   private userService: UserService = container.resolve(UserService)
   public authService: AuthService = container.resolve(AuthService)
+  public mailService: MailService = container.resolve(MailService)
 
   public async login({ auth, request, response }: HttpContextContract) {
     try {
       const body = request.body() as Register
       const result = await this.authService.login(body, { auth })
-      return response.status(httpStatus.OK).send(result)
+      return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
       return response.status(httpStatus.BAD_REQUEST).send(error.message)
@@ -26,7 +28,7 @@ export default class AuthController {
     try {
       const body = request.body() as Register
       const result = await this.userService.createUser(body)
-      return response.status(httpStatus.CREATED).send(result)
+      return response.ok(result)
     } catch (error: any) {
       Logger.error(error.message)
       return response.badRequest({
@@ -47,6 +49,19 @@ export default class AuthController {
     } catch (e) {
       return response.badRequest({
         error: e.message || 'We could not verify your email address',
+      })
+    }
+  }
+
+  public async resendVerification({ request, response }: HttpContextContract) {
+    try {
+      const email = request.input('email')
+      const result = await this.userService.resendVerificationEmail(email)
+      return response.ok(result)
+    } catch (error) {
+      Logger.error(error.message)
+      return response.badRequest({
+        error: error.message || 'We could not resend your verification email',
       })
     }
   }

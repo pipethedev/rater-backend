@@ -5,7 +5,7 @@ import { ROLE } from 'App/Enum'
 
 export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true
-  
+
   @column({ isPrimary: true })
   public id: string
 

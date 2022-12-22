@@ -3,7 +3,7 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Song extends BaseModel {
   public static selfAssignPrimaryKey = true
-  
+
   @column({ isPrimary: true })
   public id: string
 

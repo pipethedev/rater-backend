@@ -3,7 +3,7 @@ import { ROLE } from 'App/Enum'
 import User from 'App/Models/User'
 
 export default class extends BaseSeeder {
-  public async run () {
+  public async run() {
     await User.createMany([
       {
         first_name: 'Administrator',
@@ -12,7 +12,7 @@ export default class extends BaseSeeder {
         email: 'admin@test.com',
         password: 'password',
         role: ROLE.ADMIN,
-      }
+      },
     ])
   }
 }

@@ -5,9 +5,9 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export default class MailService {
-  public async send(to: string, view: string, data: ObjectLiteral) {
+  public async send(to: string, subject: string, view: string, data: ObjectLiteral) {
     return await Mail.sendLater((message) => {
-      message.from(Env.get('MAIL_FROM')).to(to).subject('Welcome Onboard!').htmlView(view, data)
+      message.from(Env.get('MAIL_FROM')).to(to).subject(subject).htmlView(view, data)
     })
   }
 }

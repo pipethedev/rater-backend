@@ -40,11 +40,15 @@ export default class AuthService {
   public async verifyUser(id: string): Promise<User> {
     const trx = await Database.transaction()
     try {
-      const user =  await this.userRepository.updateOne(id, {
-        account_verify_token: null,
-        account_verify_expires: null,
-        email_verified_at: new Date(),
-      }, trx)
+      const user = await this.userRepository.updateOne(
+        id,
+        {
+          account_verify_token: null,
+          account_verify_expires: null,
+          email_verified_at: new Date(),
+        },
+        trx
+      )
       trx.commit()
       return user
     } catch (error) {
@@ -52,4 +56,5 @@ export default class AuthService {
       throw error
     }
   }
+
 }

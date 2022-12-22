@@ -9,12 +9,12 @@ import { container } from 'tsyringe'
 export default class UsersController {
   private userService: UserService = container.resolve(UserService)
   public async me({ auth }: HttpContextContract) {
-    return SuccessResponse("User profile fetched", auth.user!)
+    return SuccessResponse('User profile fetched', auth.user!)
   }
 
   public async updateProfile({ auth, request, response }: HttpContextContract) {
     try {
-      const { id } = auth.user!; // this is the authenticated user
+      const { id } = auth.user! // this is the authenticated user
       const body = request.body() as UpdateUser
       const result = await this.userService.updateProfile(id, body)
       return response.status(httpStatus.OK).send(result)

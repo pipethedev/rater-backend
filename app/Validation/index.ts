@@ -23,4 +23,14 @@ const UpdatePasswordValidation = {
   new_password: 'required',
 }
 
-export { RegisterValidation, LoginValidation, UpdateUserValidation, UpdatePasswordValidation }
+const ForgotPasswordValidation = {
+  email: 'required|email',
+}
+
+export {
+  RegisterValidation,
+  LoginValidation,
+  UpdateUserValidation,
+  UpdatePasswordValidation,
+  ForgotPasswordValidation,
+}

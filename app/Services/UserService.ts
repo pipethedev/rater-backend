@@ -9,7 +9,7 @@ import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import { AppError } from 'App/Exceptions/Handler'
 import httpStatus from 'http-status'
 import MailService from './MailService'
-import Env from '@ioc:Adonis/Core/Env'
+import Route from '@ioc:Adonis/Core/Route'
 
 export default class UserService {
   public userRepository: UserRepository = container.resolve(UserRepository)
@@ -24,11 +24,12 @@ export default class UserService {
       const token = randomBytes(32).toString('hex') as string
       await this.tokenRepository.create({ email: body.email, token }, trx)
       const user = await this.userRepository.create(body, trx)
+      const url = Route.makeUrl('verifyEmail', { token })
       await Promise.all([
         this.generateVerifyTokenForUser({ token, userId: user.id }, trx),
-        this.mailService.send(body.email, 'emails/verify', {
+        this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
           name: `${user.last_name} ${user.first_name}`,
-          url: `${Env.get('APP_URL')}/verify/${token}`,
+          url,
         }),
       ])
       await trx.commit()
@@ -55,7 +56,7 @@ export default class UserService {
     }
   }
 
-  private async generateVerifyTokenForUser(
+  public async generateVerifyTokenForUser(
     { token, userId }: { token: string; userId: string },
     trx: TransactionClientContract
   ): Promise<string> {
@@ -72,5 +73,28 @@ export default class UserService {
     )
 
     return token
+  }
+
+  public async resendVerificationEmail(email: string) {
+    const trx = await Database.transaction()
+    try {
+      const token = randomBytes(32).toString('hex') as string
+      // create user
+      const { id } = await this.userRepository.findByEmail(email) as User
+
+      // generate verification token
+      const verifyToken = await this.generateVerifyTokenForUser({ token, userId: id }, trx)
+
+      const link = Route.makeUrl('verifyEmail', { token: verifyToken })
+
+      //send token to user mail for verification
+      await this.mailService.send(email, 'Verify your email', 'emails/verify', { link })
+
+      // return user, token and their setting
+      return SuccessResponse('Verification email sent', null)
+    } catch (error) {
+      trx.rollback()
+      throw error
+    }
   }
 }

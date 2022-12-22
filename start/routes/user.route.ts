@@ -6,7 +6,13 @@ Route.group(() => {
   // User routes
   Route.group(() => {
     Route.get('/', 'UsersController.me').middleware('auth:api')
-    Route.put('/', 'UsersController.update').middleware(['auth:api', validate(UpdateUserValidation)])
-    Route.put('/change-password', 'UsersController.changePassword').middleware(['auth:api', validate(UpdatePasswordValidation)])
+    Route.put('/', 'UsersController.update').middleware([
+      'auth:api',
+      validate(UpdateUserValidation),
+    ])
+    Route.put('/change-password', 'UsersController.changePassword').middleware([
+      'auth:api',
+      validate(UpdatePasswordValidation),
+    ])
   }).prefix('/profile')
 }).prefix('/api/v1')

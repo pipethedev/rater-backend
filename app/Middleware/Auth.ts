@@ -49,7 +49,7 @@ export default class AuthMiddleware {
     /**
      * Unable to authenticate using any guard
      */
-    throw new UnAuthorizedException("Invalid access or expired token")
+    throw new UnAuthorizedException('Invalid access or expired token')
   }
 
   /**
