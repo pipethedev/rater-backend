@@ -5,8 +5,10 @@ import httpStatus from 'http-status'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import AuthService from 'App/Services/AuthService'
-import { SuccessResponse } from 'App/Helpers'
+import { ErrorResponse } from 'App/Helpers'
 import MailService from 'App/Services/MailService'
+import { AppError } from 'App/Exceptions/Handler'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class AuthController {
   private userService: UserService = container.resolve(UserService)
@@ -20,7 +22,8 @@ export default class AuthController {
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
-      return response.status(httpStatus.BAD_REQUEST).send(error.message)
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('Unable to login at the moment try again later'))
     }
   }
 
@@ -31,9 +34,8 @@ export default class AuthController {
       return response.ok(result)
     } catch (error: any) {
       Logger.error(error.message)
-      return response.badRequest({
-        error: error.message || 'We could not create your account',
-      })
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not create your account'))
     }
   }
 
@@ -43,26 +45,25 @@ export default class AuthController {
       const user = await this.authService.getUserByVerificationToken(request.param('token'))
 
       // 2) If there is a user, set the new password
-      const verify = await this.authService.verifyUser(user.id)
+      await this.authService.verifyUser(user.id)
 
-      return SuccessResponse('Your email has been verified', verify)
-    } catch (e) {
-      return response.badRequest({
-        error: e.message || 'We could not verify your email address',
-      })
+      return response.location(Env.get('FRONTEND_URL') + '/login').send('Email verified successfully')
+    } catch (error) {
+      Logger.error(error.message)
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not verify your email'))
     }
   }
 
   public async resendVerification({ request, response }: HttpContextContract) {
     try {
-      const email = request.input('email')
+      const { email } = request.body()
       const result = await this.userService.resendVerificationEmail(email)
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
-      return response.badRequest({
-        error: error.message || 'We could not resend your verification email',
-      })
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not resend your verification email'))
     }
   }
 

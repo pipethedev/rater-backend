@@ -1,7 +1,6 @@
 import { Exception } from '@adonisjs/core/build/standalone'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ErrorResponse } from 'App/Helpers'
-import httpStatus from 'http-status'
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +16,6 @@ import httpStatus from 'http-status'
 */
 export default class UnAuthorizedException extends Exception {
   public async handle(error: this, ctx: HttpContextContract) {
-    return ctx.response.status(httpStatus.UNAUTHORIZED).send(ErrorResponse(error.message))
+    return ctx.response.unauthorized(ErrorResponse(error.message))
   }
 }

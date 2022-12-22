@@ -13,7 +13,7 @@ Route.group(() => {
 
     Route.get('/verify-email/:token', 'AuthController.verifyUserEmail').as('verifyEmail')
 
-    Route.post('/resend-verification', 'AuthController.verifyUserEmail').middleware(
+    Route.post('/resend-verification', 'AuthController.resendVerification').middleware(
       validate(ForgotPasswordValidation)
     )
   }).prefix('/auth')

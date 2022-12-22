@@ -1,7 +1,6 @@
-import { SuccessResponse, convertoHex } from 'App/Helpers'
+import { SuccessResponse } from 'App/Helpers'
 import User from 'App/Models/User'
 import { createHash, randomBytes } from 'crypto'
-import TokenRepository from 'App/Repository/TokenRepository'
 import UserRepository from 'App/Repository/UserRepository'
 import { Register, UpdateUser } from 'App/Types'
 import { container } from 'tsyringe'
@@ -14,7 +13,6 @@ import Env from '@ioc:Adonis/Core/Env'
 
 export default class UserService {
   public userRepository: UserRepository = container.resolve(UserRepository)
-  public tokenRepository: TokenRepository = container.resolve(TokenRepository)
   public mailService: MailService = container.resolve(MailService)
 
   public async createUser(body: Register) {
@@ -22,17 +20,13 @@ export default class UserService {
     try {
       const check = await this.userRepository.findByEmail(body.email)
       if (check) throw new AppError(httpStatus.BAD_REQUEST, 'Email already exists')
-      const token = randomBytes(32).toString('hex') as string
-      await this.tokenRepository.create({ email: body.email, token }, trx)
       const user = await this.userRepository.create(body, trx)
+      const token = await this.generateVerifyTokenForUser(user.id, trx)
       const url = Route.makeUrl('verifyEmail', { token })
-      await Promise.all([
-        this.generateVerifyTokenForUser({ token, userId: user.id }, trx),
-        this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
-          name: `${user.last_name} ${user.first_name}`,
-          url: Env.get('APP_URL') + url,
-        }),
-      ])
+      await this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
+        ...(user.toJSON()),
+        url: Env.get('APP_URL') + url,
+      })
       await trx.commit()
       return SuccessResponse<User>(
         'User registered successfully, check your email for verification',
@@ -58,11 +52,11 @@ export default class UserService {
   }
 
   public async generateVerifyTokenForUser(
-    { token, userId }: { token: string; userId: string },
+    userId: string,
     trx: TransactionClientContract
   ): Promise<string> {
-    const newToken = convertoHex(token)
-    const accountVerifyToken = createHash('sha256').update(newToken).digest('hex')
+    const verifyToken = randomBytes(32).toString('hex') as string
+    const accountVerifyToken = createHash('sha256').update(verifyToken).digest('hex')
 
     await this.userRepository.updateOne(
       userId,
@@ -73,23 +67,23 @@ export default class UserService {
       trx
     )
 
-    return token
+    return verifyToken
   }
 
   public async resendVerificationEmail(email: string) {
     const trx = await Database.transaction()
     try {
-      const token = randomBytes(32).toString('hex') as string
       // create user
-      const { id } = await this.userRepository.findByEmail(email) as User
+      const user = await this.userRepository.findByEmail(email) as User
+      if (!user) throw new AppError(httpStatus.NOT_FOUND, 'Invalid email address provided')
 
       // generate verification token
-      const verifyToken = await this.generateVerifyTokenForUser({ token, userId: id }, trx)
+      const token = await this.generateVerifyTokenForUser(user.id, trx)
 
-      const link = Route.makeUrl('verifyEmail', { token: verifyToken })
+      const url =  Env.get('APP_URL') + Route.makeUrl('verifyEmail', { token })
 
       //send token to user mail for verification
-      await this.mailService.send(email, 'Verify your email', 'emails/verify', { link })
+      await this.mailService.send<Partial<User> & { url: string}>(email, 'Verify your email', 'emails/verify', { url, ...user.toJSON() })
 
       // return user, token and their setting
       return SuccessResponse('Verification email sent', null)

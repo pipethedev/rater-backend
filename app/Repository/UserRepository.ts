@@ -14,8 +14,8 @@ export default class UserRepository {
 
   public async findbyVerificationToken(token: string): Promise<User | null> {
     return await User.query()
-      .where('accountVerifyToken', token)
-      .where('accountVerifyExpires', '<', new Date(Date.now() + 10 * 60 * 1000))
+      .where('account_verify_token', token)
+      .where('account_verify_expires', '<', new Date(Date.now() + 10 * 60 * 1000))
       .first()
   }
 
@@ -24,8 +24,6 @@ export default class UserRepository {
     data: Partial<User>,
     transaction: TransactionClientContract
   ): Promise<User> {
-    const user = await User.query({ client: transaction }).where('id', id).firstOrFail()
-    user.useTransaction(transaction)
-    return await user.merge(data).save()
+    return await User.query({ client: transaction }).where('id', id).update(data).first()
   }
 }
