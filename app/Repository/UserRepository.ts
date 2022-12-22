@@ -6,10 +6,7 @@ import { injectable } from 'tsyringe'
 @injectable()
 export default class UserRepository {
   public async create(data: Register, transaction: TransactionClientContract): Promise<User> {
-    const user = new User()
-    user.merge(data)
-    user.useTransaction(transaction)
-    return await user.save()
+    return await User.create(data, { client: transaction });
   }
   public async findByEmail(email: string): Promise<User | null> {
     return await User.findBy('email', email)

@@ -10,6 +10,7 @@ import { AppError } from 'App/Exceptions/Handler'
 import httpStatus from 'http-status'
 import MailService from './MailService'
 import Route from '@ioc:Adonis/Core/Route'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class UserService {
   public userRepository: UserRepository = container.resolve(UserRepository)
@@ -29,7 +30,7 @@ export default class UserService {
         this.generateVerifyTokenForUser({ token, userId: user.id }, trx),
         this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
           name: `${user.last_name} ${user.first_name}`,
-          url,
+          url: Env.get('APP_URL') + url,
         }),
       ])
       await trx.commit()
