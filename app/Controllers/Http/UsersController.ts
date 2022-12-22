@@ -24,7 +24,7 @@ export default class UsersController {
     }
   }
 
-  public async deactivate() {}
+  public async changePassword() {}
 
   public async getAllUsers() {}
 }

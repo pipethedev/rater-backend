@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.alterTable(this.tableName, (table) => {
       table.string('account_verify_token').nullable()
       table.timestamp('account_verify_expires').nullable()
+      table.timestamp('email_verified_at').nullable()
     })
   }
 

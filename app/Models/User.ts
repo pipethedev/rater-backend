@@ -33,11 +33,14 @@ export default class User extends BaseModel {
   @column()
   public banned_at: DateTime
 
-  @column({ columnName: "account_verify_token"})
-  public account_verify_token: string
+  @column()
+  public email_verified_at: Date
 
-  @column({ columnName: "account_verify_expires" })
-  public account_verify_expires: Date
+  @column()
+  public account_verify_token: string | null
+
+  @column()
+  public account_verify_expires: Date | null
 
   @column.dateTime({ autoCreate: true })
   public created_at: DateTime

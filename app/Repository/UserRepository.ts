@@ -14,6 +14,14 @@ export default class UserRepository {
   public async findByEmail(email: string): Promise<User | null> {
     return await User.findBy('email', email)
   }
+
+  public async findbyVerificationToken(token: string): Promise<User | null> {
+    return await User.query()
+      .where('accountVerifyToken', token)
+      .where('accountVerifyExpires', '<', new Date(Date.now() + 10 * 60 * 1000))
+      .first()
+  }
+
   public async updateOne(
     id: string,
     data: Partial<User>,
