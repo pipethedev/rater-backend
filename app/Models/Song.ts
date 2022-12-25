@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeSave } from '@ioc:Adonis/Lucid/Orm'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Song extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -9,6 +10,9 @@ export default class Song extends BaseModel {
 
   @column({ columnName: 'user_id' })
   public user_id: string
+
+  @column({ columnName: 'title' })
+  public title: string
 
   @column({ columnName: 'file_url' })
   public file_url: string
@@ -27,4 +31,11 @@ export default class Song extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
+
+  @beforeSave()
+  public static async generateUUID(song: Song) {
+    if (!song.$dirty.id) {
+      song.id = uuidv4()
+    }
+  }
 }

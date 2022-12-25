@@ -36,8 +36,13 @@ type ForgotPassword = {
 type ResendVerification = ForgotPassword;
 
 type Token = {
-  token: string
-  email: string
+  token: string;
+  email: string;
 }
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword }
+type UploadSong = {
+  title: string;
+  payment_reference: string;
+}
+
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UploadSong }

@@ -10,6 +10,10 @@ export default class UserRepository {
     return await User.create(data, { client: transaction });
   }
 
+  public async findByID(id: string): Promise<User | null> {
+    return await User.find(id)
+  }
+
   public async findByEmail(email: string): Promise<User | null> {
     return await User.findBy('email', email)
   }

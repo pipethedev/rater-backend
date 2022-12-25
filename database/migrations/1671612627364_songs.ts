@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('title').notNullable()
       table.uuid('user_id').notNullable()
+      table.string('title').notNullable()
       table.string('file_url').notNullable()
       table.string('file_name').notNullable()
       table.string('file_type').notNullable()

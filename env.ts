@@ -19,7 +19,7 @@ export default Env.rules({
   PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
-  DRIVE_DISK: Env.schema.enum(['local'] as const),
+  DRIVE_DISK: Env.schema.enum(['local', 's3'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
 
   MYSQL_HOST: Env.schema.string({ format: 'host' }),
@@ -32,4 +32,12 @@ export default Env.rules({
   SMTP_PORT: Env.schema.number(),
   SMTP_USERNAME: Env.schema.string(),
   SMTP_PASSWORD: Env.schema.string(),
+
+  FIREBASE_KEY: Env.schema.string(),
+  FIREBASE_AUTH_DOMAIN: Env.schema.string(),
+  FIREBASE_PROJECT_ID: Env.schema.string(),
+  FIREBASE_STORAGE_BUCKET: Env.schema.string(),
+  FIREBASE_MESSAGING_SENDER_ID: Env.schema.string(),
+  FIREBASE_APP_ID: Env.schema.string(),
+  FIREBASE_MEASUREMENT_ID: Env.schema.string()
 })

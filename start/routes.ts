@@ -22,6 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 import './routes/auth.route'
 import './routes/user.route'
+import './routes/song.route'
 
 Route.get('/', async () => {
   return {
