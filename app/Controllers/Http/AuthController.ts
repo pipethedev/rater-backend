@@ -84,11 +84,13 @@ export default class AuthController {
     }
   }
 
-  public async resetPassword({ request, response }: HttpContextContract){
+  public async resetPassword({ auth, request, response }: HttpContextContract){
     try {
       const body = request.body() as ResetPassword
 
       const result = await this.userService.reset(request.param('token'), body)
+
+      auth.use('api').revoke()
 
       return response.ok(result)
     } catch (error) {
@@ -99,7 +101,10 @@ export default class AuthController {
   }
 
   public async logout({ auth, response }: HttpContextContract) {
-    await auth.logout()
+    await Promise.all([ 
+      auth.logout(),
+      auth.use('api').revoke()
+    ])
     return response.status(httpStatus.OK)
   }
 }

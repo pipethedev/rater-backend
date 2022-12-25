@@ -22,6 +22,10 @@ const UpdatePasswordValidation = {
   password: 'required|confirmed'
 }
 
+const ResetPasswordValidation = {
+  password: 'required|confirmed'
+}
+
 const EmailValidation = {
   email: 'required|email',
 }
@@ -31,5 +35,6 @@ export {
   LoginValidation,
   UpdateUserValidation,
   UpdatePasswordValidation,
+  ResetPasswordValidation,
   EmailValidation,
 }

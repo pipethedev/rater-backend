@@ -25,7 +25,7 @@ export default class UserService {
 
   public async all() {
     const users = await this.userRepository.all()
-    return SuccessResponse("All users fetched successfully§", users)
+    return SuccessResponse("All users fetched successfully", users)
   }
 
   public async createUser(body: Register) {
@@ -90,14 +90,11 @@ export default class UserService {
     }
   }
 
-  public async reset(token: string, { old_password, password }: ResetPassword) {
+  public async reset(token: string, { password }: ResetPassword) {
     const trx = await Database.transaction()
     try {
       const user = await this.findUserByToken(token, PasswordAction.PasswordReset)
 
-      //validate old password
-      const verify = Hash.verify(password, old_password);
-      if(!verify) throw new AppError(httpStatus.UNAUTHORIZED, "Invalid old password provided")
 
       const update = await this.userRepository.updateOne(user.id, {
         password: await Hash.make(password),
@@ -107,7 +104,7 @@ export default class UserService {
 
       await trx.commit()
 
-      if(update) return SuccessResponse("Password update successfully", null)
+      if(update) return SuccessResponse("Password updated successfully", null)
     } catch (error){
       await trx.rollback()
       throw error
@@ -128,14 +125,10 @@ export default class UserService {
       const token = randomBytes(32).toString('hex') as string
       const accountVerifyToken = createHash('sha256').update(token).digest('hex')
   
-      await this.userRepository.updateOne(
-        userId,
-        {
-          account_verify_token: accountVerifyToken,
-          account_verify_expires: new Date(Date.now() + 10 * 60 * 1000),
-        },
-        trx
-      )
+      await this.userRepository.updateOne(userId,{
+        account_verify_token: accountVerifyToken,
+        account_verify_expires: new Date(Date.now() + 10 * 60 * 1000),
+      }, trx)
       await trx.commit()
       return token
     } catch (error) {
@@ -174,7 +167,8 @@ export default class UserService {
       const { email } = auth.user!
       const user = await this.findUserbyEmail(email);
 
-      const verify = Hash.verify(user.password, body.old_password);
+
+      const verify = await Hash.verify(user.password, body.old_password);
       if(!verify) throw new AppError(httpStatus.UNAUTHORIZED, "Invalid old password provided")
 
       const update = await this.userRepository.updateOne(user.id, {
@@ -183,7 +177,7 @@ export default class UserService {
 
       await trx.commit()
 
-      if(update) return SuccessResponse("User password updated successfully", user)
+      if(update) return SuccessResponse("User password updated successfully", null)
     } catch (error) {
       await trx.rollback()
       throw error

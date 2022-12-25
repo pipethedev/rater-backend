@@ -8,8 +8,11 @@ import { AppError } from 'App/Exceptions/Handler'
 
 export default class UsersController {
   private userService: UserService = container.resolve(UserService)
+
   public async me({ auth }: HttpContextContract) {
-    return SuccessResponse('User profile fetched', auth.user!)
+    const { email } = auth.user!
+    const user = await this.userService.findUserbyEmail(email);
+    return SuccessResponse('User profile fetched', user)
   }
 
   public async updateProfile({ auth, request, response }: HttpContextContract) {

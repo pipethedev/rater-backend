@@ -34,7 +34,7 @@ export default class AuthService {
         account_verify_expires: null,
         email_verified_at: new Date(),
       },trx)
-      trx.commit()
+      await trx.commit()
       return user
     } catch (error) {
       trx.rollback()
