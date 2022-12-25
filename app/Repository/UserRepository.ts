@@ -5,11 +5,17 @@ import { injectable } from 'tsyringe'
 
 @injectable()
 export default class UserRepository {
+
   public async create(data: Register, transaction: TransactionClientContract): Promise<User> {
     return await User.create(data, { client: transaction });
   }
+
   public async findByEmail(email: string): Promise<User | null> {
     return await User.findBy('email', email)
+  }
+
+  public async all() {
+    return await User.all()
   }
 
   public async findbyVerificationToken(token: string): Promise<User | null> {
@@ -19,11 +25,7 @@ export default class UserRepository {
       .first()
   }
 
-  public async updateOne(
-    id: string,
-    data: Partial<User>,
-    transaction: TransactionClientContract
-  ): Promise<User> {
+  public async updateOne(id: string, data: Partial<User>, transaction: TransactionClientContract): Promise<User> {
     return await User.query({ client: transaction }).where('id', id).update(data).first()
   }
 }

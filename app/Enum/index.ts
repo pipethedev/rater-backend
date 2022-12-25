@@ -12,4 +12,9 @@ enum PAYMENT_STATUS {
   PENDING = 'PENDING',
   FAILED = 'FAILED',
 }
-export { ROLE, CURRENCY, PAYMENT_STATUS }
+
+enum PasswordAction {
+  PasswordVerification  = "verification",
+  PasswordReset = "reset"
+}
+export { ROLE, CURRENCY, PAYMENT_STATUS, PasswordAction }

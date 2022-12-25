@@ -19,11 +19,10 @@ const LoginValidation = {
 
 const UpdatePasswordValidation = {
   old_password: 'required',
-  password: 'required',
-  new_password: 'required',
+  password: 'required|confirmed'
 }
 
-const ForgotPasswordValidation = {
+const EmailValidation = {
   email: 'required|email',
 }
 
@@ -32,5 +31,5 @@ export {
   LoginValidation,
   UpdateUserValidation,
   UpdatePasswordValidation,
-  ForgotPasswordValidation,
+  EmailValidation,
 }

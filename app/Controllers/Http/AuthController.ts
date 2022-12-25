@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserService from 'App/Services/UserService'
-import { Register } from 'App/Types'
+import { ForgotPassword, Register, ResetPassword } from 'App/Types'
 import httpStatus from 'http-status'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
@@ -9,6 +9,7 @@ import { ErrorResponse } from 'App/Helpers'
 import MailService from 'App/Services/MailService'
 import { AppError } from 'App/Exceptions/Handler'
 import Env from '@ioc:Adonis/Core/Env'
+import { PasswordAction } from 'App/Enum'
 
 export default class AuthController {
   private userService: UserService = container.resolve(UserService)
@@ -30,7 +31,9 @@ export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
     try {
       const body = request.body() as Register
+
       const result = await this.userService.createUser(body)
+
       return response.ok(result)
     } catch (error: any) {
       Logger.error(error.message)
@@ -42,7 +45,7 @@ export default class AuthController {
   public async verifyUserEmail({ request, response }: HttpContextContract) {
     try {
       // Get user based on the token
-      const user = await this.authService.getUserByVerificationToken(request.param('token'))
+      const user = await this.userService.findUserByToken(request.param('token'), PasswordAction.PasswordVerification)
 
       // 2) If there is a user, set the new password
       await this.authService.verifyUser(user.id)
@@ -55,6 +58,20 @@ export default class AuthController {
     }
   }
 
+  public async forgotPassword({ request, response }: HttpContextContract) {
+    try {
+      const body = request.body() as ForgotPassword
+
+      const result = await this.userService.recover(body.email)
+      
+      return response.ok(result)
+    } catch (error) {
+      Logger.error(error.message)
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not send password forgot link!'))
+    }
+  }
+
   public async resendVerification({ request, response }: HttpContextContract) {
     try {
       const { email } = request.body()
@@ -64,6 +81,20 @@ export default class AuthController {
       Logger.error(error.message)
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
       return response.internalServerError(ErrorResponse('We could not resend your verification email'))
+    }
+  }
+
+  public async resetPassword({ request, response }: HttpContextContract){
+    try {
+      const body = request.body() as ResetPassword
+
+      const result = await this.userService.reset(request.param('token'), body)
+
+      return response.ok(result)
+    } catch (error) {
+      Logger.error(error.message)
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not reset your password, try again !'))
     }
   }
 

@@ -20,14 +20,24 @@ type User = {
 
 type Login = Pick<User, 'email' | 'password'>
 type Register = Omit<User, 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
-type UpdateUser = Omit<
-  User,
-  'email' | 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'
->
+type UpdateUser = Omit<User, 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
+
+type ChangePassword = {
+  old_password: string;
+  password: string;
+}
+
+type ResetPassword = ChangePassword;
+
+type ForgotPassword = {
+  email: string;
+}
+
+type ResendVerification = ForgotPassword;
 
 type Token = {
   token: string
   email: string
 }
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser }
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword }

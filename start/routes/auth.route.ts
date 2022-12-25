@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 import validate from 'App/Helpers'
-import { RegisterValidation, LoginValidation, ForgotPasswordValidation } from 'App/Validation'
+import { RegisterValidation, LoginValidation, EmailValidation, UpdatePasswordValidation } from 'App/Validation'
 
 Route.group(() => {
   // Authentication routes
@@ -13,8 +13,10 @@ Route.group(() => {
 
     Route.get('/verify-email/:token', 'AuthController.verifyUserEmail').as('verifyEmail')
 
-    Route.post('/resend-verification', 'AuthController.resendVerification').middleware(
-      validate(ForgotPasswordValidation)
-    )
+    Route.put('/reset-password/:token', 'AuthController.resetPassword').middleware(validate(UpdatePasswordValidation))
+
+    Route.post('/forgot-password', 'AuthController.forgotPassword').middleware(validate(EmailValidation) )
+
+    Route.post('/resend-verification', 'AuthController.resendVerification').middleware(validate(EmailValidation))
   }).prefix('/auth')
 }).prefix('/api/v1')
