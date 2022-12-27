@@ -32,14 +32,8 @@ export default class WebhookService {
                         payment_status: PAYMENT_STATUS.SUCCESSFUL
                     }, trx)
                     // save reference to database
-                    await this.paymentReferenceRepository.create({
-                        user_id: user.id,
-                        transaction_id: payment.id,
-                        used: true
-                    });
+                    await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id }, trx);               
                 }
-
-                // dispatch a mail to the user
             }
             await trx.commit()
         } catch (error) {

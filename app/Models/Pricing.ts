@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Pricing extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,11 @@ export default class Pricing extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
+
+  @beforeSave()
+  public static async generateUUID(pricing: Pricing) {
+    if (!pricing.$dirty.id) {
+      pricing.id = uuidv4()
+    }
+  }
 }

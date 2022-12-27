@@ -4,7 +4,6 @@ import { ErrorResponse } from 'App/Helpers'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SongService from 'App/Services/SongService'
 import { container } from 'tsyringe'
-import { UploadSong } from 'App/Types'
 import { UNSUPPORTED_MEDIA_TYPE, INTERNAL_SERVER_ERROR } from 'http-status'
 
 export default class SongsController {
@@ -14,11 +13,7 @@ export default class SongsController {
         try {
             const { id } = auth.user!
 
-            const body = request.body() as UploadSong
-
-            const file = request.file('audio', { size: '10mb', extnames: [ 'mp3', 'ogg', 'wav', 'mp4', 'wma' ] })!
-
-            const result = await this.songService.saveRecord(id, body, file)
+            const result = await this.songService.saveRecord(id, { request })
             
             return response.ok(result)
           } catch (error) {

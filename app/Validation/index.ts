@@ -3,7 +3,7 @@ const RegisterValidation = {
   last_name: 'required|string',
   phone_number: 'required',
   email: 'required|email',
-  password: 'required',
+  password: 'required|max:15',
 }
 const UpdateUserValidation = {
   first_name: 'required',
@@ -26,15 +26,10 @@ const ResetPasswordValidation = {
   password: 'required|confirmed'
 }
 
-const EmailValidation = {
-  email: 'required|email',
-}
-
 export {
   RegisterValidation,
   LoginValidation,
   UpdateUserValidation,
   UpdatePasswordValidation,
   ResetPasswordValidation,
-  EmailValidation,
 }

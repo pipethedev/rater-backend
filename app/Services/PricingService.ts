@@ -20,9 +20,9 @@ export default class PricingService {
     public async updatePricing(id: string, body: UpdatePricing) {
         const trx = await Database.transaction()
         try {
-            const price = await this.pricingRepository.updateOne(id, body, trx)
+            await this.pricingRepository.updateOne(id, body, trx)
             await trx.commit()
-            return SuccessResponse("Latest price fetched successfully", price)
+            return SuccessResponse("Price updated successfully", null)
         } catch (error) {
             await trx.rollback()
             throw error;

@@ -4,6 +4,7 @@ import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import { AppError } from 'App/Exceptions/Handler'
 import { ErrorResponse } from 'App/Helpers'
+import { UpdatePricing } from 'App/Types'
 
 export default class PricingsController {
 
@@ -13,12 +14,22 @@ export default class PricingsController {
         try {
             const result = await this.pricingService.fetchPricing()
             return response.ok(result)
-          } catch (error) {
+        } catch (error) {
             Logger.error(error.message)
             if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
             return response.internalServerError(ErrorResponse('We could not fetch the latest pricing, try again later!'))
-          }
+        }
     }
 
-    public async update({ }: HttpContextContract) {}
+    public async update({ request, response }: HttpContextContract) {
+        try {
+            const body = request.body() as UpdatePricing
+            const result = await this.pricingService.updatePricing(request.param('priceId'), body)
+            return response.ok(result)
+        } catch (error) {
+            Logger.error(error.message)
+            if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+            return response.internalServerError(ErrorResponse('We could not fetch the latest pricing, try again later!'))
+        }
+    }
 }

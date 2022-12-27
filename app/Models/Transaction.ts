@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import { CURRENCY, PAYMENT_STATUS } from 'App/Enum'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class Transaction extends BaseModel {
   @column({ isPrimary: true })
@@ -32,4 +33,11 @@ export default class Transaction extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
+
+  @beforeSave()
+  public static async generateUUID(transaction: Transaction) {
+    if (!transaction.$dirty.id) {
+      transaction.id = uuidv4()
+    }
+  }
 }
