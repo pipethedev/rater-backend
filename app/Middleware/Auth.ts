@@ -45,6 +45,8 @@ export default class AuthMiddleware {
         return true
       }
     }
+    
+    console.log("guardLastAttempted", guardLastAttempted)
 
     /**
      * Unable to authenticate using any guard

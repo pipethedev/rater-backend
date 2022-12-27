@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { Role } from 'App/Enum'
+import { Roles } from 'App/Enum'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('last_name').notNullable()
       table.string('phone_number').notNullable().unique()
       table.string('email').notNullable().unique()
-      table.enum('role', [Role.ADMIN, Role.MANAGER, Role.USER]).notNullable().defaultTo(Role.USER)
+      table.enum('role', [Roles.ADMIN, Roles.MANAGER, Roles.USER]).notNullable().defaultTo(Roles.USER)
       table.string('password').notNullable()
       table.boolean('banned').defaultTo(false)
       table.dateTime('banned_at').nullable()
