@@ -37,7 +37,7 @@ export default class User extends BaseModel {
   public banned: boolean
 
   @column()
-  public banned_at: DateTime
+  public banned_at: Date
 
   @column()
   public email_verified_at: Date

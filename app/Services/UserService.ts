@@ -64,6 +64,22 @@ export default class UserService {
     }
   }
 
+  public async ban(userId: string) {
+    const trx = await Database.transaction()
+    try {
+      const user = await this.userRepository.findByID(userId) as User
+      const update = await this.userRepository.updateOne(user.id, { 
+        banned: true,
+        banned_at: new Date()
+      }, trx)
+      await trx.commit()
+      if(update) return SuccessResponse<User>('This user has been banned successfully', update)
+    } catch (error: any) {
+      await trx.rollback()
+      throw error
+    }
+  }
+
   public async recover(email: string) {
     const trx = await Database.transaction()
     try {

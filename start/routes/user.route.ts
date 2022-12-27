@@ -14,4 +14,6 @@ Route.group(() => {
   }).prefix('/user/profile')
 
   Route.get('/users', 'UsersController.getAllUsers').middleware(['auth:api', 'role:admin'])
+
+  Route.put('/users/:userId', 'UsersController.banUser').middleware(['auth:api', 'role:admin' ])
 }).prefix('/api/v1')

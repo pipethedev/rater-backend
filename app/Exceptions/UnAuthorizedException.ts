@@ -16,7 +16,7 @@ import { UNAUTHORIZED } from 'http-status'
 |
 */
 export default class UnAuthorizedException extends Exception {
-    public async handle(error: this, ctx: HttpContextContract) {
-        ctx.response.status(UNAUTHORIZED).send(ErrorResponse(error.message))
+    public async handle(error: this, { response }: HttpContextContract) {
+        return response.status(UNAUTHORIZED).send(ErrorResponse(error.message))
     }
 }
