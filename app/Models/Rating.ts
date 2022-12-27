@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Song from './Song'
 
 export default class Rating extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,7 @@ export default class Rating extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Song)
+  public song: BelongsTo<typeof Song>
 }
