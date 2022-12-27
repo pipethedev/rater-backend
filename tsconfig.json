@@ -37,8 +37,7 @@
       "@adonisjs/mail",
       "@adonisjs/view",
       "@adonisjs/bouncer",
-      "@adonisjs/drive-s3",
-      "adonis5-bullmq"
+      "@adonisjs/drive-s3"
     ]
   }
 }

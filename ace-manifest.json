@@ -1,17 +1,5 @@
 {
   "commands": {
-    "song:upload": {
-      "settings": {
-        "loadApp": true,
-        "stayAlive": false
-      },
-      "commandPath": "./commands/SongUpload",
-      "commandName": "song:upload",
-      "description": "",
-      "args": [],
-      "aliases": [],
-      "flags": []
-    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

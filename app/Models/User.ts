@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { ROLE } from 'App/Enum'
+import { Roles } from 'App/Enum'
 import { v4 as uuidv4 } from 'uuid'
 
 export default class User extends BaseModel {
@@ -22,8 +22,13 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
-  @column()
-  public role: ROLE
+  @column({
+    serialize: (value: string) => {
+      const index = Object.values(Roles).indexOf(value as Roles);
+      return Object.keys(Roles)[index];
+    },
+  })
+  public role: Roles
 
   @column({ serializeAs: null })
   public password: string

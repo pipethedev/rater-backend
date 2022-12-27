@@ -3,7 +3,7 @@ import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { SuccessResponse } from "App/Helpers";
 import { AppError } from "App/Exceptions/Handler";
-import httpStatus, { NOT_FOUND } from "http-status";
+import { NOT_FOUND, UNSUPPORTED_MEDIA_TYPE } from "http-status";
 import SongRepository from "App/Repository/SongRepository";
 import Drive from '@ioc:Adonis/Core/Drive'
 import { randomBytes } from 'crypto'
@@ -24,26 +24,23 @@ export default class SongService {
     public async saveRecord(userId: string, { title }: UploadSong, file: MultipartFileContract) {
         const trx = await Database.transaction()
         try {
-            if(!file) throw new AppError(httpStatus.UNSUPPORTED_MEDIA_TYPE, "Kindly provide a file!")
+            if(!file) throw new AppError(UNSUPPORTED_MEDIA_TYPE, "Kindly provide a file!")
 
             if (!file.isValid) throw file.errors;
 
             const { id, email, first_name, last_name } = await this.userRepository.findByID(userId) as User
 
-            const userEncryptor = Encryption.child({ secret: randomBytes(16).toString('hex') });
+            const encrypt = Encryption.child({ secret: randomBytes(16).toString('hex') });
               
-            const generatedId = btoa(userEncryptor.encrypt(String((file as any).data.clientName)));
-
-            const song = await this.songRepository.create({
-                user_id: id,
-                title,
-            }, trx)
+            const generatedId = btoa(encrypt.encrypt(String((file as any).data.clientName)));
 
             await file.moveToDisk('./', { name: generatedId })
             
             const url = await Drive.getSignedUrl(generatedId as string)
 
-             await this.songRepository.updateOne(song.id, {
+            const song = await this.songRepository.create({
+                user_id: id,
+                title,
                 file_name: String((file as any).data.clientName),
                 file_url: url,
                 external_id: generatedId
@@ -68,11 +65,23 @@ export default class SongService {
         }
     }
 
+    public async fetchSingleSong(userId: string, songId: string) {
+        try {
+            const song = await this.songRepository.findOneByUser(userId, songId)
+            return SuccessResponse("All uploaded songs fetched successfully", song)
+        } catch (error) {
+            throw error;
+        }
+    }
+
     public async deleteSong(userId: string, songId: string) {
         try {
             const song = await this.songRepository.findOneByUser(userId, songId) as Song
             if (!song) throw new AppError(NOT_FOUND, "This song is unavailable")
-            await this.songRepository.deleteOneByUser(userId, songId);
+            await Promise.all([
+                this.songRepository.deleteOneByUser(userId, songId),
+                Drive.delete(song.file_name)
+            ])
             return SuccessResponse<Song>(`Song #${song.id} deleted successfuly`, song)
         } catch (error) {
             throw error;

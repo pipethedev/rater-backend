@@ -261,7 +261,7 @@
 
 "@adonisjs/redis@^7.3.2":
   version "7.3.2"
-  resolved "https://registry.yarnpkg.com/@adonisjs/redis/-/redis-7.3.2.tgz#197207f9205f8656bf5c5646e41b9dcd47d9e80f"
+  resolved "https://registry.npmjs.org/@adonisjs/redis/-/redis-7.3.2.tgz"
   integrity sha512-rTzJbR+WuoRX+U/BgjloM+blyRSVvInA+iy3i0f/vxknQP2TQ2cg88vuHinEXoCdxPgAfdSy0AkVhsq3HCHgSw==
   dependencies:
     "@poppinss/utils" "^5.0.0"
@@ -1416,7 +1416,7 @@
 
 "@ioredis/commands@^1.1.1":
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@ioredis/commands/-/commands-1.2.0.tgz#6d61b3097470af1fdbbe622795b8921d42018e11"
+  resolved "https://registry.npmjs.org/@ioredis/commands/-/commands-1.2.0.tgz"
   integrity sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==
 
 "@japa/api-client@^1.4.2":
@@ -1545,7 +1545,7 @@
 
 "@msgpackr-extract/msgpackr-extract-darwin-arm64@2.2.0":
   version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-2.2.0.tgz#901c5937e1441572ea23e631fe6deca68482fe76"
+  resolved "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-2.2.0.tgz"
   integrity sha512-Z9LFPzfoJi4mflGWV+rv7o7ZbMU5oAU9VmzCgL240KnqDW65Y2HFCT3MW06/ITJSnbVLacmcEJA8phywK7JinQ==
 
 "@msgpackr-extract/msgpackr-extract-darwin-x64@2.2.0":
@@ -1791,6 +1791,14 @@
   resolved "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz"
   integrity sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==
 
+"@types/@adonisjs/auth":
+  version "8.2.3"
+  resolved "https://codeload.github.com/adonisjs/auth/tar.gz/49228c5b619ba76362ad8ccb2afc9e2f65e83104"
+  dependencies:
+    "@poppinss/hooks" "^5.0.3"
+    "@poppinss/utils" "^5.0.0"
+    luxon "^3.0.4"
+
 "@types/bytes@^3.1.1":
   version "3.1.1"
   resolved "https://registry.npmjs.org/@types/bytes/-/bytes-3.1.1.tgz"
@@ -1850,7 +1858,7 @@
 
 "@types/ioredis@^4.28.10":
   version "4.28.10"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.10.tgz#40ceb157a4141088d1394bb87c98ed09a75a06ff"
+  resolved "https://registry.npmjs.org/@types/ioredis/-/ioredis-4.28.10.tgz"
   integrity sha512-69LyhUgrXdgcNDv7ogs1qXZomnfOEnSmrmMFqKgt1XMJxmoOSG/u3wYy13yACIfKuMJ8IhKgHafDO3sx19zVQQ==
   dependencies:
     "@types/node" "*"
@@ -1947,7 +1955,7 @@
 
 "@types/source-map-support@^0.5.6":
   version "0.5.6"
-  resolved "https://registry.npmjs.org/@types/source-map-support/-/source-map-support-0.5.6.tgz"
+  resolved "https://registry.yarnpkg.com/@types/source-map-support/-/source-map-support-0.5.6.tgz#aa4a8c98ec73a1f1f30a813573a9b2154a6eb39a"
   integrity sha512-b2nJ9YyXmkhGaa2b8VLM0kJ04xxwNyijcq12/kDoomCt43qbHBeK2SLNJ9iJmETaAj+bKUT05PQUu3Q66GvLhQ==
   dependencies:
     source-map "^0.6.0"
@@ -2135,6 +2143,13 @@ adonis-preset-ts@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/adonis-preset-ts/-/adonis-preset-ts-2.1.0.tgz"
   integrity sha512-cQH/NP250gOF9k3TTDhVsTOPSAvyH4MhKVZ4ryYiihA+vnP27sut1gVIrRas3Evl5d2wEgWVGI5DgdP/ZFSk0w==
+
+adonis5-bullmq@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/adonis5-bullmq/-/adonis5-bullmq-2.2.0.tgz#0273a731c7d963a17f9c3ee99efbece396102ae5"
+  integrity sha512-yzrM1KnWahryJWpIT1iT9Yuo5zPqyt1L4rcEQds4UGcdttwOiHAoWYTJMniRgu4b85PrPsqc6oivDJKaU3utKg==
+  dependencies:
+    bullmq "^1.78.2"
 
 aggregate-error@^3.0.0:
   version "3.1.0"
@@ -2479,9 +2494,24 @@ builtins@^1.0.3:
   resolved "https://registry.npmjs.org/builtins/-/builtins-1.0.3.tgz"
   integrity sha512-uYBjakWipfaO/bXI7E8rq6kpwHRZK5cNYrUv2OzZSI/FvmdMyXJ2tG9dKcjEC5YHmHpUAwsargWIZNWdxb/bnQ==
 
+bullmq@^1.78.2:
+  version "1.91.1"
+  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-1.91.1.tgz#ed17cfd4e314afa398fd099a32d365046b1ed4bc"
+  integrity sha512-u7dat9I8ZwouZ651AMZkBSvB6NVUPpnAjd4iokd9DM41whqIBnDjuL11h7+kEjcpiDKj6E+wxZiER00FqirZQg==
+  dependencies:
+    cron-parser "^4.6.0"
+    get-port "6.1.2"
+    glob "^8.0.3"
+    ioredis "^5.2.2"
+    lodash "^4.17.21"
+    msgpackr "^1.6.2"
+    semver "^7.3.7"
+    tslib "^2.0.0"
+    uuid "^9.0.0"
+
 bullmq@^3.5.1:
   version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-3.5.1.tgz#253032396e9fb30d63336ad28ae2eaeffb37de41"
+  resolved "https://registry.npmjs.org/bullmq/-/bullmq-3.5.1.tgz"
   integrity sha512-QxQnSIPBmEVq/bM1wxmMdh9RS4oNyUNeCvoTegr2EgtlNYToCkLgHAkM56JhaRlffo9ExNiWfVFJpXLWDfK0Fw==
   dependencies:
     cron-parser "^4.6.0"
@@ -2726,7 +2756,7 @@ clone@^2.1.2:
 
 cluster-key-slot@^1.1.0:
   version "1.1.2"
-  resolved "https://registry.yarnpkg.com/cluster-key-slot/-/cluster-key-slot-1.1.2.tgz#88ddaa46906e303b5de30d3153b7d9fe0a0c19ac"
+  resolved "https://registry.npmjs.org/cluster-key-slot/-/cluster-key-slot-1.1.2.tgz"
   integrity sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==
 
 co-compose@^7.0.2:
@@ -2892,7 +2922,7 @@ cpy@^8.1.2:
 
 cron-parser@^4.6.0:
   version "4.7.0"
-  resolved "https://registry.yarnpkg.com/cron-parser/-/cron-parser-4.7.0.tgz#184eac151f810e7bf2b32ad37b4dd4a711797cdc"
+  resolved "https://registry.npmjs.org/cron-parser/-/cron-parser-4.7.0.tgz"
   integrity sha512-BdAELR+MCT2ZWsIBhZKDuUqIUCBjHHulPJnm53OfdRLA4EWBjva3R+KM5NeidJuGsNXdEcZkjC7SCnkW5rAFSA==
   dependencies:
     luxon "^3.1.0"
@@ -3710,6 +3740,11 @@ get-package-type@^0.1.0:
   resolved "https://registry.npmjs.org/get-package-type/-/get-package-type-0.1.0.tgz"
   integrity sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==
 
+get-port@6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/get-port/-/get-port-6.1.2.tgz#c1228abb67ba0e17fb346da33b15187833b9c08a"
+  integrity sha512-BrGGraKm2uPqurfGVj/z97/zv8dPleC6x9JBNRTrDNtCkkRF4rPwrQXFgL7+I+q8QSdU4ntLQX2D7KIxSy8nGw==
+
 get-port@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/get-port/-/get-port-5.1.1.tgz"
@@ -4088,7 +4123,7 @@ interpret@^2.2.0:
 
 ioredis@^5.2.2, ioredis@^5.2.3:
   version "5.2.4"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.2.4.tgz#9e262a668bc29bae98f2054c1e0d7efd86996b96"
+  resolved "https://registry.npmjs.org/ioredis/-/ioredis-5.2.4.tgz"
   integrity sha512-qIpuAEt32lZJQ0XyrloCRdlEdUUNGG9i0UOk6zgzK6igyudNWqEBxfH6OlbnOOoBBvr1WB02mm8fR55CnikRng==
   dependencies:
     "@ioredis/commands" "^1.1.1"
@@ -4543,7 +4578,7 @@ locate-path@^6.0.0:
 
 lodash.defaults@^4.2.0:
   version "4.2.0"
-  resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+  resolved "https://registry.npmjs.org/lodash.defaults/-/lodash.defaults-4.2.0.tgz"
   integrity sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==
 
 lodash.flatten@^4.4.0:
@@ -4558,7 +4593,7 @@ lodash.get@^4.4.2:
 
 lodash.isarguments@^3.1.0:
   version "3.1.0"
-  resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
+  resolved "https://registry.npmjs.org/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz"
   integrity sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==
 
 lodash.isequal@^4.5.0:
@@ -4884,7 +4919,7 @@ ms@2.1.3, ms@^2.1.3:
 
 msgpackr-extract@^2.2.0:
   version "2.2.0"
-  resolved "https://registry.yarnpkg.com/msgpackr-extract/-/msgpackr-extract-2.2.0.tgz#4bb749b58d9764cfdc0d91c7977a007b08e8f262"
+  resolved "https://registry.npmjs.org/msgpackr-extract/-/msgpackr-extract-2.2.0.tgz"
   integrity sha512-0YcvWSv7ZOGl9Od6Y5iJ3XnPww8O7WLcpYMDwX+PAA/uXLDtyw94PJv9GLQV/nnp3cWlDhMoyKZIQLrx33sWog==
   dependencies:
     node-gyp-build-optional-packages "5.0.3"
@@ -4898,7 +4933,7 @@ msgpackr-extract@^2.2.0:
 
 msgpackr@^1.6.2:
   version "1.8.1"
-  resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.8.1.tgz#2298aed8a14f83e99df77d344cbda3e436f29b5b"
+  resolved "https://registry.npmjs.org/msgpackr/-/msgpackr-1.8.1.tgz"
   integrity sha512-05fT4J8ZqjYlR4QcRDIhLCYKUOHXk7C/xa62GzMKj74l3up9k2QZ3LgFc6qWdsPHl91QA2WLWqWc8b8t7GLNNw==
   optionalDependencies:
     msgpackr-extract "^2.2.0"
@@ -4996,7 +5031,7 @@ node-emoji@^1.11.0:
 
 node-gyp-build-optional-packages@5.0.3:
   version "5.0.3"
-  resolved "https://registry.yarnpkg.com/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.3.tgz#92a89d400352c44ad3975010368072b41ad66c17"
+  resolved "https://registry.npmjs.org/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.3.tgz"
   integrity sha512-k75jcVzk5wnnc/FMxsf4udAoTEUv2jY3ycfdSd3yWu6Cnd1oee6/CfZJApyscA4FJOmdoixWwiwOyf16RzD5JA==
 
 node-repl-await@^0.1.2:
@@ -5613,12 +5648,12 @@ redeyed@~2.1.0:
 
 redis-errors@^1.0.0, redis-errors@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/redis-errors/-/redis-errors-1.2.0.tgz#eb62d2adb15e4eaf4610c04afe1529384250abad"
+  resolved "https://registry.npmjs.org/redis-errors/-/redis-errors-1.2.0.tgz"
   integrity sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==
 
 redis-parser@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/redis-parser/-/redis-parser-3.0.0.tgz#b66d828cdcafe6b4b8a428a7def4c6bcac31c8b4"
+  resolved "https://registry.npmjs.org/redis-parser/-/redis-parser-3.0.0.tgz"
   integrity sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==
   dependencies:
     redis-errors "^1.0.0"
@@ -5983,7 +6018,7 @@ source-map-resolve@^0.5.0:
 
 source-map-support@^0.5.21:
   version "0.5.21"
-  resolved "https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.21.tgz"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
   integrity sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==
   dependencies:
     buffer-from "^1.0.0"
@@ -6041,7 +6076,7 @@ stacktracey@^2.1.8:
 
 standard-as-callback@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/standard-as-callback/-/standard-as-callback-2.1.0.tgz#8953fc05359868a77b5b9739a665c5977bb7df45"
+  resolved "https://registry.npmjs.org/standard-as-callback/-/standard-as-callback-2.1.0.tgz"
   integrity sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==
 
 static-extend@^0.1.1:

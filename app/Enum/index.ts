@@ -1,7 +1,7 @@
-enum ROLE {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  USER = 'user',
+enum Roles {
+  ADMIN = '1',
+  MANAGER = '2',
+  USER = '3'
 }
 enum CURRENCY {
   NGN = 'NGN',
@@ -17,4 +17,4 @@ enum PasswordAction {
   PasswordVerification  = "verification",
   PasswordReset = "reset"
 }
-export { ROLE, CURRENCY, PAYMENT_STATUS, PasswordAction }
+export { Roles, CURRENCY, PAYMENT_STATUS, PasswordAction }

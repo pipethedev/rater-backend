@@ -3,10 +3,11 @@ import { container, injectable } from 'tsyringe'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UserRepository from 'App/Repository/UserRepository'
 import { AppError } from 'App/Exceptions/Handler'
-import httpStatus from 'http-status'
+import { UNAUTHORIZED } from 'http-status'
 import { SuccessResponse } from 'App/Helpers'
 import User from 'App/Models/User'
 import Database from '@ioc:Adonis/Lucid/Database'
+import UnAuthorizedException from 'App/Exceptions/UnAuthorizedException'
 
 @injectable()
 export default class AuthService {
@@ -14,9 +15,11 @@ export default class AuthService {
 
   public async login(body: Login, { auth }) {
     const { email, password } = body
-    const user = await this.userRepository.findByEmail(email)
+    const user = await this.userRepository.findByEmail(email) as User
+
+    if(user.banned && user.banned_at !== null) throw new UnAuthorizedException('Your account has been banned, please contact support')
     // Verify password
-    if (!(await Hash.verify(user?.password as string, password))) throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials')
+    if (!(await Hash.verify(user?.password as string, password))) throw new AppError(UNAUTHORIZED, 'Invalid credentials')
     // Generate token
     const token = await auth.use('api').attempt(email, password, {
       expiresIn: '24hours',

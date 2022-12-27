@@ -31,13 +31,5 @@ export default Env.rules({
   SMTP_HOST: Env.schema.string({ format: 'host' }),
   SMTP_PORT: Env.schema.number(),
   SMTP_USERNAME: Env.schema.string(),
-  SMTP_PASSWORD: Env.schema.string(),
-
-  FIREBASE_KEY: Env.schema.string(),
-  FIREBASE_AUTH_DOMAIN: Env.schema.string(),
-  FIREBASE_PROJECT_ID: Env.schema.string(),
-  FIREBASE_STORAGE_BUCKET: Env.schema.string(),
-  FIREBASE_MESSAGING_SENDER_ID: Env.schema.string(),
-  FIREBASE_APP_ID: Env.schema.string(),
-  FIREBASE_MEASUREMENT_ID: Env.schema.string()
+  SMTP_PASSWORD: Env.schema.string()
 })

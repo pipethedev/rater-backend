@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserService from 'App/Services/UserService'
 import { ForgotPassword, Register, ResetPassword } from 'App/Types'
-import httpStatus from 'http-status'
+import { OK } from 'http-status'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import AuthService from 'App/Services/AuthService'
@@ -105,6 +105,6 @@ export default class AuthController {
       auth.logout(),
       auth.use('api').revoke()
     ])
-    return response.status(httpStatus.OK)
+    return response.status(OK)
   }
 }

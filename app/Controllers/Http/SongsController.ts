@@ -28,9 +28,49 @@ export default class SongsController {
           }
     }
 
-    public async getAllSongs({ }: HttpContextContract){}
+    public async getAllSongs({ auth, response }: HttpContextContract){
+      try {
+        const { id } = auth.user!
 
-    public async fetchSingleSong({ }: HttpContextContract){}
+        const result = await this.songService.fetchSongs(id)
+        
+        return response.ok(result)
+      } catch (error) {
+        Logger.error(error.message)
+        if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+        return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not fetch your songs, try again later!', error))
+      }
+    }
 
-    public async deleteSong({ }: HttpContextContract){}
+    public async fetchSingleSong({ auth, request, response }: HttpContextContract){
+      try {
+
+        const { id } = auth.user!
+
+        const result = await this.songService.fetchSingleSong(id, request.param('songId'))
+
+        return response.ok(result)
+        
+      } catch (error) {
+        Logger.error(error.message)
+        if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+        return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not fetch your song, try again later!', error))
+      }
+    }
+
+    public async deleteSong({ auth, request, response }: HttpContextContract){
+      try {
+
+        const { id } = auth.user!
+
+        const result = await this.songService.deleteSong(id, request.param('songId'))
+
+        return response.ok(result)
+        
+      } catch (error) {
+        Logger.error(error.message)
+        if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+        return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not delete your song, try again later!', error))
+      }
+    }
 }

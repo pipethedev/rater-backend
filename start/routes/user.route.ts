@@ -13,5 +13,5 @@ Route.group(() => {
 
   }).prefix('/user/profile')
 
-  Route.get('/users', 'UsersController.getAllUsers')
+  Route.get('/users', 'UsersController.getAllUsers').middleware(['auth:api', 'role:admin'])
 }).prefix('/api/v1')

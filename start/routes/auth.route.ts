@@ -5,7 +5,7 @@ import { RegisterValidation, LoginValidation, EmailValidation, ResetPasswordVali
 Route.group(() => {
   // Authentication routes
   Route.group(() => {
-    Route.post('/login', 'AuthController.login').middleware(validate(LoginValidation))
+    Route.post('/login', 'AuthController.login').middleware([validate(LoginValidation)])
 
     Route.post('/register', 'AuthController.register').middleware(validate(RegisterValidation))
 

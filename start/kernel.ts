@@ -40,5 +40,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 */
 Server.middleware.registerNamed({
   auth: () => import('App/Middleware/Auth'),
-  verified: () => import('App/Middleware/EmailVerified')  
+  verified: () => import('App/Middleware/EmailVerified'),
+  banned: () => import('App/Middleware/Banned'),
+  role: () => import('App/Middleware/Role')
 })
