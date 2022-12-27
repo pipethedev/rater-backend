@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeSave } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeSave, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import { v4 as uuidv4 } from 'uuid'
+import Rating from './Rating'
 
 export default class Song extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -31,6 +32,11 @@ export default class Song extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
+
+  @hasMany(() => Rating, {
+    foreignKey: 'song_id',
+  })
+  public ratings: HasMany<typeof Rating>
 
   @beforeSave()
   public static async generateUUID(song: Song) {
