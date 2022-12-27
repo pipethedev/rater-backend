@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table.uuid('user_id').notNullable()
-      table.uuid('song_id').notNullable()
+      table.uuid('song_id').nullable()
       table.uuid('pricing_id').notNullable()
       table.integer('amount').notNullable()
       table.enum('currency', ['NGN', 'USD']).notNullable()

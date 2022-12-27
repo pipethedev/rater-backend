@@ -14,14 +14,16 @@ import UserRepository from "App/Repository/UserRepository";
 import User from "App/Models/User";
 import Env from '@ioc:Adonis/Core/Env'
 import Song from "App/Models/Song";
+import PaystackService from "./PaystackService";
 
 @injectable()
 export default class SongService {
+    protected paystackService: PaystackService = container.resolve(PaystackService)
     protected songRepository: SongRepository = container.resolve(SongRepository)
     protected mailService: MailService = container.resolve(MailService)
     protected userRepository: UserRepository = container.resolve(UserRepository)
 
-    public async saveRecord(userId: string, { title }: UploadSong, file: MultipartFileContract) {
+    public async saveRecord(userId: string, { title, payment_reference }: UploadSong, file: MultipartFileContract) {
         const trx = await Database.transaction()
         try {
             if(!file) throw new AppError(UNSUPPORTED_MEDIA_TYPE, "Kindly provide a file!")
@@ -29,6 +31,8 @@ export default class SongService {
             if (!file.isValid) throw file.errors;
 
             const { id, email, first_name, last_name } = await this.userRepository.findByID(userId) as User
+
+            await this.paystackService.verify(payment_reference)
 
             const encrypt = Encryption.child({ secret: randomBytes(16).toString('hex') });
               

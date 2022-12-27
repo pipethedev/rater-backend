@@ -45,11 +45,22 @@ export default class UserService {
         user
       )
     } catch (error: any) {
-      console.log(error)
       await trx.rollback()
       throw error
     }
   }
+
+  // public async createWorker (body: CreateWorker) {
+  //   const trx = await Database.transaction()
+  //   try {
+  //     await this.findUserbyEmail(body.email);
+  //     const worker = await this.userRepository.create(body, trx)
+  //     await trx.commit()
+  //   } catch (error) {
+  //     await trx.rollback()
+  //     throw error
+  //   }
+  // }
 
   public async updateProfile(id: string, body: UpdateUser) {
     const trx = await Database.transaction()

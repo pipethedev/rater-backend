@@ -1,4 +1,4 @@
-import { ROLE } from 'App/Enum'
+import { Roles } from 'App/Enum'
 import { DateTime } from 'luxon'
 
 type ObjectLiteral = {
@@ -10,7 +10,7 @@ type User = {
   last_name: string
   phone_number: string
   email: string
-  role: ROLE
+  role: Roles
   password: string
   banned: boolean
   banned_at: string
@@ -22,9 +22,15 @@ type Login = Pick<User, 'email' | 'password'>
 type Register = Omit<User, 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
 type UpdateUser = Omit<User, 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
 
+type CreateWorker = Pick<User, 'first_name' | 'last_name' | 'email' | 'role'>
+
 type ChangePassword = {
   old_password: string;
   password: string;
+}
+
+type UpdatePricing = {
+  price: number;
 }
 
 type ResetPassword = ChangePassword;
@@ -45,4 +51,4 @@ type UploadSong = {
   payment_reference: string;
 }
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UploadSong }
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker }

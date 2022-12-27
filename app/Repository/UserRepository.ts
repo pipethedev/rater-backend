@@ -1,12 +1,12 @@
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import User from 'App/Models/User'
-import { Register } from 'App/Types'
+import { CreateWorker, Register } from 'App/Types'
 import { injectable } from 'tsyringe'
 
 @injectable()
 export default class UserRepository {
 
-  public async create(data: Register, transaction: TransactionClientContract): Promise<User> {
+  public async create(data: Register | CreateWorker, transaction: TransactionClientContract): Promise<User> {
     return await User.create(data, { client: transaction });
   }
 

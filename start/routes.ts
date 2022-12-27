@@ -23,6 +23,7 @@ import Route from '@ioc:Adonis/Core/Route'
 import './routes/auth.route'
 import './routes/user.route'
 import './routes/song.route'
+import './routes/pricing.route'
 
 Route.get('/', async () => {
   return {
@@ -31,3 +32,5 @@ Route.get('/', async () => {
     author: 'Muritala David Ilerioluwa',
   }
 })
+
+Route.post('/api/v1/paystack-webhook', 'WebhookController.manage').middleware('paystack')

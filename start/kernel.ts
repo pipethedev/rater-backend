@@ -42,5 +42,6 @@ Server.middleware.registerNamed({
   auth: () => import('App/Middleware/Auth'),
   verified: () => import('App/Middleware/EmailVerified'),
   banned: () => import('App/Middleware/Banned'),
-  role: () => import('App/Middleware/Role')
+  role: () => import('App/Middleware/Role'),
+  paystack: () => import('App/Middleware/ValidatePaystack')  
 })

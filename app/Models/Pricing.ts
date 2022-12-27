@@ -12,7 +12,7 @@ export default class Pricing extends BaseModel {
   public description: string
 
   @column({ columnName: 'price' })
-  public price: string
+  public price: number
 
   @column({ columnName: 'duration' })
   public duration: string

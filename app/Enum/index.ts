@@ -13,8 +13,13 @@ enum PAYMENT_STATUS {
   FAILED = 'FAILED',
 }
 
+enum PaystackEventAction {
+  SUCCESSFUL = 'charge.success',
+  FAILED = 'charge.failed'
+}
+
 enum PasswordAction {
   PasswordVerification  = "verification",
   PasswordReset = "reset"
 }
-export { Roles, CURRENCY, PAYMENT_STATUS, PasswordAction }
+export { Roles, CURRENCY, PAYMENT_STATUS, PasswordAction, PaystackEventAction }

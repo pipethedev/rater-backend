@@ -10,7 +10,7 @@ export default class Transaction extends BaseModel {
   public user_id: string
 
   @column({ columnName: 'song_id' })
-  public song_id: string
+  public song_id: string | null
 
   @column({ columnName: 'pricing_id' })
   public pricing_id: string

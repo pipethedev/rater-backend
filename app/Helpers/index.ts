@@ -18,6 +18,10 @@ export const ErrorResponse = (message: string, errors?: any[]) => {
   }
 }
 
+export const convertToKobo = (amount: number) => {
+  return amount / 100;
+}
+
 const validate = (rules: ObjectLiteral, validationMessages?: ObjectLiteral) => {
   return async (ctx, next) => {
     const validation = new Validator(ctx.request.body(), rules, validationMessages)

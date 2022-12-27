@@ -51,6 +51,18 @@ export default class UsersController {
     }
   }
 
+  // public async createWorker({ request, response }: HttpContextContract) {
+  //   try {
+  //     const body = request.body() as CreateWorker
+  //     const result = await this.userService.createUser()
+  //     return response.ok(result)
+  //   } catch (error) {
+  //     Logger.error(error.message)
+  //     if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+  //     return response.internalServerError(ErrorResponse('We could not ban user, try again later!'))
+  //   }
+  // }
+
   public async banUser({ request, response }: HttpContextContract) {
     try {
       const result = await this.userService.ban(request.param('userId') as string)
