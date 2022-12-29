@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, beforeSave, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { Roles } from 'App/Enum'
 import { v4 as uuidv4 } from 'uuid'
+import Rating from './Rating'
 
 export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -53,6 +54,11 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
+
+  @hasMany(() => Rating, {
+    foreignKey: 'song_id',
+  })
+  public ratings: HasMany<typeof Rating>
 
   @beforeSave()
   public static async hashPassword(user: User) {

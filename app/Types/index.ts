@@ -51,4 +51,10 @@ type UploadSong = {
   payment_reference: string;
 }
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker }
+type RateSongBody = {
+  song_id: string;
+  rating: number;
+  comment: string;
+}
+
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody }

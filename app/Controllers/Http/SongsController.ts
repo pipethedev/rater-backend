@@ -53,6 +53,19 @@ export default class SongsController {
       }
     }
 
+    public async downloadSong({ request, response }: HttpContextContract){
+      try {
+        const result = await this.songService.download(request.param('songId'), { response })
+
+        return response.stream(result)
+        
+      } catch (error) {
+        Logger.error(error.message)
+        if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+        return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not delete your song, try again later!', error))
+      }
+    }
+
     public async deleteSong({ auth, request, response }: HttpContextContract){
       try {
 

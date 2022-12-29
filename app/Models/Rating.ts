@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, beforeSave, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Song from './Song'
+import { v4 as uuidv4 } from 'uuid'
+import User from './User'
 
 export default class Rating extends BaseModel {
   @column({ isPrimary: true })
@@ -9,8 +11,11 @@ export default class Rating extends BaseModel {
   @column({ columnName: 'user_id' })
   public user_id: string
 
-  @column({ columnName: 'song_id' })
+  @column({ columnName: 'worker_id' })
   public song_id: string
+
+  @column({ columnName: 'song_id' })
+  public worker_id: string
 
   @column({ columnName: 'rating' })
   public rating: number
@@ -26,4 +31,14 @@ export default class Rating extends BaseModel {
 
   @belongsTo(() => Song)
   public song: BelongsTo<typeof Song>
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @beforeSave()
+  public static async generateUUID(rating: Rating) {
+    if (!rating.$dirty.id) {
+      rating.id = uuidv4()
+    }
+  }
 }

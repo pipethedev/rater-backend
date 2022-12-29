@@ -18,7 +18,7 @@ export const ErrorResponse = (message: string, errors?: any[]) => {
   }
 }
 
-export const convertToKobo = (amount: number) => {
+export const convertToNaria = (amount: number) => {
   return amount / 100;
 }
 

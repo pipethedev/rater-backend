@@ -24,6 +24,7 @@ import './routes/auth.route'
 import './routes/user.route'
 import './routes/song.route'
 import './routes/pricing.route'
+import './routes/rating.route'
 
 Route.get('/', async () => {
   return {
@@ -32,5 +33,7 @@ Route.get('/', async () => {
     author: 'Muritala David Ilerioluwa',
   }
 })
+
+Route.get('/api/v1/dashboard/stats', 'StatsController.get').middleware(['auth:api'])
 
 Route.post('/api/v1/paystack-webhook', 'WebhookController.manage').middleware('paystack')

@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { ErrorResponse, SuccessResponse } from 'App/Helpers'
 import Logger from '@ioc:Adonis/Core/Logger'
-import { ChangePassword, UpdateUser } from 'App/Types'
+import { ChangePassword, CreateWorker, UpdateUser } from 'App/Types'
 import UserService from 'App/Services/UserService'
 import { container } from 'tsyringe'
 import { AppError } from 'App/Exceptions/Handler'
@@ -51,17 +51,17 @@ export default class UsersController {
     }
   }
 
-  // public async createWorker({ request, response }: HttpContextContract) {
-  //   try {
-  //     const body = request.body() as CreateWorker
-  //     const result = await this.userService.createUser()
-  //     return response.ok(result)
-  //   } catch (error) {
-  //     Logger.error(error.message)
-  //     if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
-  //     return response.internalServerError(ErrorResponse('We could not ban user, try again later!'))
-  //   }
-  // }
+  public async createWorker({ request, response }: HttpContextContract) {
+    try {
+      const body = request.body() as CreateWorker
+      const result = await this.userService.createWorker(body)
+      return response.ok(result)
+    } catch (error) {
+      Logger.error(error.message)
+      if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+      return response.internalServerError(ErrorResponse('We could not create a worker, try again later!'))
+    }
+  }
 
   public async banUser({ request, response }: HttpContextContract) {
     try {

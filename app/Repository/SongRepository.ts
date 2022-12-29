@@ -16,8 +16,12 @@ export default class SongRepository {
         return await Song.query().where('user_id', userId);
     }
 
+    public async findOneById(songId: string): Promise<Song| null> {
+        return await Song.query().where('id', songId ).preload('ratings').first();
+    }
+
     public async findOneByUser(userId: string, songId: string): Promise<Song| null> {
-        return await Song.query().where('id', songId ).andWhere('user_id', userId ).first();
+        return await Song.query().where('id', songId ).andWhere('user_id', userId ).preload('ratings').first();
     }
 
     public async deleteOneByUser(userId: string, songId: string): Promise<any> {

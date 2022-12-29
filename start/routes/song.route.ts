@@ -11,5 +11,7 @@ Route.group(() => {
 
     Route.delete('/:songId', 'SongsController.deleteSong').middleware('role:user')
 
+    Route.get('/download/:songId', 'SongsController.downloadSong').middleware('auth:api')
+
   }).prefix('/song').middleware(['auth:api', 'banned'])
 }).prefix('/api/v1')

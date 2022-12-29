@@ -1,3 +1,4 @@
+import { extname } from 'path'
 import { UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
@@ -17,6 +18,7 @@ import Song from "App/Models/Song";
 import PaystackService from "./PaystackService";
 import ReferenceRepository from "App/Repository/ReferenceRepository";
 import PaymentReference from "App/Models/PaymentReference";
+import { Roles } from 'App/Enum';
 
 @injectable()
 export default class SongService {
@@ -57,10 +59,11 @@ export default class SongService {
                 external_id: generatedId
             }, trx)
 
+            await Promise.all([
+                this.paymentReferenceRepository.update(payment.id, { used: true }, trx),
 
-            await this.paymentReferenceRepository.update(payment.id, { used: true }, trx)
-
-            await this.mailService.send(email, `${Env.get('APP_NAME')} sound submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song})
+                this.mailService.send(email, `${Env.get('APP_NAME')} sound submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song})
+            ])
 
             await trx.commit()
             return SuccessResponse("File uploaded successfully, an adminstrator will get back to you", song)
@@ -81,11 +84,26 @@ export default class SongService {
 
     public async fetchSingleSong(userId: string, songId: string) {
         try {
-            const song = await this.songRepository.findOneByUser(userId, songId)
-            return SuccessResponse("All uploaded songs fetched successfully", song)
+            let song = await this.songRepository.findOneByUser(userId, songId)
+            const user = await this.userRepository.findByID(userId) as User
+            if (user.role !== Roles.USER) {
+                song = await this.songRepository.findOneById(songId)
+            }
+            return SuccessResponse("Song fetched successfully", song)
         } catch (error) {
             throw error;
         }
+    }
+
+    public async download(songId: string, { response }) {
+        const song = await this.songRepository.findOneById(songId) as Song
+
+        const { size } = await Drive.getStats(song.external_id)
+
+        response.type(extname(song.external_id))
+        response.header('content-length', size)
+      
+        return await Drive.getStream(song.external_id)
     }
 
     public async deleteSong(userId: string, songId: string) {

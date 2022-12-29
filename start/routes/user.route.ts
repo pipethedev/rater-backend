@@ -1,6 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 import validate from 'App/Helpers'
-import { UpdateUserValidation, UpdatePasswordValidation } from 'App/Validation'
+import { UpdateUserValidation, UpdatePasswordValidation, CreateWorker } from 'App/Validation'
 
 Route.group(() => {
   // User routes
@@ -13,7 +13,14 @@ Route.group(() => {
 
   }).prefix('/user/profile')
 
-  Route.get('/users', 'UsersController.getAllUsers').middleware(['auth:api', 'role:admin'])
+  Route.group(() => {
 
-  Route.put('/users/:userId', 'UsersController.banUser').middleware(['auth:api', 'role:admin' ])
+    Route.post('/create-worker', 'UsersController.createWorker').middleware(validate(CreateWorker))
+
+    Route.get('/', 'UsersController.getAllUsers')
+  
+    Route.put('/:userId', 'UsersController.banUser')
+
+  }).prefix('/users').middleware(['auth:api', 'role:admin'])
+
 }).prefix('/api/v1')

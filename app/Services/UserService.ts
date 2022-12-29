@@ -1,8 +1,9 @@
 import { SuccessResponse } from 'App/Helpers'
 import User from 'App/Models/User'
+import * as passwordGenerator from "secure-random-password"
 import { createHash, randomBytes } from 'crypto'
 import UserRepository from 'App/Repository/UserRepository'
-import { ChangePassword, Register, ResetPassword, UpdateUser } from 'App/Types'
+import { ChangePassword, CreateWorker, Register, ResetPassword, UpdateUser } from 'App/Types'
 import { container } from 'tsyringe'
 import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import { AppError } from 'App/Exceptions/Handler'
@@ -11,7 +12,7 @@ import MailService from './MailService'
 import Route from '@ioc:Adonis/Core/Route'
 import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { PasswordAction } from 'App/Enum'
+import { PasswordAction, Roles } from 'App/Enum'
 
 export default class UserService {
   public userRepository: UserRepository = container.resolve(UserRepository)
@@ -50,17 +51,23 @@ export default class UserService {
     }
   }
 
-  // public async createWorker (body: CreateWorker) {
-  //   const trx = await Database.transaction()
-  //   try {
-  //     await this.findUserbyEmail(body.email);
-  //     const worker = await this.userRepository.create(body, trx)
-  //     await trx.commit()
-  //   } catch (error) {
-  //     await trx.rollback()
-  //     throw error
-  //   }
-  // }
+  public async createWorker (body: CreateWorker) {
+    const trx = await Database.transaction()
+    try {
+      const password = passwordGenerator.randomPassword({ length: 8, characters: [passwordGenerator.lower, passwordGenerator.upper, passwordGenerator.digits] })
+
+      const worker = await this.userRepository.create({ ...body, password, role: Roles.MANAGER }, trx)
+
+      await this.mailService.send(body.email, 'Welcome aboard !', 'emails/worker', { ...worker, password })
+
+      await trx.commit()
+
+      return SuccessResponse<User>('Worker created successfully', worker)
+    } catch (error) {
+      await trx.rollback()
+      throw error
+    }
+  }
 
   public async updateProfile(id: string, body: UpdateUser) {
     const trx = await Database.transaction()

@@ -26,10 +26,20 @@ const ResetPasswordValidation = {
   password: 'required|confirmed'
 }
 
+const CreateWorker = UpdateUserValidation;
+
+const RateSongValidation = {
+  song_id: 'required|uuid|string',
+  rating: 'required|integer|max:5|min:1',
+  comment: 'required|string'
+}
+
 export {
   RegisterValidation,
   LoginValidation,
   UpdateUserValidation,
   UpdatePasswordValidation,
   ResetPasswordValidation,
+  CreateWorker,
+  RateSongValidation
 }
