@@ -5,6 +5,7 @@ import RatingService from 'App/Services/RatingService'
 import { RateSongBody } from 'App/Types'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
+import Rating from 'App/Models/Rating'
 
 export default class RatingsController {
     protected ratingService : RatingService = container.resolve(RatingService)
@@ -24,7 +25,11 @@ export default class RatingsController {
         }
     }
 
-    public async allRating({ }: HttpContextContract) {}
+    public async songRating({ request, response }: HttpContextContract) {
+        const result = await Rating.query().preload('user').where('song_id', request.param('songId'))
+
+        return response.ok(result)
+    }
 
     public async updateRating({ }: HttpContextContract) {}
 }

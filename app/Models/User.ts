@@ -56,7 +56,7 @@ export default class User extends BaseModel {
   public updated_at: DateTime
 
   @hasMany(() => Rating, {
-    foreignKey: 'song_id',
+    foreignKey: 'user_id',
   })
   public ratings: HasMany<typeof Rating>
 

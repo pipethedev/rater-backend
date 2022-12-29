@@ -86,6 +86,9 @@ export default class SongService {
         try {
             let song = await this.songRepository.findOneByUser(userId, songId)
             const user = await this.userRepository.findByID(userId) as User
+
+            console.log(user.role)
+
             if (user.role !== Roles.USER) {
                 song = await this.songRepository.findOneById(songId)
             }

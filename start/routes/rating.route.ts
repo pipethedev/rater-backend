@@ -9,6 +9,8 @@ Route.group(() => {
 
     Route.post('/rate-song', 'RatingsController.rateSong').middleware(validate(RateSongValidation))
 
+    Route.get('/:songId', 'RatingsController.songRating')
+
   }).prefix('/rating').middleware(['auth:api', 'role:manager,admin'])
 
 }).prefix('/api/v1')

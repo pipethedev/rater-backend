@@ -11,28 +11,32 @@ export default class Rating extends BaseModel {
   @column({ columnName: 'user_id' })
   public user_id: string
 
-  @column({ columnName: 'worker_id' })
+  @column({ columnName: 'song_id'})
   public song_id: string
 
-  @column({ columnName: 'song_id' })
+  @column()
   public worker_id: string
 
-  @column({ columnName: 'rating' })
+  @column()
   public rating: number
 
-  @column({ columnName: 'comment' })
+  @column()
   public comment: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime()
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Song)
+  @belongsTo(() => Song, {
+    foreignKey: 'song_id',
+  })
   public song: BelongsTo<typeof Song>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'user_id',
+  })
   public user: BelongsTo<typeof User>
 
   @beforeSave()

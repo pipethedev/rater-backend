@@ -13,15 +13,19 @@ export default class SongRepository {
     }
 
     public async findAllByUser(userId: string): Promise<Song[]> {
-        return await Song.query().where('user_id', userId);
+        return await Song.query().where('user_id', userId).preload('ratings');
     }
 
     public async findOneById(songId: string): Promise<Song| null> {
-        return await Song.query().where('id', songId ).preload('ratings').first();
+        return await Song.query().where('id', songId ).preload('ratings', (ratingsQuery) => {
+            ratingsQuery.preload('user');
+        }).first();
     }
 
     public async findOneByUser(userId: string, songId: string): Promise<Song| null> {
-        return await Song.query().where('id', songId ).andWhere('user_id', userId ).preload('ratings').first();
+        return await Song.query().where('id', songId ).andWhere('user_id', userId ).preload('ratings', (ratingsQuery) => {
+            ratingsQuery.preload('user');
+        }).first();
     }
 
     public async deleteOneByUser(userId: string, songId: string): Promise<any> {
