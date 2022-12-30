@@ -1,4 +1,5 @@
 import { extname } from 'path'
+import Event from '@ioc:Adonis/Core/Event'
 import { UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
@@ -20,6 +21,7 @@ import ReferenceRepository from "App/Repository/ReferenceRepository";
 import PaymentReference from "App/Models/PaymentReference";
 import { RatingLevel, Roles } from 'App/Enum';
 import AllocationService from './AllocationService';
+import AllocationRepository from 'App/Repository/AllocationRepository';
 
 @injectable()
 export default class SongService {
@@ -29,6 +31,7 @@ export default class SongService {
     protected songRepository: SongRepository = container.resolve(SongRepository)
     protected mailService: MailService = container.resolve(MailService)
     protected userRepository: UserRepository = container.resolve(UserRepository)
+    protected allocationRepository: AllocationRepository = container.resolve(AllocationRepository)
 
     public async saveRecord(userId: string, { request }) {
         const trx = await Database.transaction()
@@ -61,9 +64,7 @@ export default class SongService {
                 external_id: generatedId
             }, trx)
 
-            await this.allocationService.create(song.id, trx)
-
-            // assign to a worker
+            Event.emit('create:allocation', { song_id: song.id })
 
             await Promise.all([
                 this.paymentReferenceRepository.update(payment.id, { used: true }, trx),
@@ -81,11 +82,24 @@ export default class SongService {
 
     public async fetchSongs(userId: string) {
         try {
+            let response: Song[];
             const user = await this.userRepository.findByID(userId) as User
 
-            const songs = user.role === Roles.ADMIN ? await this.songRepository.findByRating(RatingLevel.Good) :  await this.songRepository.findAllByUser(userId)
-            
-            return SuccessResponse<Song[]>("All uploaded songs fetched successfully", songs)
+            const data = await this.allocationRepository.findByWorkerId(userId)
+
+           switch (user.role) {
+                case Roles.ADMIN:
+                    response = await this.songRepository.findByRating(RatingLevel.Good)
+                break;
+                case Roles.USER:
+                    response = await this.songRepository.findAllByUser(userId)
+                break;
+                case Roles.MANAGER:
+                    response = data.map(({ song }) => song) as Song[]
+                break;
+           }
+            const role = Object.keys(Roles)[Number(user.role) - 1]
+            return SuccessResponse(`All songs fetched successfully for ${role}`, response)
         } catch (error) {
             throw error;
         }

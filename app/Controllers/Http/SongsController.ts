@@ -28,7 +28,7 @@ export default class SongsController {
         const { id } = auth.user!
 
         const result = await this.songService.fetchSongs(id)
-        
+         
         return response.ok(result)
       } catch (error) {
         Logger.error(error.message)

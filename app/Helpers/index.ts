@@ -61,6 +61,6 @@ export function convertoHex(str: string) {
   return '\\u' + arr.join('\\u')
 }
 
-export function random(min: number, max: number) { 
-  return Math.random() * (max - min) + min;
+export function random(min: number, max: number): number { 
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 } 
