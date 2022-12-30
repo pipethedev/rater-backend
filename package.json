@@ -38,6 +38,8 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.5",
+    "@babel/core": "^7.17.0",
+    "@babel/preset-env": "^7.16.0",
     "@japa/preset-adonis": "^1.2.0",
     "@japa/runner": "^2.2.2",
     "@types/proxy-addr": "^2.0.0",
@@ -50,6 +52,8 @@
     "pino-pretty": "^9.1.1",
     "prettier": "^2.8.1",
     "typescript": "~4.6",
+    "webpack": "^5.72",
+    "webpack-cli": "^4.9.1",
     "youch": "^3.2.2",
     "youch-terminal": "^2.1.5"
   },

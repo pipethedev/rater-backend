@@ -6,6 +6,7 @@ import AllocationRepository from "App/Repository/AllocationRepository";
 import UserRepository from "App/Repository/UserRepository";
 import { container, injectable } from "tsyringe";
 import { random } from "App/Helpers";
+import Logger from '@ioc:Adonis/Core/Logger'
 
 @injectable()
 export default class AllocationService {
@@ -47,7 +48,7 @@ export default class AllocationService {
                     }
                     await trx.commit();
                 }
-                console.log(`completed for ${workers[key].id}`)
+                Logger.info(`completed for ${workers[key].id}`)
             }
         } catch (error) {
             await trx.rollback()

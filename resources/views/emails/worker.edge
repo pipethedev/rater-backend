@@ -1,10 +1,335 @@
-<h1> Welcome {{ last_name }} {{ first_name}}, </h1>
-<p>
-  You have been invited as a worker on soundseeker.com. Please use the password generated below to login into your account.
-</p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitonal//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitonal.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta
+      http-equiv="Content-Type"
+      charset="UTF-8"
+      content="text/html; charset=utf-8"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk&display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      @import url("../fonts/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Regular.woff2");
+      body {
+        margin: 0;
+        /* @font-face {
+          font-family: "ClashGrotesk-Regular";
+          src: url("../fonts/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Regular.woff2")
+              format("woff2"),
+            url("../fonts/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Regular.woff")
+              format("woff"),
+            url("../fonts/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Regular.ttf")
+              format("truetype");
+          font-weight: 400;
+          font-display: swap;
+          font-style: normal;
+        } */
+        font-family: "Familjen Grotesk", sans-serif;
+      }
 
-<p>
-  <i>
-    <b> Password: </b> {{ password }}
-  </i>
-</p>
+      table {
+        border-spacing: 0;
+      }
+
+      td {
+        padding: 0;
+      }
+
+      img {
+        border: 0;
+      }
+
+      .wrapper {
+        width: 100%;
+        table-layout: fixed;
+        padding-bottom: 0px;
+      }
+
+      .main {
+        background-color: #fff;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+        border-spacing: 0;
+      }
+
+      .first_row {
+        background-image: url("https://i.ibb.co/3s161Yq/Vector.png");
+        background-color: #3b71f7;
+      }
+
+      .first_row_container {
+        position: relative;
+      }
+
+      .circle {
+        width: 40px;
+        height: 40px;
+
+        background: #d9d9d9;
+        border-radius: 50%;
+      }
+      .img-container {
+        width: 100%;
+      }
+
+      .instruction {
+        color: #676767;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 145%;
+      }
+
+      .greeting {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 25px;
+      }
+
+      .button {
+        background: #3b71f7;
+        border-radius: 64px;
+        padding: 15px 38px;
+        font-weight: bold;
+        font-size: 14px;
+        text-decoration: none;
+        color: #fff;
+      }
+
+      .second_row_content {
+        padding-right: 45px;
+      }
+
+      .third_row_content {
+        position: relative;
+        left: 90%;
+      }
+
+      .hq_address {
+        color: #676767;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 145%;
+      }
+
+      .code {
+        background: #f5f8ff;
+        border-radius: 16px;
+        padding: 14px 20px;
+        font-style: bold;
+        font-weight: 800;
+        font-size: 28px;
+        width: 100%;
+        max-width: 600px;
+        /* display: inline; */
+      }
+
+      .circle-copy {
+        width: 40px;
+        height: 40px;
+
+        background: #e5edff;
+        border-radius: 50%;
+        border: none;
+      }
+
+      .circle-copy:hover {
+        cursor: pointer;
+        background: #dce3f3;
+      }
+
+      .circle_copy img {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        margin: 0;
+
+        height: 50%;
+        width: 50%;
+        position: relative;
+        left: 22%;
+        bottom: -22%;
+      }
+
+      .verify_code input {
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        font-style: inherit;
+        outline: none;
+      }
+
+      /* .img-1 {
+        position: relative;
+        left: 70%;
+        transform: rotate(20deg);
+      } */
+    </style>
+  </head>
+  <body>
+    <center class="wrapper">
+      <table class="main" width="100%">
+        <!-- first row -->
+        <tbody>
+          <tr>
+            <td height="290" style="padding: 10px 30px" class="first_row">
+              <div class="first_row_container">
+                <table>
+                  <tbody>
+                    <tr>
+                      <p class="circle"></p>
+                    </tr>
+                  </tbody>
+                </table>
+                <table>
+                  <tr>
+                    <p style="color: white; font-size: 35px; font-weight: 600">
+                      Welcome to SoundSeek
+                    </p>
+                  </tr>
+                </table>
+
+                <!-- <img
+                  class="img-1"
+                  src="./Rectangle 7.png"
+                  alt=""
+                  style="position: absolute; right: -6%; top: 55%"
+                /> -->
+
+                <img
+                  src="https://i.ibb.co/M1FYd6v/Rectangle-7.png"
+                  alt="Rectangle-7"
+                  border="0"
+                  style="position: absolute; right: -6%; top: 55%"
+                />
+              </div>
+            </td>
+          </tr>
+          <!-- second row -->
+          <tr>
+            <td style="background-color: #fff; padding: 5% 30px 20% 30px">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="second_row_content">
+                      <p class="greeting">Hello {{ last_name }} {{ first_name }},</p>
+
+                      <p
+                        class="instruction"
+                        style="font-size: 14px; margin-bottom: 48px"
+                      >
+                        You have been invited as a worker on soundseeker.com.
+                        <br />
+
+                        Please kindly use the password below to log in to your
+                        account.
+                      </p>
+
+                      <!-- <a href="http://" class="button"> Reset Password </a> -->
+                      <table class="code">
+                        <tbody>
+                          <tr>
+                            <td class="verify_code">
+                              <input
+                                type="text"
+                                class="otp-code"
+                                value="{{ password }}"
+                                readonly
+                              />
+                            </td>
+
+                            <td>
+                              <button class="circle-copy">
+                                <img
+                                  src="https://i.ibb.co/b5j9s10/Icon.png"
+                                  alt="Icon"
+                                  border="0"
+                                />
+                                
+                
+                                <!-- <img src="./icons/Icon.png" alt="" /> -->
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Third row -->
+          <tr>
+            <td
+              height="140"
+              style="background-color: #fffaf0; padding: 0px 30px"
+            >
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class="hq_address">
+                        John Smith 123 Main Street Anytown, <br />
+                        USA 12345
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="third_row_content">
+                      <p style="font-size: 12px; font-weight: 700; color: #000">
+                        <a
+                          href="#"
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: #676767;
+                            text-decoration: none;
+                          "
+                          >Manage Email preferences</a
+                        >
+                        OR
+                        <a
+                          href="#"
+                          style="
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: #e50000;
+                          "
+                          >Unsubscribe</a
+                        >
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+
+    <script>
+      const inputField = document.querySelector(".otp-code");
+      const copyButton = document.querySelector(".circle-copy");
+
+      inputField.addEventListener("focus", () => inputField.select());
+
+      copyButton.addEventListener("click", () => {
+        const text = inputField.value;
+
+        inputField.select();
+        navigator.clipboard.writeText(text);
+      });
+    </script>
+  </body>
+</html>
