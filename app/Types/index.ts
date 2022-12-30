@@ -1,4 +1,4 @@
-import { Roles } from 'App/Enum'
+import { RatingLevel, Roles } from 'App/Enum'
 import { DateTime } from 'luxon'
 
 type ObjectLiteral = {
@@ -53,7 +53,7 @@ type UploadSong = {
 
 type RateSongBody = {
   song_id: string;
-  rating: number;
+  rating: RatingLevel;
   comment: string;
 }
 

@@ -18,10 +18,12 @@ import Song from "App/Models/Song";
 import PaystackService from "./PaystackService";
 import ReferenceRepository from "App/Repository/ReferenceRepository";
 import PaymentReference from "App/Models/PaymentReference";
-import { Roles } from 'App/Enum';
+import { RatingLevel, Roles } from 'App/Enum';
+import AllocationService from './AllocationService';
 
 @injectable()
 export default class SongService {
+    protected allocationService: AllocationService = container.resolve(AllocationService)
     protected paystackService: PaystackService = container.resolve(PaystackService)
     protected paymentReferenceRepository: ReferenceRepository = container.resolve(ReferenceRepository)
     protected songRepository: SongRepository = container.resolve(SongRepository)
@@ -59,10 +61,14 @@ export default class SongService {
                 external_id: generatedId
             }, trx)
 
+            await this.allocationService.create(song.id, trx)
+
+            // assign to a worker
+
             await Promise.all([
                 this.paymentReferenceRepository.update(payment.id, { used: true }, trx),
 
-                this.mailService.send(email, `${Env.get('APP_NAME')} sound submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song})
+                this.mailService.send(email, `${Env.get('APP_NAME')} sound submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song}),
             ])
 
             await trx.commit()
@@ -75,7 +81,10 @@ export default class SongService {
 
     public async fetchSongs(userId: string) {
         try {
-            const songs = await this.songRepository.findAllByUser(userId)
+            const user = await this.userRepository.findByID(userId) as User
+
+            const songs = user.role === Roles.ADMIN ? await this.songRepository.findByRating(RatingLevel.Good) :  await this.songRepository.findAllByUser(userId)
+            
             return SuccessResponse<Song[]>("All uploaded songs fetched successfully", songs)
         } catch (error) {
             throw error;
@@ -85,9 +94,8 @@ export default class SongService {
     public async fetchSingleSong(userId: string, songId: string) {
         try {
             let song = await this.songRepository.findOneByUser(userId, songId)
-            const user = await this.userRepository.findByID(userId) as User
 
-            console.log(user.role)
+            const user = await this.userRepository.findByID(userId) as User
 
             if (user.role !== Roles.USER) {
                 song = await this.songRepository.findOneById(songId)

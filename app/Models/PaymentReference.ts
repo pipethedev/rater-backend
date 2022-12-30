@@ -4,7 +4,6 @@ import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class PaymentReference extends BaseModel {
   public static table = "payment_references"
-  public static selfAssignPrimaryKey = true
 
   @column({ isPrimary: true })
   public id: string

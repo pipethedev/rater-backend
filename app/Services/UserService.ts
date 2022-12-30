@@ -32,15 +32,28 @@ export default class UserService {
   public async createUser(body: Register) {
     const trx = await Database.transaction()
     try {
-      await this.findUserbyEmail(body.email);
+      const emailCheck = await this.userRepository.findByEmail(body.email) as User
+
+      if(emailCheck) throw new AppError(httpStatus.BAD_REQUEST, 'User with this email address already exist')
+
+      const phoneCheck = await this.userRepository.findByPhoneNumber(body.phone_number) as User
+
+      if(phoneCheck) throw new AppError(httpStatus.BAD_REQUEST, 'User with this phone number already exist')
+
       const user = await this.userRepository.create(body, trx)
+
       const token = await this.generateTokenForUser(user.id, trx)
+
       const url = Route.makeUrl('verifyEmail', { token })
+
+
       await this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
         ...(user.toJSON()),
         url: Env.get('APP_URL') + url,
       })
+
       await trx.commit()
+
       return SuccessResponse<User>(
         'User registered successfully, check your email for verification',
         user

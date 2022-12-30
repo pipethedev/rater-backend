@@ -18,8 +18,11 @@ export default class WebhookService {
 
     public async execute({ event, data }: ObjectLiteral) {
         const trx = await Database.transaction()
+        console.log(data)
         try {
+
             const user = await this.userRepository.findByEmail(data.customer.email) as User
+
             const pricing = await this.pricingRepository.current() as Pricing
 
             if(event == PaystackEventAction.SUCCESSFUL) {
@@ -32,7 +35,7 @@ export default class WebhookService {
                         payment_status: PAYMENT_STATUS.SUCCESSFUL
                     }, trx)
                     // save reference to database
-                    await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id }, trx);               
+                    await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id, reference: data.reference }, trx);               
                 }
             }
             await trx.commit()

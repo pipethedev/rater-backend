@@ -60,3 +60,7 @@ export function convertoHex(str: string) {
   }
   return '\\u' + arr.join('\\u')
 }
+
+export function random(min: number, max: number) { 
+  return Math.random() * (max - min) + min;
+} 

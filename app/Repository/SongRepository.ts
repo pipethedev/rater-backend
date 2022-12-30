@@ -1,4 +1,5 @@
 import { TransactionClientContract } from "@ioc:Adonis/Lucid/Database";
+import { RatingLevel } from "App/Enum";
 import Song from "App/Models/Song";
 import { injectable } from "tsyringe";
 
@@ -14,6 +15,12 @@ export default class SongRepository {
 
     public async findAllByUser(userId: string): Promise<Song[]> {
         return await Song.query().where('user_id', userId).preload('ratings');
+    }
+
+    public async findByRating(rating: RatingLevel): Promise<Song[]> {
+        return await Song.query().whereHas('ratings', (ratingsQuery) => {
+            ratingsQuery.where('rating', rating).preload('user')
+        }, '>', 0)
     }
 
     public async findOneById(songId: string): Promise<Song| null> {

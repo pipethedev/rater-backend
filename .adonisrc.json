@@ -6,7 +6,8 @@
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands",
     "@adonisjs/mail/build/commands",
-    "@adonisjs/bouncer/build/commands"
+    "@adonisjs/bouncer/build/commands",
+    "adonis5-scheduler/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -18,7 +19,8 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/bouncer"
+    "./start/bouncer",
+    "./start/events"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -29,7 +31,8 @@
     "@adonisjs/view",
     "@adonisjs/bouncer",
     "@adonisjs/drive-s3",
-    "adonis5-bullmq"
+    "adonis5-bullmq",
+    "adonis5-scheduler"
   ],
   "aceProviders": [
     "@adonisjs/repl"

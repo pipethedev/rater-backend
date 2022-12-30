@@ -3,6 +3,14 @@ enum Roles {
   MANAGER = '2',
   USER = '3'
 }
+
+enum RatingLevel {
+  Excellent = 'Excellent',
+  Good = 'Good',
+  Bad = 'Bad',
+  Fair = 'Fair'
+}
+
 enum CURRENCY {
   NGN = 'NGN',
   USD = 'USD',
@@ -22,4 +30,4 @@ enum PasswordAction {
   PasswordVerification  = "verification",
   PasswordReset = "reset"
 }
-export { Roles, CURRENCY, PAYMENT_STATUS, PasswordAction, PaystackEventAction }
+export { Roles, CURRENCY, PAYMENT_STATUS, PasswordAction, PaystackEventAction, RatingLevel }

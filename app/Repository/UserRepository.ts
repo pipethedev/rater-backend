@@ -1,4 +1,5 @@
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import { Roles } from 'App/Enum';
 import User from 'App/Models/User'
 import { CreateWorker, Register } from 'App/Types'
 import { injectable } from 'tsyringe'
@@ -18,8 +19,12 @@ export default class UserRepository {
     return await User.findBy('email', email)
   }
 
-  public async all() {
-    return await User.all()
+  public async findByPhoneNumber(phone: string): Promise<User | null> {
+    return await User.findBy('phone_number', phone)
+  }
+
+  public async all(role?: Roles): Promise<User[]> {
+    return role ? await User.query().where('role', role) : await User.all()
   }
 
   public async findbyVerificationToken(token: string): Promise<User | null> {

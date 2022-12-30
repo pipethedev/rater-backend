@@ -19,7 +19,7 @@ export default Env.rules({
   PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
-  DRIVE_DISK: Env.schema.enum(['local', 's3'] as const),
+  DRIVE_DISK: Env.schema.enum(['s3'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
 
   MYSQL_HOST: Env.schema.string({ format: 'host' }),
@@ -34,5 +34,7 @@ export default Env.rules({
   SMTP_PASSWORD: Env.schema.string(),
 
   PAYSTACK_BASE_URL: Env.schema.string(),
-  PAYSTACK_SECRET_KEY: Env.schema.string()
+  PAYSTACK_SECRET_KEY: Env.schema.string(),
+
+  MAXIMUM_SONG_ALLOCATION: Env.schema.number(),
 })

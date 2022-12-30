@@ -3,6 +3,7 @@ import { BaseModel, BelongsTo, beforeSave, belongsTo, column } from '@ioc:Adonis
 import Song from './Song'
 import { v4 as uuidv4 } from 'uuid'
 import User from './User'
+import { RatingLevel } from 'App/Enum'
 
 export default class Rating extends BaseModel {
   @column({ isPrimary: true })
@@ -18,7 +19,7 @@ export default class Rating extends BaseModel {
   public worker_id: string
 
   @column()
-  public rating: number
+  public rating: RatingLevel
 
   @column()
   public comment: string

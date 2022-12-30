@@ -4,6 +4,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import { Roles } from 'App/Enum'
 import { v4 as uuidv4 } from 'uuid'
 import Rating from './Rating'
+import Song from './Song'
 
 export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -55,10 +56,13 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
 
-  @hasMany(() => Rating, {
+  @hasMany(() => Rating)
+  public ratings: HasMany<typeof Rating>
+
+  @hasMany(() => Song, {
     foreignKey: 'user_id',
   })
-  public ratings: HasMany<typeof Rating>
+  public songs: HasMany<typeof Song>
 
   @beforeSave()
   public static async hashPassword(user: User) {

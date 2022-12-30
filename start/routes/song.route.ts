@@ -3,7 +3,7 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   // User routes
   Route.group(() => {
-    Route.post('/upload', 'SongsController.create')
+    Route.post('/upload', 'SongsController.create').middleware('role:user')
 
     Route.get('/all', 'SongsController.getAllSongs')
 

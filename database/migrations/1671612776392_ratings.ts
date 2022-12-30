@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { RatingLevel } from 'App/Enum'
 
 export default class extends BaseSchema {
   protected tableName = 'ratings'
@@ -9,7 +10,7 @@ export default class extends BaseSchema {
       table.uuid('user_id').notNullable()
       table.uuid('worker_id').notNullable()
       table.uuid('song_id').notNullable()
-      table.integer('rating').notNullable()
+      table.enum('rating', [RatingLevel.Bad, RatingLevel.Fair, RatingLevel.Good, RatingLevel.Excellent]).notNullable()
       table.text('comment').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
