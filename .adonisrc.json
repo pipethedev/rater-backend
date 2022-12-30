@@ -31,7 +31,6 @@
     "@adonisjs/view",
     "@adonisjs/bouncer",
     "@adonisjs/drive-s3",
-    "adonis5-bullmq",
     "adonis5-scheduler"
   ],
   "aceProviders": [

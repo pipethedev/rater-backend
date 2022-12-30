@@ -2505,36 +2505,6 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@msgpackr-extract/msgpackr-extract-darwin-arm64@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-2.2.0.tgz"
-  integrity sha512-Z9LFPzfoJi4mflGWV+rv7o7ZbMU5oAU9VmzCgL240KnqDW65Y2HFCT3MW06/ITJSnbVLacmcEJA8phywK7JinQ==
-
-"@msgpackr-extract/msgpackr-extract-darwin-x64@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-darwin-x64/-/msgpackr-extract-darwin-x64-2.2.0.tgz#fb877fe6bae3c4d3cea29786737840e2ae689066"
-  integrity sha512-vq0tT8sjZsy4JdSqmadWVw6f66UXqUCabLmUVHZwUFzMgtgoIIQjT4VVRHKvlof3P/dMCkbMJ5hB1oJ9OWHaaw==
-
-"@msgpackr-extract/msgpackr-extract-linux-arm64@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-arm64/-/msgpackr-extract-linux-arm64-2.2.0.tgz#986179c38b10ac41fbdaf7d036c825cbc72855d9"
-  integrity sha512-hlxxLdRmPyq16QCutUtP8Tm6RDWcyaLsRssaHROatgnkOxdleMTgetf9JsdncL8vLh7FVy/RN9i3XR5dnb9cRA==
-
-"@msgpackr-extract/msgpackr-extract-linux-arm@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-arm/-/msgpackr-extract-linux-arm-2.2.0.tgz#15f2c6fe9e0adc06c21af7e95f484ff4880d79ce"
-  integrity sha512-SaJ3Qq4lX9Syd2xEo9u3qPxi/OB+5JO/ngJKK97XDpa1C587H9EWYO6KD8995DAjSinWvdHKRrCOXVUC5fvGOg==
-
-"@msgpackr-extract/msgpackr-extract-linux-x64@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-linux-x64/-/msgpackr-extract-linux-x64-2.2.0.tgz#30cae5c9a202f3e1fa1deb3191b18ffcb2f239a2"
-  integrity sha512-94y5PJrSOqUNcFKmOl7z319FelCLAE0rz/jPCWS+UtdMZvpa4jrQd+cJPQCLp2Fes1yAW/YUQj/Di6YVT3c3Iw==
-
-"@msgpackr-extract/msgpackr-extract-win32-x64@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-2.2.0.tgz#016d855b6bc459fd908095811f6826e45dd4ba64"
-  integrity sha512-XrC0JzsqQSvOyM3t04FMLO6z5gCuhPE6k4FXuLK5xf52ZbdvcFe1yBmo7meCew9B8G2f0T9iu9t3kfTYRYROgA==
-
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -3292,13 +3262,6 @@ adonis-preset-ts@^2.1.0:
   resolved "https://registry.npmjs.org/adonis-preset-ts/-/adonis-preset-ts-2.1.0.tgz"
   integrity sha512-cQH/NP250gOF9k3TTDhVsTOPSAvyH4MhKVZ4ryYiihA+vnP27sut1gVIrRas3Evl5d2wEgWVGI5DgdP/ZFSk0w==
 
-adonis5-bullmq@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/adonis5-bullmq/-/adonis5-bullmq-2.2.0.tgz#0273a731c7d963a17f9c3ee99efbece396102ae5"
-  integrity sha512-yzrM1KnWahryJWpIT1iT9Yuo5zPqyt1L4rcEQds4UGcdttwOiHAoWYTJMniRgu4b85PrPsqc6oivDJKaU3utKg==
-  dependencies:
-    bullmq "^1.78.2"
-
 adonis5-scheduler@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/adonis5-scheduler/-/adonis5-scheduler-2.0.2.tgz#2e59a09b74c20195a4a3b4ab1c0006c558f762b3"
@@ -3707,35 +3670,6 @@ builtins@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/builtins/-/builtins-1.0.3.tgz"
   integrity sha512-uYBjakWipfaO/bXI7E8rq6kpwHRZK5cNYrUv2OzZSI/FvmdMyXJ2tG9dKcjEC5YHmHpUAwsargWIZNWdxb/bnQ==
-
-bullmq@^1.78.2:
-  version "1.91.1"
-  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-1.91.1.tgz#ed17cfd4e314afa398fd099a32d365046b1ed4bc"
-  integrity sha512-u7dat9I8ZwouZ651AMZkBSvB6NVUPpnAjd4iokd9DM41whqIBnDjuL11h7+kEjcpiDKj6E+wxZiER00FqirZQg==
-  dependencies:
-    cron-parser "^4.6.0"
-    get-port "6.1.2"
-    glob "^8.0.3"
-    ioredis "^5.2.2"
-    lodash "^4.17.21"
-    msgpackr "^1.6.2"
-    semver "^7.3.7"
-    tslib "^2.0.0"
-    uuid "^9.0.0"
-
-bullmq@^3.5.1:
-  version "3.5.1"
-  resolved "https://registry.npmjs.org/bullmq/-/bullmq-3.5.1.tgz"
-  integrity sha512-QxQnSIPBmEVq/bM1wxmMdh9RS4oNyUNeCvoTegr2EgtlNYToCkLgHAkM56JhaRlffo9ExNiWfVFJpXLWDfK0Fw==
-  dependencies:
-    cron-parser "^4.6.0"
-    glob "^8.0.3"
-    ioredis "^5.2.2"
-    lodash "^4.17.21"
-    msgpackr "^1.6.2"
-    semver "^7.3.7"
-    tslib "^2.0.0"
-    uuid "^9.0.0"
 
 bytes@3.1.2, bytes@^3.1.0, bytes@^3.1.2:
   version "3.1.2"
@@ -4189,13 +4123,6 @@ cron-parser@^3.5.0:
   dependencies:
     is-nan "^1.3.2"
     luxon "^1.26.0"
-
-cron-parser@^4.6.0:
-  version "4.7.0"
-  resolved "https://registry.npmjs.org/cron-parser/-/cron-parser-4.7.0.tgz"
-  integrity sha512-BdAELR+MCT2ZWsIBhZKDuUqIUCBjHHulPJnm53OfdRLA4EWBjva3R+KM5NeidJuGsNXdEcZkjC7SCnkW5rAFSA==
-  dependencies:
-    luxon "^3.1.0"
 
 cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -5056,11 +4983,6 @@ get-package-type@^0.1.0:
   resolved "https://registry.npmjs.org/get-package-type/-/get-package-type-0.1.0.tgz"
   integrity sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==
 
-get-port@6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/get-port/-/get-port-6.1.2.tgz#c1228abb67ba0e17fb346da33b15187833b9c08a"
-  integrity sha512-BrGGraKm2uPqurfGVj/z97/zv8dPleC6x9JBNRTrDNtCkkRF4rPwrQXFgL7+I+q8QSdU4ntLQX2D7KIxSy8nGw==
-
 get-port@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/get-port/-/get-port-5.1.1.tgz"
@@ -5140,7 +5062,7 @@ glob@^7.1.3:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^8.0.0, glob@^8.0.3:
+glob@^8.0.0:
   version "8.0.3"
   resolved "https://registry.npmjs.org/glob/-/glob-8.0.3.tgz"
   integrity sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==
@@ -5467,7 +5389,7 @@ interpret@^2.2.0:
   resolved "https://registry.npmjs.org/interpret/-/interpret-2.2.0.tgz"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
 
-ioredis@^5.2.2, ioredis@^5.2.3:
+ioredis@^5.2.3:
   version "5.2.4"
   resolved "https://registry.npmjs.org/ioredis/-/ioredis-5.2.4.tgz"
   integrity sha512-qIpuAEt32lZJQ0XyrloCRdlEdUUNGG9i0UOk6zgzK6igyudNWqEBxfH6OlbnOOoBBvr1WB02mm8fR55CnikRng==
@@ -6323,27 +6245,6 @@ ms@2.1.3, ms@^2.1.3:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-msgpackr-extract@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/msgpackr-extract/-/msgpackr-extract-2.2.0.tgz"
-  integrity sha512-0YcvWSv7ZOGl9Od6Y5iJ3XnPww8O7WLcpYMDwX+PAA/uXLDtyw94PJv9GLQV/nnp3cWlDhMoyKZIQLrx33sWog==
-  dependencies:
-    node-gyp-build-optional-packages "5.0.3"
-  optionalDependencies:
-    "@msgpackr-extract/msgpackr-extract-darwin-arm64" "2.2.0"
-    "@msgpackr-extract/msgpackr-extract-darwin-x64" "2.2.0"
-    "@msgpackr-extract/msgpackr-extract-linux-arm" "2.2.0"
-    "@msgpackr-extract/msgpackr-extract-linux-arm64" "2.2.0"
-    "@msgpackr-extract/msgpackr-extract-linux-x64" "2.2.0"
-    "@msgpackr-extract/msgpackr-extract-win32-x64" "2.2.0"
-
-msgpackr@^1.6.2:
-  version "1.8.1"
-  resolved "https://registry.npmjs.org/msgpackr/-/msgpackr-1.8.1.tgz"
-  integrity sha512-05fT4J8ZqjYlR4QcRDIhLCYKUOHXk7C/xa62GzMKj74l3up9k2QZ3LgFc6qWdsPHl91QA2WLWqWc8b8t7GLNNw==
-  optionalDependencies:
-    msgpackr-extract "^2.2.0"
-
 multi-part-lite@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/multi-part-lite/-/multi-part-lite-1.0.0.tgz"
@@ -6444,11 +6345,6 @@ node-exceptions@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/node-exceptions/-/node-exceptions-4.0.1.tgz#70425d17a245c3c00709c72f57c4c20b39ef1a4c"
   integrity sha512-KJI+FawYOv74x60H6+zrBPfO2vvp9m0pHZi6SH8BBBuc67Irv11DsqY4Le4EBFq1/T5aXFU3hkLrMgtW7RNXxA==
-
-node-gyp-build-optional-packages@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.npmjs.org/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.3.tgz"
-  integrity sha512-k75jcVzk5wnnc/FMxsf4udAoTEUv2jY3ycfdSd3yWu6Cnd1oee6/CfZJApyscA4FJOmdoixWwiwOyf16RzD5JA==
 
 node-releases@^2.0.6:
   version "2.0.8"
@@ -7921,7 +7817,7 @@ tslib@^1.11.1, tslib@^1.8.1, tslib@^1.9.3:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.3.1:
+tslib@^2.0.3, tslib@^2.3.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
