@@ -57,4 +57,6 @@ type RateSongBody = {
   comment: string;
 }
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody }
+type UpdateSongRating = Omit<RateSongBody, 'song_id'>
+
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating }

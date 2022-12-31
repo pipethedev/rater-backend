@@ -1,16 +1,15 @@
 import { container, injectable } from "tsyringe";
 import Database from "@ioc:Adonis/Lucid/Database";
 import RatingRepository from "App/Repository/RatingRepository";
-import { RateSongBody } from "App/Types";
+import { RateSongBody, UpdateSongRating } from "App/Types";
 import { SuccessResponse } from "App/Helpers";
 import SongRepository from "App/Repository/SongRepository";
 import Song from "App/Models/Song";
 import UserRepository from "App/Repository/UserRepository";
 import User from "App/Models/User";
-import { Roles } from "App/Enum";
 import Rating from "App/Models/Rating";
 import { AppError } from "App/Exceptions/Handler";
-import { BAD_REQUEST } from "http-status";
+import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from "http-status";
 
 @injectable()
 export default class RatingService {
@@ -30,15 +29,38 @@ export default class RatingService {
 
             if(ratedSong) throw new AppError(BAD_REQUEST, "You have already rated this song")
 
-            if(worker.role === Roles.ADMIN) {
-                // Send a mail to the user about their review
-            }
-
             const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
 
             await trx.commit()
 
             return SuccessResponse("Song rated successfully", rating)
+        } catch (error) {
+            await trx.rollback()
+            throw error;
+        }
+    }
+
+    public async update(workerId: string, songId: string, body: UpdateSongRating) {
+        const trx = await Database.transaction()
+        try {
+            const worker = await this.userRepository.findByID(workerId) as User
+
+            if(!worker) throw new AppError(BAD_REQUEST, "Unable to rate song")
+
+            const song = await this.songRepository.findOneById(songId) as Song
+
+            if(!song) throw new AppError(NOT_FOUND, "This song does not exist")
+
+            // Check if user has rated the song before
+            const ratedSong = await this.ratingRepository.findByWorkerAndSongId(worker.id, songId) as Rating
+
+            if(!ratedSong) throw new AppError(FORBIDDEN, "You don't have the access to update this rating")
+
+            await this.ratingRepository.update(ratedSong.id, ratedSong.song_id, body)
+
+            await trx.commit()
+
+            return SuccessResponse("Song rating updated successfully", null)
         } catch (error) {
             await trx.rollback()
             throw error;

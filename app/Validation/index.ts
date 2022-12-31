@@ -30,7 +30,7 @@ const CreateWorker = UpdateUserValidation;
 
 const RateSongValidation = {
   song_id: 'required|uuid|string',
-  rating: 'required|in:Good,Bad,Fair|max:5|min:1',
+  rating: 'required|in:Good,Bad,Fair',
   comment: 'required|string'
 }
 
