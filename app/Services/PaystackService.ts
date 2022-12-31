@@ -1,5 +1,5 @@
 import Env from '@ioc:Adonis/Core/Env'
-import { AppError } from 'App/Exceptions/Handler';
+import AppError from 'App/Helpers/error';
 import { HTTPClient } from 'App/Helpers/http'
 import PaymentReference from 'App/Models/PaymentReference';
 import ReferenceRepository from 'App/Repository/ReferenceRepository';

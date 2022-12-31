@@ -2,9 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PricingService from 'App/Services/PricingService'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
-import { AppError } from 'App/Exceptions/Handler'
 import { ErrorResponse } from 'App/Helpers'
 import { UpdatePricing } from 'App/Types'
+import AppError from 'App/Helpers/error'
 
 export default class PricingsController {
 
