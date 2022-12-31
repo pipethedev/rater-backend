@@ -54,7 +54,9 @@ export default class UsersController {
   public async createWorker({ request, response }: HttpContextContract) {
     try {
       const body = request.body() as CreateWorker
+
       const result = await this.userService.createWorker(body)
+      
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)

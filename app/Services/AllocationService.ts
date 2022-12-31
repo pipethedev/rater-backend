@@ -19,14 +19,17 @@ export default class AllocationService {
 
         const midWay = Env.get('MAXIMUM_SONG_ALLOCATION') / 2
 
-        const workers = await this.userRepository.all(Roles.MANAGER)
         const trx = await Database.transaction()
         try {
+            const workers = await this.userRepository.all(Roles.MANAGER)
+
             for (let key of Object.keys(workers)) {
                 // Fetch all the song(s) allocated of the user for the past 24 hours
                 allocations = await this.allocationRepository.findbyWorkerIdAndDate(workers[key].id)
-        
-                if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
+
+                if(allocations.length === Env.get('MAXIMUM_SONG_ALLOCATION')) {
+
+                }else if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
                     const randomIndex = random(0, allocations.length === 0 ? 0 : allocations.length - 1) as number
         
                     // If the number of song(s) allocated is greater than or equal to the mid way which is 5
