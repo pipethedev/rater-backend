@@ -2,11 +2,11 @@ import { Login } from 'App/Types'
 import { container, injectable } from 'tsyringe'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UserRepository from 'App/Repository/UserRepository'
-import { AppError } from 'App/Exceptions/Handler'
 import { UNAUTHORIZED } from 'http-status'
 import { SuccessResponse } from 'App/Helpers'
 import User from 'App/Models/User'
 import Database from '@ioc:Adonis/Lucid/Database'
+import AppError from 'App/Helpers/error'
 
 @injectable()
 export default class AuthService {

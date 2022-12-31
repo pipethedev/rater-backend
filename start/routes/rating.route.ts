@@ -13,6 +13,6 @@ Route.group(() => {
 
     Route.get('/:songId', 'RatingsController.songRating')
 
-  }).prefix('/rating').middleware(['auth:api'])
+  }).prefix('/rating').middleware(['auth:api', 'banned'])
 
 }).prefix('/api/v1')

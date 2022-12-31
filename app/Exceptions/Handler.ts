@@ -15,27 +15,18 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 class ExceptionHandler extends HttpExceptionHandler {
   constructor() {
     super(Logger)
   }
-}
+  public handle(error: any, ctx: HttpContextContract): any {
+      console.log(error.message)
+  }
 
-class AppError extends Error {
-  public statusCode: number
-  public isOperational: boolean
-  public cause: Error | undefined
-
-  constructor(statusCode: number, message, cause?: any, isOperational = true) {
-    super(message)
-
-    this.statusCode = statusCode
-    this.cause = cause as Error
-    this.isOperational = isOperational
-
-    Error.captureStackTrace(this, this.constructor)
+  public report(error: any, ctx: HttpContextContract): void {
+    Logger.error(error.message)
   }
 }
-
-export { ExceptionHandler, AppError }
+export { ExceptionHandler }

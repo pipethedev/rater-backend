@@ -18,7 +18,6 @@ export default class WebhookService {
 
     public async execute({ event, data }: ObjectLiteral) {
         const trx = await Database.transaction()
-        console.log(data)
         try {
 
             const user = await this.userRepository.findByEmail(data.customer.email) as User

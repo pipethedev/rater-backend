@@ -7,9 +7,9 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import AuthService from 'App/Services/AuthService'
 import { ErrorResponse } from 'App/Helpers'
 import MailService from 'App/Services/MailService'
-import { AppError } from 'App/Exceptions/Handler'
 import Env from '@ioc:Adonis/Core/Env'
 import { PasswordAction } from 'App/Enum'
+import AppError from 'App/Helpers/error'
 
 export default class AuthController {
   private userService: UserService = container.resolve(UserService)

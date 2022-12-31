@@ -25,6 +25,7 @@ import './routes/user.route'
 import './routes/song.route'
 import './routes/pricing.route'
 import './routes/rating.route'
+import './routes/transaction.route'
 
 Route.get('/', async () => {
   return {

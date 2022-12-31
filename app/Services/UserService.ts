@@ -6,13 +6,13 @@ import UserRepository from 'App/Repository/UserRepository'
 import { ChangePassword, CreateWorker, Register, ResetPassword, UpdateUser } from 'App/Types'
 import { container } from 'tsyringe'
 import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import { AppError } from 'App/Exceptions/Handler'
 import httpStatus from 'http-status'
 import MailService from './MailService'
 import Route from '@ioc:Adonis/Core/Route'
 import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { PasswordAction, Roles } from 'App/Enum'
+import AppError from 'App/Helpers/error'
 
 export default class UserService {
   public userRepository: UserRepository = container.resolve(UserRepository)

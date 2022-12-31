@@ -8,8 +8,8 @@ import Song from "App/Models/Song";
 import UserRepository from "App/Repository/UserRepository";
 import User from "App/Models/User";
 import Rating from "App/Models/Rating";
-import { AppError } from "App/Exceptions/Handler";
 import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from "http-status";
+import AppError from "App/Helpers/error";
 
 @injectable()
 export default class RatingService {

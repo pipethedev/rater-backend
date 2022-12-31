@@ -7,4 +7,16 @@ export default class TransactionRepository {
     public async create(data: Partial<Transaction>, transaction: TransactionClientContract): Promise<Transaction> {
         return await Transaction.create(data, { client: transaction });
     }
+
+    public async findOneById(id: string): Promise<Transaction | null> {
+        return await Transaction.query().where('id', id).first();
+    }
+
+    public async findAll(): Promise<Transaction[]> {
+        return await Transaction.query().orderBy('created_at', 'desc');
+    }
+
+    public async findAllByUser(userId: string): Promise<Transaction[]> {
+        return await Transaction.query().where('user_id', userId).orderBy('created_at', 'desc');
+    }
 }

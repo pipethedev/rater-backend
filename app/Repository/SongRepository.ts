@@ -14,13 +14,13 @@ export default class SongRepository {
     }
 
     public async findAllByUser(userId: string): Promise<Song[]> {
-        return await Song.query().where('user_id', userId).preload('ratings');
+        return await Song.query().where('user_id', userId).preload('ratings').orderBy('created_at', 'desc');
     }
 
     public async findByRating(rating: RatingLevel): Promise<Song[]> {
         return await Song.query().whereHas('ratings', (ratingsQuery) => {
             ratingsQuery.where('rating', rating).preload('user')
-        }, '>', 0)
+        }, '>', 0).orderBy('created_at', 'desc')
     }
 
     public async findOneById(songId: string): Promise<Song| null> {

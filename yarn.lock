@@ -269,7 +269,7 @@
 
 "@adonisjs/redis@^7.3.2":
   version "7.3.2"
-  resolved "https://registry.npmjs.org/@adonisjs/redis/-/redis-7.3.2.tgz"
+  resolved "https://registry.yarnpkg.com/@adonisjs/redis/-/redis-7.3.2.tgz#197207f9205f8656bf5c5646e41b9dcd47d9e80f"
   integrity sha512-rTzJbR+WuoRX+U/BgjloM+blyRSVvInA+iy3i0f/vxknQP2TQ2cg88vuHinEXoCdxPgAfdSy0AkVhsq3HCHgSw==
   dependencies:
     "@poppinss/utils" "^5.0.0"

@@ -4,7 +4,6 @@ import { UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { SuccessResponse } from "App/Helpers";
-import { AppError } from "App/Exceptions/Handler";
 import { NOT_FOUND, UNSUPPORTED_MEDIA_TYPE } from "http-status";
 import SongRepository from "App/Repository/SongRepository";
 import Drive from '@ioc:Adonis/Core/Drive'
@@ -22,6 +21,7 @@ import PaymentReference from "App/Models/PaymentReference";
 import { RatingLevel, Roles } from 'App/Enum';
 import AllocationService from './AllocationService';
 import AllocationRepository from 'App/Repository/AllocationRepository';
+import AppError from 'App/Helpers/error';
 
 @injectable()
 export default class SongService {
@@ -69,7 +69,7 @@ export default class SongService {
             await Promise.all([
                 this.paymentReferenceRepository.update(payment.id, { used: true }, trx),
 
-                this.mailService.send(email, `${Env.get('APP_NAME')} sound submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song}),
+                this.mailService.send(email, `${Env.get('APP_NAME')} Sound Submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song}),
             ])
 
             await trx.commit()

@@ -4,7 +4,7 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import { ChangePassword, CreateWorker, UpdateUser } from 'App/Types'
 import UserService from 'App/Services/UserService'
 import { container } from 'tsyringe'
-import { AppError } from 'App/Exceptions/Handler'
+import AppError from 'App/Helpers/error'
 
 export default class UsersController {
   private userService: UserService = container.resolve(UserService)
@@ -56,7 +56,7 @@ export default class UsersController {
       const body = request.body() as CreateWorker
 
       const result = await this.userService.createWorker(body)
-      
+
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)

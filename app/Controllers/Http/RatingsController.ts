@@ -1,11 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { AppError } from 'App/Exceptions/Handler'
 import { ErrorResponse, SuccessResponse } from 'App/Helpers'
 import RatingService from 'App/Services/RatingService'
 import { RateSongBody, UpdateSongRating } from 'App/Types'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Rating from 'App/Models/Rating'
+import AppError from 'App/Helpers/error'
 
 export default class RatingsController {
     protected ratingService : RatingService = container.resolve(RatingService)

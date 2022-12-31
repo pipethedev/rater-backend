@@ -31,7 +31,8 @@
     "@adonisjs/view",
     "@adonisjs/bouncer",
     "@adonisjs/drive-s3",
-    "adonis5-scheduler"
+    "adonis5-scheduler",
+    "@adonisjs/redis"
   ],
   "aceProviders": [
     "@adonisjs/repl"

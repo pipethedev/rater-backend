@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { AppError } from 'App/Exceptions/Handler'
 import { ErrorResponse } from 'App/Helpers'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SongService from 'App/Services/SongService'
 import { container } from 'tsyringe'
 import { UNSUPPORTED_MEDIA_TYPE, INTERNAL_SERVER_ERROR } from 'http-status'
+import AppError from 'App/Helpers/error'
 
 export default class SongsController {
     protected songService : SongService = container.resolve(SongService)

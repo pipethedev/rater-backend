@@ -24,7 +24,7 @@ export default class UserRepository {
   }
 
   public async all(role?: Roles): Promise<User[]> {
-    return role ? await User.query().where('role', role) : await User.all()
+    return role ? await User.query().where('role', role) : await User.query().orderBy('created_at', 'desc')
   }
 
   public async findbyVerificationToken(token: string): Promise<User | null> {
