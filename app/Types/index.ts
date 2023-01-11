@@ -19,7 +19,7 @@ type User = {
 }
 
 type Login = Pick<User, 'email' | 'password'>
-type Register = Omit<User, 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
+type Register = Omit<User, 'banned' | 'banned_at' | 'created_at' | 'updated_at' | 'role'>
 type UpdateUser = Omit<User, 'password' | 'banned' | 'banned_at' | 'created_at' | 'updated_at'>
 
 type CreateWorker = Pick<User, 'first_name' | 'last_name' | 'email' | 'role'>
