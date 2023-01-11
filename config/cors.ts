@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['https://rater-admin.brimble.app', 'http://localhost:3000', 'http://localhost:5000'],
+  origin: ['https://rater-user.brimble.app', 'http://localhost:3000', 'http://localhost:5000', 'https://soundseek.brimble.app'],
 
   /*
   |--------------------------------------------------------------------------
