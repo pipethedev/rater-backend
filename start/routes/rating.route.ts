@@ -13,7 +13,7 @@ Route.group(() => {
 
     Route.get('/:songId', 'RatingsController.songRating')
 
-    Route.get('/:songId', 'RatingsController.adminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
+    Route.get('/admin-feedback/:songId', 'RatingsController.adminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
 
   }).prefix('/rating').middleware(['auth:api', 'banned'])
 
