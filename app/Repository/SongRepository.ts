@@ -14,7 +14,7 @@ export default class SongRepository {
     }
 
     public async findAllByUser(userId: string): Promise<Song[]> {
-        return await Song.query().where('user_id', userId).preload('ratings').orderBy('created_at', 'desc');
+        return await Song.query().where('user_id', userId).preload('ratings').preload('admin_feedback').orderBy('created_at', 'desc');
     }
 
     public async findByRating(rating: RatingLevel): Promise<Song[]> {
