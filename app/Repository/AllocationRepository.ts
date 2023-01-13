@@ -15,14 +15,14 @@ export default class AllocationRepository {
     }
 
     public async findbyWorkerIdAndDate(workerId: string): Promise<Allocation[]> {
-        return await Allocation.query().where('worker_id', workerId ).andWhere('created_at', '>=', Database.raw('DATE_SUB(NOW(), INTERVAL 1 DAY)'));
+        return await Allocation.query().where({ 'worker_id':  workerId, 'pending': false }).andWhere('created_at', '>=', Database.raw('DATE_SUB(NOW(), INTERVAL 1 DAY)'));
     }
 
     public async findbyWorkerIdAndSongId(workerId: string, songId: string): Promise<Allocation | null> {
-        return await Allocation.query().where('song_id', songId).andWhere('worker_id', workerId).first();
+        return await Allocation.query().where({ 'song_id': songId, 'pending': false }).andWhere('worker_id', workerId).first();
     }
 
     public async findLowestCount(): Promise<Allocation | null> {
-        return await Allocation.query().groupBy('worker_id').orderByRaw('count(*) ASC').first();
+        return await Allocation.query().where('pending', false).groupBy('worker_id').orderByRaw('count(*) ASC').first();
     }
 }

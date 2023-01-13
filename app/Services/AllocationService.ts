@@ -28,8 +28,9 @@ export default class AllocationService {
                 allocations = await this.allocationRepository.findbyWorkerIdAndDate(workers[key].id)
 
                 if(allocations.length === Env.get('MAXIMUM_SONG_ALLOCATION')) {
-
-                }else if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
+                    // Register allocated songs as pending
+                    await this.allocationRepository.create({ worker_id: workers[key].id, song_id: songId, pending: true }, trx);
+                } else if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
                     const randomIndex = random(0, allocations.length === 0 ? 0 : allocations.length - 1) as number
         
                     // If the number of song(s) allocated is greater than or equal to the mid way which is 5
@@ -39,7 +40,7 @@ export default class AllocationService {
             
                         const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
                         
-                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId }, trx)
+                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
         
                     } else {
                         // Use the lowest number of song(s) allocated worker
@@ -47,7 +48,7 @@ export default class AllocationService {
         
                         const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
                             
-                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId }, trx)
+                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
                     }
                     await trx.commit();
                 }

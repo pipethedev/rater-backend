@@ -15,6 +15,9 @@ export default class Allocation extends BaseModel {
   @column({ isPrimary: true })
   public song_id: string
 
+  @column()
+  public pending: boolean
+
   @column.dateTime({ autoCreate: true })
   public created_at: DateTime
 

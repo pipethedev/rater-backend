@@ -4,7 +4,7 @@ import { UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { SuccessResponse } from "App/Helpers";
-import { NOT_FOUND, UNSUPPORTED_MEDIA_TYPE } from "http-status";
+import { BAD_REQUEST, NOT_FOUND, UNSUPPORTED_MEDIA_TYPE } from "http-status";
 import SongRepository from "App/Repository/SongRepository";
 import Drive from '@ioc:Adonis/Core/Drive'
 import { randomBytes } from 'crypto'
@@ -37,6 +37,11 @@ export default class SongService {
         const trx = await Database.transaction()
         try {
             const { title, payment_reference } = request.body() as UploadSong
+
+            // Check for pending payment reference
+            const paymentReference = await this.paymentReferenceRepository.findUnused(userId)
+
+            if(paymentReference) throw new AppError(BAD_REQUEST, "Kindly use your un-used payment reference to proceed")
 
             const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
