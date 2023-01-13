@@ -6,7 +6,7 @@ import UserRepository from 'App/Repository/UserRepository'
 import { ChangePassword, CreateWorker, Register, ResetPassword, UpdateUser } from 'App/Types'
 import { container } from 'tsyringe'
 import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import httpStatus from 'http-status'
+import httpStatus, { BAD_REQUEST } from 'http-status'
 import MailService from './MailService'
 import Route from '@ioc:Adonis/Core/Route'
 import Env from '@ioc:Adonis/Core/Env'
@@ -24,8 +24,16 @@ export default class UserService {
     return user;
   }
 
-  public async all() {
-    const users = await this.userRepository.all()
+  public async all(roleString: string) {
+    let role;
+    if(roleString === 'workers') {
+      role = Roles.MANAGER
+    }else if (roleString === 'users') {
+      role = Roles.USER
+    }else{
+      throw new AppError(BAD_REQUEST, `Invalid role ${roleString} provided`)
+    }
+    const users = await this.userRepository.all(role)
     return SuccessResponse("All users fetched successfully", users)
   }
 

@@ -17,8 +17,6 @@ export default class PaystackService {
         try {
             const response = await this.client.get(`/transaction/verify/${reference}`)
 
-            console.log()
-
             if (response.status !== OK || response.data.data.status == 'failed') throw new AppError(BAD_REQUEST, "Invalid payment reference provided")
 
             const payment = await this.paymentReferenceRepository.findByReference(reference) as PaymentReference

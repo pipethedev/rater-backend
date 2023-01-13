@@ -40,9 +40,10 @@ export default class UsersController {
     }
   }
 
-  public async getAllUsers({ response }: HttpContextContract) {
+  public async getAllUsers({ response, request }: HttpContextContract) {
     try {
-      const result = await this.userService.all();
+      const type = request.qs().type as string
+      const result = await this.userService.all(type);
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
