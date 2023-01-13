@@ -55,7 +55,7 @@ export default class RatingService {
             const song = await this.songRepository.findOneById(song_id);
 
             if(!song) throw new AppError(BAD_REQUEST, "Invalid song id provided")
-            
+
             // Check if user has rated the song before
             const feedback = await this.feedbackRepository.findBySongId(body.song_id);
 
@@ -66,6 +66,8 @@ export default class RatingService {
             // Send a mail to the song owner
 
             const user = song.user;
+
+            console.log(user);
 
             await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback", "emails/admin_feedback", { ...user, comment: createdFeedback.comment })
 
