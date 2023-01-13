@@ -19,7 +19,7 @@ export default class SongsController {
           } catch (error) {
             Logger.error(error.message)
             if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
-            return response.status(error.length > 0 ? UNSUPPORTED_MEDIA_TYPE : INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not upload your song, try again later!', error))
+            return response.status(error.length > 0 ? UNSUPPORTED_MEDIA_TYPE : INTERNAL_SERVER_ERROR).send(ErrorResponse(error.message, error))
           }
     }
 
