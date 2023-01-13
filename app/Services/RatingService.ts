@@ -1,7 +1,7 @@
 import { container, injectable } from "tsyringe";
 import Database from "@ioc:Adonis/Lucid/Database";
 import RatingRepository from "App/Repository/RatingRepository";
-import { RateSongBody, UpdateSongRating } from "App/Types";
+import { AdminFeedbackBody, RateSongBody, UpdateSongRating } from "App/Types";
 import { SuccessResponse } from "App/Helpers";
 import SongRepository from "App/Repository/SongRepository";
 import Song from "App/Models/Song";
@@ -10,12 +10,16 @@ import User from "App/Models/User";
 import Rating from "App/Models/Rating";
 import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from "http-status";
 import AppError from "App/Helpers/error";
+import AdminFeedbackRepository from "App/Repository/AdminFeedbackRepository";
+import MailService from "./MailService";
 
 @injectable()
 export default class RatingService {
     protected songRepository: SongRepository = container.resolve(SongRepository)
     protected userRepository: UserRepository = container.resolve(UserRepository)
     protected ratingRepository: RatingRepository = container.resolve(RatingRepository)
+    protected feedbackRepository: AdminFeedbackRepository = container.resolve(AdminFeedbackRepository)
+    protected mailService: MailService = container.resolve(MailService)
 
     public async rate(workerId: string, body: RateSongBody) {
         const trx = await Database.transaction()
@@ -34,6 +38,40 @@ export default class RatingService {
             await trx.commit()
 
             return SuccessResponse("Song rated successfully", rating)
+        } catch (error) {
+            await trx.rollback()
+            throw error;
+        }
+    }
+
+    public async adminFeedback(adminId: string, body: AdminFeedbackBody) {
+        const trx = await Database.transaction()
+        try {
+            const { song_id, comment } = body;
+            const admin = await this.userRepository.findByID(adminId) as User;
+
+            if(!admin) throw new AppError(BAD_REQUEST, "Invalid admin")
+
+            const song = await this.songRepository.findOneById(song_id);
+
+            if(!song) throw new AppError(BAD_REQUEST, "Invalid song id provided")
+
+            console.log(song);
+
+            // Check if user has rated the song before
+            const feedback = await this.feedbackRepository.findBySongId(body.song_id);
+
+            if(feedback) throw new AppError(BAD_REQUEST, "You have already provided a feedback for this song")
+
+            const rating = await this.feedbackRepository.create({ song_id, comment , admin_id: adminId })
+
+            // Send a mail to the song owner
+
+            // await this.mailService.send()
+
+            await trx.commit()
+
+            return SuccessResponse("Feedback provided successfully", rating)
         } catch (error) {
             await trx.rollback()
             throw error;

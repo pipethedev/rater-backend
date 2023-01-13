@@ -57,6 +57,8 @@ type RateSongBody = {
   comment: string;
 }
 
-type UpdateSongRating = Omit<RateSongBody, 'song_id'>
+type AdminFeedbackBody = Omit<RateSongBody, "rating">;
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating }
+type UpdateSongRating = Omit<RateSongBody, 'song_id'>;
+
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating, AdminFeedbackBody }

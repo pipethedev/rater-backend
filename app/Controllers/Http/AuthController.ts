@@ -1,11 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserService from 'App/Services/UserService'
 import { ForgotPassword, Register, ResetPassword } from 'App/Types'
-import { OK } from 'http-status'
 import { container } from 'tsyringe'
 import Logger from '@ioc:Adonis/Core/Logger'
 import AuthService from 'App/Services/AuthService'
-import { ErrorResponse } from 'App/Helpers'
+import { ErrorResponse, SuccessResponse } from 'App/Helpers'
 import MailService from 'App/Services/MailService'
 import Env from '@ioc:Adonis/Core/Env'
 import { PasswordAction } from 'App/Enum'
@@ -105,6 +104,6 @@ export default class AuthController {
       auth.logout(),
       auth.use('api').revoke()
     ])
-    return response.status(OK)
+    return response.ok(SuccessResponse("Log out successfull", null))
   }
 }
