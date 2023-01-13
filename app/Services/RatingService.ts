@@ -12,11 +12,13 @@ import { BAD_REQUEST, FORBIDDEN, NOT_FOUND } from "http-status";
 import AppError from "App/Helpers/error";
 import AdminFeedbackRepository from "App/Repository/AdminFeedbackRepository";
 import MailService from "./MailService";
+import AllocationRepository from "App/Repository/AllocationRepository";
 
 @injectable()
 export default class RatingService {
     protected songRepository: SongRepository = container.resolve(SongRepository)
     protected userRepository: UserRepository = container.resolve(UserRepository)
+    protected allocationRepository: AllocationRepository = container.resolve(AllocationRepository)
     protected ratingRepository: RatingRepository = container.resolve(RatingRepository)
     protected feedbackRepository: AdminFeedbackRepository = container.resolve(AdminFeedbackRepository)
     protected mailService: MailService = container.resolve(MailService)
@@ -32,6 +34,11 @@ export default class RatingService {
             const ratedSong = await this.ratingRepository.findByWorkerAndSongId(worker.id, body.song_id) as Rating
 
             if(ratedSong) throw new AppError(BAD_REQUEST, "You have already rated this song")
+
+            //Check if somg is allocated to user
+            const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(worker.id, body.song_id)
+
+            if(!allocation) throw new AppError(FORBIDDEN, "This song is not allocated to you fr rating")
 
             const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
 
