@@ -32,7 +32,7 @@ export default class SongRepository {
     public async findOneByUser(userId: string, songId: string): Promise<Song| null> {
         return await Song.query().where('id', songId ).andWhere('user_id', userId ).preload('ratings', (ratingsQuery) => {
             ratingsQuery.preload('user');
-        }).first();
+        }).preload('admin_feedback').first();
     }
 
     public async deleteOneByUser(userId: string, songId: string): Promise<any> {
