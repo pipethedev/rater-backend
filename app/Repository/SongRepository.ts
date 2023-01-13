@@ -20,7 +20,7 @@ export default class SongRepository {
     public async findByRating(rating: RatingLevel): Promise<Song[]> {
         return await Song.query().whereHas('ratings', (ratingsQuery) => {
             ratingsQuery.where('rating', rating).preload('user')
-        }, '>', 0).orderBy('created_at', 'desc')
+        }, '>', 0).orderBy('created_at', 'desc').preload('ratings')
     }
 
     public async findOneById(songId: string): Promise<Song| null> {

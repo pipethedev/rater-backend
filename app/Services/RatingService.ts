@@ -55,23 +55,23 @@ export default class RatingService {
             const song = await this.songRepository.findOneById(song_id);
 
             if(!song) throw new AppError(BAD_REQUEST, "Invalid song id provided")
-
-            console.log(song);
-
+            
             // Check if user has rated the song before
             const feedback = await this.feedbackRepository.findBySongId(body.song_id);
 
             if(feedback) throw new AppError(BAD_REQUEST, "You have already provided a feedback for this song")
 
-            const rating = await this.feedbackRepository.create({ song_id, comment , admin_id: adminId })
+            const createdFeedback = await this.feedbackRepository.create({ song_id, comment , admin_id: adminId })
 
             // Send a mail to the song owner
 
-            // await this.mailService.send()
+            const user = song.user;
+
+            await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback", "emails/admin_feedback", { ...user, comment: createdFeedback.comment })
 
             await trx.commit()
 
-            return SuccessResponse("Feedback provided successfully", rating)
+            return SuccessResponse("Feedback provided successfully", createdFeedback)
         } catch (error) {
             await trx.rollback()
             throw error;

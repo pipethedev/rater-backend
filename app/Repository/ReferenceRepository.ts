@@ -10,6 +10,10 @@ export default class ReferenceRepository {
         return await PaymentReference.query({ client: trx }).where('id', id).update(data);
     }
 
+    public async findByUser(userId: string): Promise<PaymentReference[]> {
+        return await PaymentReference.query().where({ userId });
+    }
+
     public async findByReference(reference: string): Promise<PaymentReference | null> {
         return await PaymentReference.findBy('reference', reference)
     }

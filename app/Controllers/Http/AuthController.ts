@@ -104,6 +104,6 @@ export default class AuthController {
       auth.logout(),
       auth.use('api').revoke()
     ])
-    return response.ok(SuccessResponse("Log out successfull", null))
+    return response.ok(SuccessResponse("Log out successful", null))
   }
 }

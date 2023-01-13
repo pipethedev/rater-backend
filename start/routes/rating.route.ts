@@ -2,7 +2,7 @@ import Route from '@ioc:Adonis/Core/Route'
 import validate from 'App/Helpers'
 import { RateSongValidation } from 'App/Validation'
 
-Route.group(() => {
+Route.group(() => {4
   // Rating routes
 
   Route.group(() => {
@@ -13,7 +13,7 @@ Route.group(() => {
 
     Route.get('/:songId', 'RatingsController.songRating')
 
-    Route.get('/admin-feedback/:songId', 'RatingsController.adminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
+    Route.post('/admin-feedback/:songId', 'RatingsController.adminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
 
   }).prefix('/rating').middleware(['auth:api', 'banned'])
 
