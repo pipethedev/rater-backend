@@ -67,8 +67,6 @@ export default class RatingService {
 
             const user = song.user;
 
-            console.log(user);
-
             await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback", "emails/admin_feedback", { ...user, comment: createdFeedback.comment })
 
             await trx.commit()
