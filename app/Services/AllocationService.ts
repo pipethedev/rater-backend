@@ -16,43 +16,34 @@ export default class AllocationService {
 
     public async create(songId: string, exceptionWorkerId: string | null = null): Promise<boolean> {
         let workers: User[] = await this.userRepository.all(Roles.MANAGER);
-        let allocations: Allocation[];
-
-        const totalWorkers = workers.length;
 
         const midWay = Env.get('MAXIMUM_SONG_ALLOCATION') / 2
 
         const trx = await Database.transaction()
         try {
             if(exceptionWorkerId || exceptionWorkerId !== null) {
-                workers = await User.query().where('id', exceptionWorkerId);
+                workers = workers.filter((val) => val.id !== exceptionWorkerId);
             }
 
-            console.log(workers);
+            // Pick a random worker
+            const randomIndex = random(0, workers.length - 1) as number;
 
-            for (let key of Object.keys(workers)) {
-                // Fetch all the song(s) allocated of the user for the past 24 hours
-                allocations = await this.allocationRepository.findbyWorkerIdAndDate(workers[key].id)
+            const workerId = workers[randomIndex].id;
 
-                if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
-                    Logger.info("This worker has not exceeded his daily limit")
+            // Fetch all the song(s) allocated of the user for the past 24 hours
+            const allocations = await this.allocationRepository.findbyWorkerIdAndDate(workerId)
+
+            if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
+                Logger.info(`Worker #${workers[randomIndex].id} has not exceeded his daily limit`)
         
-                    // If the number of song(s) allocated is greater than or equal to the mid way which is 5
-                    if(allocations.length <= midWay) {
+                // If the number of song(s) allocated is greater than or equal to the mid way which is 5
+                allocations.length <= midWay ? await this.allocateWithRandomIndex({ songId, worker_id: workerId }, trx) :  await this.allocateWithLowestValue(songId, trx);
 
-                        await this.allocateWithRandomIndex({ songId, workers, allocations, totalWorkers }, exceptionWorkerId, trx);
-                        
-                    } else {
-                        Logger.info("This worker has exceeded his daily limit assigning to another worker")
-                        // Use the lowest number of song(s) allocated worker
-                        await this.allocateWithLowestValue(exceptionWorkerId, songId, trx);
-                    }
-                    await trx.commit();
-                }else{
-                    await this.allocationRepository.create({ worker_id: workers[key].id, song_id: songId, pending: true }, trx);
-                }
-                
-                Logger.info(`completed for ${workers[key].id}`)
+                await trx.commit();
+
+                Logger.info(`completed for #${workerId}`);
+            } else{
+                await this.allocationRepository.create({ worker_id: workerId, song_id: songId, pending: true }, trx);
             }
         } catch (error) {
             await trx.rollback()
@@ -60,26 +51,21 @@ export default class AllocationService {
         return true;
     }
 
-    async allocateWithRandomIndex ({ songId, workers, allocations, totalWorkers }, exceptionWorkerId: string | null, trx: TransactionClientContract){
-        const randomIndex = random(0, allocations.length === 0 ? 0 : totalWorkers - 1) as number
-        const worker_id = workers[randomIndex].id;
+    async allocateWithRandomIndex ({ songId, worker_id },trx: TransactionClientContract){
 
-        if(worker_id !== exceptionWorkerId) {
-            const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
+        const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
+
+        console.log("Iteration")
                         
-            if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
-        }else {
-            await this.allocateWithRandomIndex({ songId, workers, allocations, totalWorkers }, exceptionWorkerId, trx);
-        }
+        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
     }
 
-    async allocateWithLowestValue(exceptionWorkerId: string | null, songId: string, trx: TransactionClientContract) {
+    async allocateWithLowestValue(songId: string, trx: TransactionClientContract) {
         const { worker_id } = await this.allocationRepository.findLowestCount() as Allocation
 
-        if(worker_id !== exceptionWorkerId) {
-            const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
+        const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
             
-            if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
-        }
+        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
+
     }
 }

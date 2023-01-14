@@ -1,5 +1,7 @@
 import { TransactionClientContract } from "@ioc:Adonis/Lucid/Database";
+import { RatingLevel } from "App/Enum";
 import Rating from "App/Models/Rating";
+import Song from "App/Models/Song";
 
 export default class RatingRepository {
     public async create(data: Partial<Rating>, transaction: TransactionClientContract): Promise<Rating> {
@@ -8,6 +10,14 @@ export default class RatingRepository {
 
     public async findByWorkerAndSongId(workerId: string, songId: string): Promise<Rating | null> {
         return await Rating.query().where('song_id', songId).andWhere('worker_id', workerId).preload('user').first();
+    }
+
+    public async findFairSong(songId: string): Promise<Song[]> {
+        return await Song.query().where({ id: songId, rating: RatingLevel.Fair });
+    }
+
+    public async updateToAlmostGood(songId: string, transaction?: TransactionClientContract)  {
+        return await Rating.query({ client: transaction }).where({ song_id: songId }).update({ rating: RatingLevel.AlmostGood });
     }
 
     public async update(ratingId: string, songId: string, data: Partial<Rating>)  {

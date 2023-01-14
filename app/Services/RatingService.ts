@@ -43,19 +43,14 @@ export default class RatingService {
 
             if(!allocation) throw new AppError(FORBIDDEN, "This song is not allocated to you for rating")
 
+            const fairSong = await this.ratingRepository.findFairSong(body.song_id);
+
+            if(fairSong.length > 2) await this.ratingRepository.updateToAlmostGood(body.song_id, trx)
+
             const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
 
             // If song us rated Fair it should be re-assigned to another worker in the allocation service
-            if(body.rating === RatingLevel.Fair) {
-                await Promise.all([
-                    // this.allocationRepository.updateByWorkerIdAndSongId({ 
-                    //     song_id: body.song_id,
-                    //     worker_id: workerId
-                    // }, { pending: true }, trx),
-
-                    this.allocationService.create(body.song_id, workerId)
-                ]);
-            }
+            if(body.rating === RatingLevel.Fair) await this.allocationService.create(body.song_id, workerId);
 
             await trx.commit()
 
