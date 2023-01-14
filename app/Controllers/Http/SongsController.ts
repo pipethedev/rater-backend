@@ -1,10 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ErrorResponse } from 'App/Helpers'
+import { ErrorResponse, SuccessResponse } from 'App/Helpers'
 import Logger from '@ioc:Adonis/Core/Logger'
 import SongService from 'App/Services/SongService'
 import { container } from 'tsyringe'
 import { UNSUPPORTED_MEDIA_TYPE, INTERNAL_SERVER_ERROR } from 'http-status'
 import AppError from 'App/Helpers/error'
+import { Roles } from 'App/Enum'
 
 export default class SongsController {
     protected songService : SongService = container.resolve(SongService)
@@ -25,11 +26,13 @@ export default class SongsController {
 
     public async getAllSongs({ auth, response }: HttpContextContract){
       try {
-        const { id } = auth.user!
+        const { id, role } = auth.user!
+
+        const userRole = Object.keys(Roles)[Number(role) - 1]
 
         const result = await this.songService.fetchSongs(id)
          
-        return response.ok(result)
+        return response.ok(SuccessResponse(`Songs fetched successfully for ${userRole}`, result))
       } catch (error) {
         Logger.error(error.message)
         if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
