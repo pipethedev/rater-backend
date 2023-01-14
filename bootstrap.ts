@@ -15,6 +15,14 @@ export default class BootstrapApp {
     }
 
     public async registerCronJobs() {
+        await Promise.all([
+            this.registerPendingAllocations(),
+
+            this.reAssignAllocatedPendingSongs()
+        ]);
+    }
+
+    private async registerPendingAllocations() {
         const { default: AllocationRepository } = await import('App/Repository/AllocationRepository');
         const allocationRepository = container.resolve(AllocationRepository) as AllocationRepository;
         cron.schedule('0 23 * * *', async () => {
@@ -24,5 +32,9 @@ export default class BootstrapApp {
                 await allocationRepository.updatePending()
             }
         });
+    }
+
+    private async reAssignAllocatedPendingSongs() {
+        console.log('running')
     }
 }
