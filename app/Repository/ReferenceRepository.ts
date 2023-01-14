@@ -11,7 +11,7 @@ export default class ReferenceRepository {
     }
 
     public async findByUser(userId: string): Promise<PaymentReference[]> {
-        return await PaymentReference.query().where({ userId });
+        return await PaymentReference.query().where({ user_id: userId });
     }
 
     public async findByReference(reference: string): Promise<PaymentReference | null> {

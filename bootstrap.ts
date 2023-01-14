@@ -1,3 +1,4 @@
+import cron from 'node-cron'
 import { injectable } from "tsyringe";
 import Validator from "validatorjs";
 
@@ -9,5 +10,11 @@ export default class BootstrapApp {
         Validator.register("uuid",(value: string) => {
             return uuidRegex.test(value);
           }, ":attribute is not a valid UUID");
-      }
+    }
+
+    public async registerCronJobs() {
+        cron.schedule('* * * * *', () => {
+            console.log('running a task every minute');
+        });
+    }
 }

@@ -16,8 +16,10 @@ import { Ignitor } from '@adonisjs/core/build/standalone'
 import { container } from 'tsyringe'
 import BootstrapApp from './bootstrap'
 
+
 sourceMapSupport.install({ handleUncaughtExceptions: false })
 
-new Ignitor(__dirname).httpServer().start().then(() => {
+new Ignitor(__dirname).httpServer().start().then(async () => {
     container.resolve(BootstrapApp).registerCustomValidationRules()
-})
+    await container.resolve(BootstrapApp).registerCronJobs()
+});

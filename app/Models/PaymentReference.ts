@@ -17,7 +17,11 @@ export default class PaymentReference extends BaseModel {
   @column()
   public reference: string
 
-  @column()
+  @column({
+    serialize: (value: number) => {
+      return value === 1
+    },
+  })
   public used: boolean
 
   @column.dateTime({ autoCreate: true })

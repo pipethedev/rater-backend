@@ -41,7 +41,7 @@ export default class SongService {
             // Check for pending payment reference
             const paymentReference = await this.paymentReferenceRepository.findUnused(userId)
 
-            if(paymentReference) throw new AppError(BAD_REQUEST, "Kindly use your un-used payment reference to proceed")
+            if(paymentReference.length > 0) throw new AppError(BAD_REQUEST, "Kindly use your un-used payment reference to proceed")
 
             const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
