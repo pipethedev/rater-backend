@@ -103,8 +103,7 @@ export default class SongService {
                     response = data.map(({ song }) => song) as Song[]
                 break;
            }
-            const role = Object.keys(Roles)[Number(user.role) - 1]
-            return SuccessResponse(`All songs fetched successfully for ${role}`, response)
+            return response;
         } catch (error) {
             throw error;
         }
