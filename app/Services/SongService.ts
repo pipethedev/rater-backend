@@ -59,9 +59,7 @@ export default class SongService {
 
             await file.moveToDisk('./', { name: generatedId })
             
-            const url = await Drive.getSignedUrl(generatedId as string, {
-                expiresIn: '365Days'
-            })
+            const url = await Drive.getSignedUrl(generatedId as string)
 
             const song = await this.songRepository.create({
                 user_id: id,
