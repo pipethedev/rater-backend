@@ -35,6 +35,6 @@ export default class BootstrapApp {
     }
 
     private async reAssignAllocatedPendingSongs() {
-        console.log('running')
+        console.log('Re-assign allocated pending songs by 12am');
     }
 }

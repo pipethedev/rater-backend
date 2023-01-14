@@ -5,6 +5,7 @@ import { Roles } from 'App/Enum'
 import { v4 as uuidv4 } from 'uuid'
 import Rating from './Rating'
 import Song from './Song'
+import Transaction from './Transaction'
 
 export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -63,6 +64,11 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public songs: HasMany<typeof Song>
+
+  @hasMany(() => Transaction, {
+    foreignKey: 'user_id',
+  })
+  public transactions: HasMany<typeof Transaction>
 
   @beforeSave()
   public static async hashPassword(user: User) {

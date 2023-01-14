@@ -9,14 +9,14 @@ export default class TransactionRepository {
     }
 
     public async findOneById(id: string): Promise<Transaction | null> {
-        return await Transaction.query().where('id', id).first();
+        return await Transaction.query().where('id', id).preload('user').first();
     }
 
     public async findAll(): Promise<Transaction[]> {
-        return await Transaction.query().orderBy('created_at', 'desc');
+        return await Transaction.query().preload('user').orderBy('created_at', 'desc');
     }
 
     public async findAllByUser(userId: string): Promise<Transaction[]> {
-        return await Transaction.query().where('user_id', userId).orderBy('created_at', 'desc');
+        return await Transaction.query().where('user_id', userId).preload('user').orderBy('created_at', 'desc');
     }
 }

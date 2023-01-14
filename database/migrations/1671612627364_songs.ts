@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('title').notNullable()
       table.uuid('user_id').notNullable()
       table.string('title').notNullable()
-      table.string('file_url').notNullable()
+      table.text('file_url').notNullable()
       table.string('file_name').notNullable()
       table.string('file_type').notNullable()
       table.string('external_id').notNullable()
