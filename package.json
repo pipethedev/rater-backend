@@ -71,6 +71,7 @@
     "@types/": "adonisjs/auth",
     "@types/axios": "^0.14.0",
     "@types/http-status": "^1.1.2",
+    "@types/node-cron": "^3.0.7",
     "@types/uuid": "^9.0.0",
     "@types/validatorjs": "^3.15.0",
     "adonis5-scheduler": "^2.0.2",

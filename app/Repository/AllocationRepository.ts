@@ -25,4 +25,12 @@ export default class AllocationRepository {
     public async findLowestCount(): Promise<Allocation | null> {
         return await Allocation.query().where('pending', false).groupBy('worker_id').orderByRaw('count(*) ASC').first();
     }
+
+    public async findPending(transaction?: TransactionClientContract): Promise<Allocation[]> {
+        return await Allocation.query({ client: transaction }).where('pending', true);
+    }
+
+    public async updatePending(transaction?: TransactionClientContract): Promise<Allocation[]> {
+        return await Allocation.query({ client: transaction }).where('pending', true).update({ pending: true });
+    }
 }
