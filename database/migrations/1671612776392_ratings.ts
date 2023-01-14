@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.uuid('user_id').notNullable()
       table.uuid('worker_id').notNullable()
       table.uuid('song_id').notNullable()
-      table.enum('rating', [RatingLevel.Bad, RatingLevel.Fair, RatingLevel.Good, RatingLevel.Excellent]).notNullable()
+      table.enum('rating', [RatingLevel.Bad, RatingLevel.Fair, RatingLevel.Good, RatingLevel.AlmostGood]).notNullable()
       table.text('comment').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

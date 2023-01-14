@@ -13,6 +13,8 @@ import AppError from "App/Helpers/error";
 import AdminFeedbackRepository from "App/Repository/AdminFeedbackRepository";
 import MailService from "./MailService";
 import AllocationRepository from "App/Repository/AllocationRepository";
+import AllocationService from "./AllocationService";
+import { RatingLevel } from "App/Enum";
 
 @injectable()
 export default class RatingService {
@@ -22,6 +24,7 @@ export default class RatingService {
     protected ratingRepository: RatingRepository = container.resolve(RatingRepository)
     protected feedbackRepository: AdminFeedbackRepository = container.resolve(AdminFeedbackRepository)
     protected mailService: MailService = container.resolve(MailService)
+    protected allocationService: AllocationService = container.resolve(AllocationService)
 
     public async rate(workerId: string, body: RateSongBody) {
         const trx = await Database.transaction()
@@ -35,12 +38,24 @@ export default class RatingService {
 
             if(ratedSong) throw new AppError(BAD_REQUEST, "You have already rated this song")
 
-            //Check if somg is allocated to user
+            //Check if song is allocated to user
             const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(worker.id, body.song_id)
 
             if(!allocation) throw new AppError(FORBIDDEN, "This song is not allocated to you fr rating")
 
             const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
+
+            // If song us rated Fair it should be re-assigned to another worker in the allocation service
+            if(body.rating === RatingLevel.Fair) {
+                await Promise.all([
+                    this.allocationRepository.updateByWorkerIdAndSongId({ 
+                        song_id: body.song_id,
+                        worker_id: workerId
+                    }, { pending: true }, trx),
+
+                    this.allocationService.create(body.song_id, workerId)
+                ]);
+            }
 
             await trx.commit()
 

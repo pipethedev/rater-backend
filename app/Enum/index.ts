@@ -5,10 +5,10 @@ enum Roles {
 }
 
 enum RatingLevel {
-  Excellent = 'Excellent',
   Good = 'Good',
   Bad = 'Bad',
-  Fair = 'Fair'
+  Fair = 'Fair',
+  AlmostGood = 'AlmostGood'
 }
 
 enum CURRENCY {

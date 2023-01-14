@@ -13,7 +13,7 @@ export default class AllocationService {
     protected userRepository: UserRepository = container.resolve(UserRepository)
     protected allocationRepository: AllocationRepository = container.resolve(AllocationRepository)
 
-    public async create(songId: string): Promise<boolean> {
+    public async create(songId: string, exceptionWorkerId: string | null = null): Promise<boolean> {
         let worker_id: string;
         let allocations: Allocation[];
 
@@ -27,28 +27,38 @@ export default class AllocationService {
                 // Fetch all the song(s) allocated of the user for the past 24 hours
                 allocations = await this.allocationRepository.findbyWorkerIdAndDate(workers[key].id)
 
-                if(allocations.length === Env.get('MAXIMUM_SONG_ALLOCATION')) {
-                    // Register allocated songs as pending
-                    await this.allocationRepository.create({ worker_id: workers[key].id, song_id: songId, pending: true }, trx);
-                } else if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
+                if(allocations.length < Env.get('MAXIMUM_SONG_ALLOCATION')) {
                     const randomIndex = random(0, allocations.length === 0 ? 0 : allocations.length - 1) as number
         
                     // If the number of song(s) allocated is greater than or equal to the mid way which is 5
                     if(allocations.length <= midWay) {
 
-                        worker_id = workers[randomIndex].id
-            
-                        const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
+                        worker_id = workers[randomIndex].id;
+
+                        if(worker_id !== exceptionWorkerId) {
+                            const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
                         
-                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
+                            if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
+    
+                            if(allocations.length === Env.get('MAXIMUM_SONG_ALLOCATION')){
+                                await this.allocationRepository.create({ worker_id: workers[key].id, song_id: songId, pending: true }, trx);
+                            }
+                        }
         
                     } else {
+                        if(exceptionWorkerId) {}
                         // Use the lowest number of song(s) allocated worker
                         const { worker_id } = await this.allocationRepository.findLowestCount() as Allocation
-        
-                        const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
+
+                        if(worker_id !== exceptionWorkerId) {
+                            const check = await this.allocationRepository.findbyWorkerIdAndSongId(worker_id, songId)
                             
-                        if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
+                            if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
+    
+                            if(allocations.length === Env.get('MAXIMUM_SONG_ALLOCATION')){
+                                await this.allocationRepository.create({ worker_id: workers[key].id, song_id: songId, pending: true }, trx);
+                            }
+                        }
                     }
                     await trx.commit();
                 }
