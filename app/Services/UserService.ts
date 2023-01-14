@@ -48,7 +48,7 @@ export default class UserService {
 
       if(phoneCheck) throw new AppError(httpStatus.BAD_REQUEST, 'User with this phone number already exist')
 
-      const user = await this.userRepository.create(body, trx)
+      const user = await this.userRepository.create({ ...body, role: Roles.USER }, trx)
 
       const token = await this.generateTokenForUser(user.id, trx)
 
