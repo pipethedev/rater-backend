@@ -18,10 +18,10 @@ export default class ReferenceRepository {
         return await PaymentReference.findBy('reference', reference)
     }
 
-    public async findUnused(userId: string) {
+    public async findUnused(userId: string): Promise<PaymentReference | null> {
         return await PaymentReference.query().where({
             'user_id': userId,
             'used': false
-        });
+        }).first();
     }
 }
