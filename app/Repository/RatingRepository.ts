@@ -8,7 +8,7 @@ export default class RatingRepository {
     }
 
     public async findByWorkerAndSongId(workerId: string, songId: string): Promise<Rating | null> {
-        return await Rating.query().where('song_id', songId).andWhere('worker_id', workerId).preload('user').first();
+        return await Rating.query().where('song_id', songId).andWhere('worker_id', workerId).preload('worker').first();
     }
 
     public async findFairSong(songId: string): Promise<Rating[]> {
