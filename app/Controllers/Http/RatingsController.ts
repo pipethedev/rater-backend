@@ -43,7 +43,7 @@ export default class RatingsController {
 
     public async songRating({ request, response }: HttpContextContract) {
         try {
-            const result = await Rating.query().preload('user').where('song_id', request.param('songId'))
+            const result = await Rating.query().preload('worker').where('song_id', request.param('songId'))
 
             return response.ok(SuccessResponse("Song rating fetched successfully",result))
         } catch (error) {
