@@ -36,9 +36,9 @@ export default class Rating extends BaseModel {
   public song: BelongsTo<typeof Song>
 
   @belongsTo(() => User, {
-    foreignKey: 'user_id',
+    foreignKey: 'worker_id',
   })
-  public user: BelongsTo<typeof User>
+  public worker: BelongsTo<typeof User>
 
   @beforeSave()
   public static async generateUUID(rating: Rating) {

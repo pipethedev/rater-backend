@@ -19,19 +19,19 @@ export default class SongRepository {
 
     public async findByRating(rating: RatingLevel): Promise<Song[]> {
         return await Song.query().whereHas('ratings', (ratingsQuery) => {
-            ratingsQuery.where('rating', rating).preload('user')
+            ratingsQuery.where('rating', rating).preload('worker')
         }, '>', 0).orderBy('created_at', 'desc').preload('ratings').preload('admin_feedback')
     }
 
     public async findOneById(songId: string): Promise<Song| null> {
         return await Song.query().where('id', songId ).preload('ratings', (ratingsQuery) => {
-            ratingsQuery.preload('user');
-        }).preload('user').preload('admin_feedback').first();
+            ratingsQuery.preload('worker');
+        }).preload('admin_feedback').first();
     }
 
     public async findOneByUser(userId: string, songId: string): Promise<Song| null> {
         return await Song.query().where('id', songId ).andWhere('user_id', userId ).preload('ratings', (ratingsQuery) => {
-            ratingsQuery.preload('user');
+            ratingsQuery.preload('worker');
         }).preload('admin_feedback').first();
     }
 
