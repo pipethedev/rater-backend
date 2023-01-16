@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Rating from './Rating'
 import Song from './Song'
 import Transaction from './Transaction'
+import Allocation from './Allocation'
 
 export default class User extends BaseModel {
   public static selfAssignPrimaryKey = true
@@ -57,7 +58,9 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updated_at: DateTime
 
-  @hasMany(() => Rating)
+  @hasMany(() => Rating, {
+    foreignKey: 'worker_id',
+  })
   public ratings: HasMany<typeof Rating>
 
   @hasMany(() => Song, {
@@ -69,6 +72,11 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public transactions: HasMany<typeof Transaction>
+
+  @hasMany(() => Allocation, {
+    foreignKey: 'worker_id',
+  })
+  public allocations: HasMany<typeof Allocation>
 
   @beforeSave()
   public static async hashPassword(user: User) {
