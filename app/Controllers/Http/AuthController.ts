@@ -18,7 +18,9 @@ export default class AuthController {
   public async login({ auth, request, response }: HttpContextContract) {
     try {
       const body = request.body() as Register
+
       const result = await this.authService.login(body, { auth })
+      
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)

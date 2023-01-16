@@ -7,9 +7,9 @@ import { container } from 'tsyringe'
 export default class Banned {
   protected userService: UserRepository = container.resolve(UserRepository)
   public async handle({ auth }: HttpContextContract, next: () => Promise<void>) {
-    const { id} = auth.user!
+    const { id } = auth.user!
     const { banned, banned_at } = await this.userService.findByID(id) as User
-    if(banned && banned_at !== null) throw new UnAuthorizedException('Your account has been banned, please contact support')
+    if(banned && banned_at !== null) throw new UnAuthorizedException('Your account has been banned, please contact support or administrator')
     await next()
   }
 }

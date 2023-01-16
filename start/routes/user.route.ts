@@ -19,7 +19,7 @@ Route.group(() => {
 
     Route.get('/', 'UsersController.getAllUsers')
   
-    Route.put('/:userId', 'UsersController.banUser')
+    Route.put('/:userId', 'UsersController.banUser').middleware([validate({ banned: 'required|boolean' }),'role:admin'])
 
   }).prefix('/users').middleware(['auth:api', 'role:admin'])
 

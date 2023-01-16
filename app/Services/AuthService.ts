@@ -14,9 +14,10 @@ export default class AuthService {
 
   public async login(body: Login, { auth }) {
     const { email, password } = body
+
     const user = await this.userRepository.findByEmail(email) as User
 
-    if(user.banned && user.banned_at !== null) throw new AppError(UNAUTHORIZED, 'Your account has been banned, please contact support')
+    if(user.banned && user.banned_at !== null) throw new AppError(UNAUTHORIZED, 'Your account has been de-activated, please contact support')
     // Verify password
     if (!(await Hash.verify(user?.password as string, password))) throw new AppError(UNAUTHORIZED, 'Invalid credentials')
     // Generate token

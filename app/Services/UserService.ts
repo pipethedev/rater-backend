@@ -103,16 +103,28 @@ export default class UserService {
     }
   }
 
-  public async ban(userId: string) {
+  public async ban(userId: string, banned: boolean) {
     const trx = await Database.transaction()
     try {
       const user = await this.userRepository.findByID(userId) as User
+
+      if(!user) throw new AppError(BAD_REQUEST, "Invalid user id provided")
+
+      if(user.role == Roles.ADMIN) throw new AppError(BAD_REQUEST, "Administrator cannot de-activate itself")
+
+      if(banned && user.banned && user.banned_at) {
+        throw new AppError(BAD_REQUEST, "This user has been de-activated previously")
+      }
+
       const update = await this.userRepository.updateOne(user.id, { 
-        banned: true,
-        banned_at: new Date()
+        banned,
+        banned_at: banned ? new Date() : null
       }, trx)
+
       await trx.commit()
-      if(update) return SuccessResponse<User>('This user has been banned successfully', update)
+
+      if(update) return update;
+
     } catch (error: any) {
       await trx.rollback()
       throw error

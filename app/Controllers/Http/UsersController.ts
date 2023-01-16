@@ -18,12 +18,17 @@ export default class UsersController {
   public async updateProfile({ auth, request, response }: HttpContextContract) {
     try {
       const { id } = auth.user! // this is the authenticated user
+      
       const body = request.body() as UpdateUser
+
       const result = await this.userService.updateProfile(id, body)
+
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
+
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
       return response.internalServerError(ErrorResponse('We could not update your profile, try again later!'))
     }
   }
@@ -35,7 +40,9 @@ export default class UsersController {
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
+
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
       return response.internalServerError(ErrorResponse('We could not update password, try again later!'))
     }
   }
@@ -47,7 +54,9 @@ export default class UsersController {
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
+
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
       return response.internalServerError(ErrorResponse('We could not fetch all users, try again later!'))
     }
   }
@@ -61,18 +70,26 @@ export default class UsersController {
       return response.ok(result)
     } catch (error) {
       Logger.error(error.message)
+
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
       return response.internalServerError(ErrorResponse('We could not create a worker, try again later!'))
     }
   }
 
   public async banUser({ request, response }: HttpContextContract) {
     try {
-      const result = await this.userService.ban(request.param('userId') as string)
-      return response.ok(result)
+      const { banned } = request.body();
+
+      const result = await this.userService.ban(request.param('userId') as string, banned)
+
+      return response.ok(SuccessResponse(`This user has been ${banned ? 'de-activated' : 'activated' } successfully`, result))
+
     } catch (error) {
       Logger.error(error.message)
+
       if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
       return response.internalServerError(ErrorResponse('We could not ban user, try again later!'))
     }
   }
