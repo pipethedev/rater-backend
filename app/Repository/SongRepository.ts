@@ -26,7 +26,7 @@ export default class SongRepository {
     public async findOneById(songId: string): Promise<Song| null> {
         return await Song.query().where('id', songId ).preload('ratings', (ratingsQuery) => {
             ratingsQuery.preload('worker');
-        }).preload('admin_feedback').first();
+        }).preload('admin_feedback').preload('user').first();
     }
 
     public async findOneByUser(userId: string, songId: string): Promise<Song| null> {

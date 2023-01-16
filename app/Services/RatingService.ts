@@ -95,6 +95,40 @@ export default class RatingService {
         }
     }
 
+    public async editAdminFeedback(adminId: string, body: AdminFeedbackBody) {
+        const trx = await Database.transaction()
+        try {
+            const { song_id, comment } = body;
+            const admin = await this.userRepository.findByID(adminId) as User;
+
+            if(!admin) throw new AppError(BAD_REQUEST, "Invalid admin")
+
+            const song = await this.songRepository.findOneById(song_id);
+
+            if(!song) throw new AppError(BAD_REQUEST, "Invalid song id provided")
+
+            // Check if user has rated the song before
+            const feedback = await this.feedbackRepository.findBySongId(body.song_id);
+
+            if(feedback) {
+                const updatedFeedback = await this.feedbackRepository.update(feedback.id, { comment }, trx)
+                // Send a mail to the song owner
+
+                const { last_name, first_name } = song.user;
+
+                await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback [UPDATE]", "emails/admin_feedback", { last_name, first_name, comment: updatedFeedback.comment })
+
+                await trx.commit()
+
+                return updatedFeedback;
+            }
+            throw new AppError(BAD_REQUEST, "Provide a feedback, before this feedback can be edited")
+        } catch (error) {
+            await trx.rollback()
+            throw error;
+        }
+    }
+
     public async update(workerId: string, songId: string, body: UpdateSongRating) {
         const trx = await Database.transaction()
         try {

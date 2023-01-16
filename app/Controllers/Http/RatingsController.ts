@@ -41,6 +41,22 @@ export default class RatingsController {
         }
     }
 
+    public async editAdminFeedback({ auth, request, response }: HttpContextContract) {
+        try {
+            const { id } = auth.user!
+
+            const body = { song_id: request.param('songId'), comment: request.input('comment') } as AdminFeedbackBody;
+
+            const result = await this.ratingService.editAdminFeedback(id, body)
+
+            return response.ok(SuccessResponse("Admin feedback edited successfully", result))
+        } catch (error) {
+            Logger.error(error.message)
+            if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+            return response.internalServerError(ErrorResponse('Unable to create feedback on song, try again later!'))
+        }
+    }
+
     public async songRating({ request, response }: HttpContextContract) {
         try {
             const result = await Rating.query().preload('worker').where('song_id', request.param('songId'))

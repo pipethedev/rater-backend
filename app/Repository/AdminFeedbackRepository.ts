@@ -6,6 +6,10 @@ export default class AdminFeedbackRepository {
         return await AdminFeedback.create(data, { client: transaction });
     }
 
+    public async update(id: number, data: Partial<AdminFeedback>, transaction?: TransactionClientContract) {
+        return await AdminFeedback.query({ client: transaction }).where('id', id).update(data).first()
+    }
+
     public async findBySongId(songId: string): Promise<AdminFeedback | null> {
         return await AdminFeedback.query().where('song_id', songId).first();
     }

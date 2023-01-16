@@ -15,6 +15,8 @@ Route.group(() => {4
 
     Route.post('/admin-feedback/:songId', 'RatingsController.adminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
 
+    Route.put('/admin-feedback/:songId', 'RatingsController.editAdminFeedback').middleware([validate({ comment: "required|string" }), 'role:admin'])
+
   }).prefix('/rating').middleware(['auth:api', 'banned'])
 
 }).prefix('/api/v1')
