@@ -22,7 +22,6 @@ import { RatingLevel, Roles } from 'App/Enum';
 import AllocationService from './AllocationService';
 import AllocationRepository from 'App/Repository/AllocationRepository';
 import AppError from 'App/Helpers/error';
-import Role from 'App/Middleware/Role';
 
 @injectable()
 export default class SongService {
