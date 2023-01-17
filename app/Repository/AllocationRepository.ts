@@ -15,7 +15,9 @@ export default class AllocationRepository {
     }
 
     public async findByWorkerId(workerId: string): Promise<Allocation[]> {
-        return await Allocation.query().where('worker_id', workerId).preload('song');
+        return await Allocation.query().where('worker_id', workerId).preload('song', (songQuery) => {
+            songQuery.preload('ratings')
+        }).orderBy('created_at', 'desc').preload('worker')
     }
 
     public async findbyWorkerIdAndDate(workerId: string): Promise<Allocation[]> {

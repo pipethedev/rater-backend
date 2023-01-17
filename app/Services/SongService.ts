@@ -89,7 +89,7 @@ export default class SongService {
 
     public async fetchSongs(userId: string) {
         try {
-            let response: Song[];
+            let response: any[];
             const user = await this.userRepository.findByID(userId) as User
 
             const data = await this.allocationRepository.findByWorkerId(userId)
@@ -102,7 +102,15 @@ export default class SongService {
                     response = await this.songRepository.findAllByUser(userId)
                 break;
                 case Roles.MANAGER:
-                    response = data.map(({ song }) => song) as Song[]
+                    response = data.map(({ song, worker }) => { 
+                        return {
+                            song,
+                            worker: {
+                                id: worker.id,
+                                name: `${worker.last_name} ${worker.first_name}`
+                            }
+                        }
+                    })
                 break;
            }
             return response;
