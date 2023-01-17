@@ -99,6 +99,7 @@ export default class RatingService {
         const trx = await Database.transaction()
         try {
             const { song_id, comment } = body;
+            
             const admin = await this.userRepository.findByID(adminId) as User;
 
             if(!admin) throw new AppError(BAD_REQUEST, "Invalid admin")

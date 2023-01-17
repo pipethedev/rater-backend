@@ -20,12 +20,14 @@ export default class UserService {
 
   async findUserbyEmail(email: string): Promise<any> {
     const user = await this.userRepository.findByEmail(email)
+
     if (!user) throw new AppError(httpStatus.BAD_REQUEST, 'User with this email address does not exist')
+
     return user;
   }
 
   public async all(roleString: string) {
-    let role;
+    let role: Roles;
     if(roleString === 'workers') {
       role = Roles.MANAGER
     }else if (roleString === 'users') {
@@ -57,7 +59,7 @@ export default class UserService {
 
       await this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
         ...(user.toJSON()),
-        url: Env.get('APP_URL') + url,
+        url: Env.get('USER_FRONTEND_URL') + url,
       })
 
       await trx.commit()
@@ -94,8 +96,11 @@ export default class UserService {
     const trx = await Database.transaction()
     try {
       await this.findUserbyEmail(body.email);
+
       const update = await this.userRepository.updateOne(id, body, trx)
+
       await trx.commit()
+
       return SuccessResponse<User>('User profile updated successfully', update)
     } catch (error: any) {
       await trx.rollback()
@@ -140,7 +145,9 @@ export default class UserService {
       // Generate the random reset token
       const resetToken = await this.generateTokenForUser(user.id, trx)
 
-      const url = Env.get('FRONTEND_URL') + `/reset/${resetToken}`
+      const urlUserType = user.role == Roles.USER ? Env.get('USER_FRONTEND_URL') : Env.get('WORKER_FRONTEND_URL')
+
+      const url = urlUserType + `/reset/${resetToken}`
 
       // Send it to user's email
       await this.mailService.send(user.email, "Reset password", "emails/reset", {
@@ -213,7 +220,7 @@ export default class UserService {
       // generate verification token
       const token = await this.generateTokenForUser(user.id, trx)
 
-      const url =  Env.get('APP_URL') + Route.makeUrl('verifyEmail', { token })
+      const url =  Env.get('USER_FRONTEND_URL') + Route.makeUrl('verifyEmail', { token })
 
       //send token to user mail for verification
       await this.mailService.send<Partial<User> & { url: string}>(email, 'Verify your email', 'emails/verify', { url, ...user.toJSON() })
@@ -232,10 +239,11 @@ export default class UserService {
     const trx = await Database.transaction()
     try {
       const { email } = auth.user!
+      
       const user = await this.findUserbyEmail(email);
 
-
       const verify = await Hash.verify(user.password, body.old_password);
+
       if(!verify) throw new AppError(httpStatus.UNAUTHORIZED, "Invalid old password provided")
 
       const update = await this.userRepository.updateOne(user.id, {
