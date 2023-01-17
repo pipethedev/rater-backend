@@ -22,6 +22,7 @@ import { RatingLevel, Roles } from 'App/Enum';
 import AllocationService from './AllocationService';
 import AllocationRepository from 'App/Repository/AllocationRepository';
 import AppError from 'App/Helpers/error';
+import Role from 'App/Middleware/Role';
 
 @injectable()
 export default class SongService {
@@ -96,7 +97,7 @@ export default class SongService {
 
            switch (user.role) {
                 case Roles.ADMIN:
-                    response = await this.songRepository.findByRating(RatingLevel.Good)
+                    response = await this.songRepository.findByRating(RatingLevel.Good, Roles.ADMIN)
                 break;
                 case Roles.USER:
                     response = await this.songRepository.findAllByUser(userId)
