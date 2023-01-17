@@ -18,7 +18,7 @@ export default class StatsController {
                 songs = (await Song.all()).length
                 users = (await User.query()).length
                 revenue = await Database.rawQuery('SELECT SUM(amount) as total FROM transactions')
-                return response.ok( SuccessResponse("Dashbord stats", { songs, users, revenue: convertToNaria(revenue[0][0].total)}))
+                return response.ok( SuccessResponse("Dashbord stats", { songs, users, revenue: revenue[0][0].total }))
             case Roles.MANAGER:
                 songs = await Rating.query().where('worker_id', id)
                 const good = await Rating.query().where('worker_id', id).where('rating', RatingLevel.Good)
