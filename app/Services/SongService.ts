@@ -58,10 +58,8 @@ export default class SongService {
             const generatedId = btoa(encrypt.encrypt(String((file as any).data.clientName)));
 
             await file.moveToDisk('./', { name: generatedId })
-            
-            const url = await Drive.getSignedUrl(generatedId as string, {
-                expiresIn: 31536000,
-            })
+
+            const url = `${Env.get('CLOUDCUBE_URL')}/${Env.get('CLOUDCUBE_BUCKET_NAME')}/${generatedId}?x-id=GetObject`;
 
             const song = await this.songRepository.create({
                 user_id: id,
