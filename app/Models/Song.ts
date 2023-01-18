@@ -26,7 +26,9 @@ export default class Song extends BaseModel {
   @column({ columnName: 'file_type' })
   public file_type: string
 
-  @column({ columnName: 'external_id' })
+  @column({ 
+    columnName: 'external_id'
+  })
   public external_id: string
 
   @column.dateTime({ autoCreate: true })
