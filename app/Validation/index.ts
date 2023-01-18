@@ -8,7 +8,7 @@ const RegisterValidation = {
 const UpdateUserValidation = {
   first_name: 'required',
   last_name: 'required',
-  phone_number: 'required',
+  phone_number: 'present',
   email: 'required|email',
 }
 
