@@ -25,7 +25,10 @@ export default class AuthService {
       expiresIn: '24hours',
     })
 
-    return SuccessResponse('Login successful', token.toJSON())
+    return SuccessResponse('Login successful', {
+      role: user.role,
+      ...token.toJSON()
+    })
   }
 
 
