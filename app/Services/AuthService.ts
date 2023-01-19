@@ -7,6 +7,7 @@ import { SuccessResponse } from 'App/Helpers'
 import User from 'App/Models/User'
 import Database from '@ioc:Adonis/Lucid/Database'
 import AppError from 'App/Helpers/error'
+import { Roles } from 'App/Enum'
 
 @injectable()
 export default class AuthService {
@@ -25,8 +26,11 @@ export default class AuthService {
       expiresIn: '24hours',
     })
 
+    const index = Object.values(Roles).indexOf(user.role as Roles);
+    const role =  Object.keys(Roles)[index];
+
     return SuccessResponse('Login successful', {
-      role: user.role,
+      role,
       ...token.toJSON()
     })
   }
