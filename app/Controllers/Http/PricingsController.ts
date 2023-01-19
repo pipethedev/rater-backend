@@ -23,8 +23,9 @@ export default class PricingsController {
 
     public async update({ request, response }: HttpContextContract) {
         try {
-            const body = request.body() as UpdatePricing
-            const result = await this.pricingService.updatePricing(request.param('priceId'), body)
+            const body = request.body() as UpdatePricing;
+            const price = { price: body.price * 100}
+            const result = await this.pricingService.updatePricing(request.param('priceId'), price)
             return response.ok(result)
         } catch (error) {
             Logger.error(error.message)
