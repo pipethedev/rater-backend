@@ -22,9 +22,7 @@ export default class AuthService {
     // Verify password
     if (!(await Hash.verify(user?.password as string, password))) throw new AppError(UNAUTHORIZED, 'Invalid credentials')
     // Generate token
-    const token = await auth.use('api').attempt(email, password, {
-      expiresIn: '24hours',
-    })
+    const token = await auth.use('api').attempt(email, password)
 
     const index = Object.values(Roles).indexOf(user.role as Roles);
     const role =  Object.keys(Roles)[index];
