@@ -37,7 +37,9 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
-  @column()
+  @column({ serialize: (value: number) => {
+    return value == 1;
+  }})
   public banned: boolean
 
   @column()
