@@ -8,6 +8,8 @@ import { container, injectable } from "tsyringe";
 import { random } from "App/Helpers";
 import Logger from '@ioc:Adonis/Core/Logger'
 import User from "App/Models/User";
+import AppError from "App/Helpers/error";
+import { BAD_REQUEST } from "http-status";
 
 @injectable()
 export default class AllocationService {
@@ -47,6 +49,8 @@ export default class AllocationService {
             }
         } catch (error) {
             await trx.rollback()
+
+            Logger.error(error.message)
         }
         return true;
     }
@@ -67,5 +71,29 @@ export default class AllocationService {
             
         if(!check) await this.allocationRepository.create({ worker_id, song_id: songId, pending: false }, trx)
 
+    }
+
+    public async manualAllocation({ songId, workerId }: { songId: string; workerId: string}) {
+        const trx = await Database.transaction()
+
+        try {
+            const maxAllocation = Env.get('MAXIMUM_SONG_ALLOCATION');
+
+            const allocations = await this.allocationRepository.findbyWorkerIdAndDate(workerId)
+
+            if(allocations.length == maxAllocation) throw new AppError(BAD_REQUEST, `Worker has exceeded his daily limit of ${maxAllocation} songs`);
+
+            const allocation = await this.allocationRepository.create({ worker_id: workerId, song_id: songId, pending: false }, trx);
+
+            await trx.commit();
+
+            Logger.info(`completed for #${workerId}`);
+
+            return allocation;
+        } catch (error) {
+            await trx.rollback()
+
+            Logger.error(error.message)
+        }
     }
 }

@@ -57,8 +57,13 @@ type RateSongBody = {
   comment: string;
 }
 
+type ManualAllocation = {
+  songId: string;
+  workerId: string;
+};
+
 type AdminFeedbackBody = Omit<RateSongBody, "rating">;
 
 type UpdateSongRating = Omit<RateSongBody, 'song_id'>;
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating, AdminFeedbackBody }
+export { Login, Register, ObjectLiteral, Token, UpdateUser, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating, AdminFeedbackBody, ManualAllocation }
