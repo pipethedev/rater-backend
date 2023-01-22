@@ -45,7 +45,7 @@ export default class SongService {
 
             const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
-            const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames: [ 'mp3', 'ogg', 'wav', 'mp4', 'wma' ] })!
+            const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames: [ 'mp3', 'ogg', 'wav', 'mp4', 'wma', 'm4a' ] })!
 
             if(!file) throw new AppError(UNSUPPORTED_MEDIA_TYPE, "Kindly provide a file!")
 
