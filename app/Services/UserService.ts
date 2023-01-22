@@ -6,7 +6,7 @@ import UserRepository from 'App/Repository/UserRepository'
 import { ChangePassword, CreateWorker, Register, ResetPassword, UpdateUser } from 'App/Types'
 import { container } from 'tsyringe'
 import Database, { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
-import httpStatus, { BAD_REQUEST } from 'http-status'
+import { BAD_REQUEST, UNAUTHORIZED } from 'http-status'
 import MailService from './MailService'
 import Route from '@ioc:Adonis/Core/Route'
 import Env from '@ioc:Adonis/Core/Env'
@@ -21,7 +21,7 @@ export default class UserService {
   async findUserbyEmail(email: string): Promise<any> {
     const user = await this.userRepository.findByEmail(email)
 
-    if (!user) throw new AppError(httpStatus.BAD_REQUEST, 'User with this email address does not exist')
+    if (!user) throw new AppError(BAD_REQUEST, 'User with this email address does not exist')
 
     return user;
   }
@@ -44,18 +44,17 @@ export default class UserService {
     try {
       const emailCheck = await this.userRepository.findByEmail(body.email) as User
 
-      if(emailCheck) throw new AppError(httpStatus.BAD_REQUEST, 'User with this email address already exist')
+      if(emailCheck) throw new AppError(BAD_REQUEST, 'User with this email address already exist')
 
       const phoneCheck = await this.userRepository.findByPhoneNumber(body.phone_number) as User
 
-      if(phoneCheck) throw new AppError(httpStatus.BAD_REQUEST, 'User with this phone number already exist')
+      if(phoneCheck) throw new AppError(BAD_REQUEST, 'User with this phone number already exist')
 
       const user = await this.userRepository.create({ ...body, role: Roles.USER }, trx)
 
       const token = await this.generateTokenForUser(user.id, trx)
 
       const url = Route.makeUrl('verifyEmail', { token })
-
 
       await this.mailService.send(body.email, 'Welcome aboard !', 'emails/verify', {
         ...(user.toJSON()),
@@ -169,7 +168,6 @@ export default class UserService {
     try {
       const user = await this.findUserByToken(token, PasswordAction.PasswordReset)
 
-
       const update = await this.userRepository.updateOne(user.id, {
         password: await Hash.make(password),
         account_verify_expires: null,
@@ -190,7 +188,7 @@ export default class UserService {
 
     const user = await this.userRepository.findbyVerificationToken(accountVerifyToken)
 
-    if (!user) throw new AppError(httpStatus.BAD_REQUEST, `Invalid ${action == PasswordAction.PasswordReset ? PasswordAction.PasswordReset : PasswordAction.PasswordVerification } token`)
+    if (!user) throw new AppError(BAD_REQUEST, `Invalid ${action == PasswordAction.PasswordReset ? PasswordAction.PasswordReset : PasswordAction.PasswordVerification } token`)
     return user
   }
 
@@ -244,7 +242,7 @@ export default class UserService {
 
       const verify = await Hash.verify(user.password, body.old_password);
 
-      if(!verify) throw new AppError(httpStatus.UNAUTHORIZED, "Invalid old password provided")
+      if(!verify) throw new AppError(UNAUTHORIZED, "Invalid old password provided")
 
       const update = await this.userRepository.updateOne(user.id, {
         password: await Hash.make(body.password)
