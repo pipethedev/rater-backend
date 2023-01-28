@@ -6,8 +6,10 @@ export default class AllocationRepository {
         return await Allocation.create(data, { client: transaction });
     }
 
-    public async createMany(data: Partial<Allocation>[], transaction?: TransactionClientContract): Promise<Allocation[]> {
-        return await Allocation.createMany(data, { client: transaction });
+    public async findAll(): Promise<Allocation[]> {
+        return await Allocation.query().preload('song', (songQuery) => {
+            songQuery.preload('ratings')
+        }).orderBy('created_at', 'desc').preload('worker')
     }
 
     public async updateOne(id: string, data: Partial<Allocation>, transaction?: TransactionClientContract): Promise<Allocation> {

@@ -10,6 +10,8 @@ Route.group(() => {
 
     Route.get('/all', 'SongsController.getAllSongs')
 
+    Route.get('/allocations', 'SongsController.allocations').middleware('role:admin')
+
     Route.get('/:songId', 'SongsController.fetchSingleSong')
 
     Route.delete('/:songId', 'SongsController.deleteSong').middleware('role:user')

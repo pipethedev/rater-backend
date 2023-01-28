@@ -83,6 +83,10 @@ export default class AllocationService {
 
             if(allocations.length == maxAllocation) throw new AppError(BAD_REQUEST, `Worker has exceeded his daily limit of ${maxAllocation} songs`);
 
+            const check = await this.allocationRepository.findbyWorkerIdAndSongId(workerId, songId);
+
+            if(check) throw new AppError(BAD_REQUEST, `Song has already been allocated to worker`);
+
             const allocation = await this.allocationRepository.create({ worker_id: workerId, song_id: songId, pending: false }, trx);
 
             await trx.commit();
@@ -94,6 +98,8 @@ export default class AllocationService {
             await trx.rollback()
 
             Logger.error(error.message)
+
+            throw error;
         }
     }
 }

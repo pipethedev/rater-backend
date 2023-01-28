@@ -7,11 +7,13 @@ import { UNSUPPORTED_MEDIA_TYPE, INTERNAL_SERVER_ERROR } from 'http-status'
 import AppError from 'App/Helpers/error'
 import { Roles } from 'App/Enum'
 import { ManualAllocation } from 'App/Types'
+import AllocationRepository from 'App/Repository/AllocationRepository'
 import AllocationService from 'App/Services/AllocationService'
 
 export default class SongsController {
     protected songService : SongService = container.resolve(SongService)
-    protected allocationService : AllocationService = container.resolve(AllocationService)
+    protected allocationService: AllocationService = container.resolve(AllocationService)
+    protected allocationRepository = container.resolve(AllocationRepository)
 
     public async create({ auth, request, response }: HttpContextContract){
         try {
@@ -25,6 +27,20 @@ export default class SongsController {
             if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
             return response.status(error.length > 0 ? UNSUPPORTED_MEDIA_TYPE : INTERNAL_SERVER_ERROR).send(ErrorResponse(error.message, error))
           }
+    }
+
+    public async allocations({ response }: HttpContextContract) {
+        try {
+            const result = await this.allocationRepository.findAll()
+
+            return response.ok(SuccessResponse(`All songs allocation fetched`, result))
+        } catch (error) {
+            Logger.error(error.message)
+
+            if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
+            return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not fetch your allocations, try again later!', error))
+        }
     }
 
     public async allocate({ request, response }: HttpContextContract) {
