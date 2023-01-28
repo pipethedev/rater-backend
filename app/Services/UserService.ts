@@ -36,7 +36,7 @@ export default class UserService {
       throw new AppError(BAD_REQUEST, `Invalid role ${roleString} provided`)
     }
     const users = await this.userRepository.all(role)
-    return SuccessResponse("All users fetched successfully", users)
+    return SuccessResponse(`All ${roleString} fetched successfully`, users)
   }
 
   public async createUser(body: Register) {
