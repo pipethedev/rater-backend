@@ -33,7 +33,14 @@ export default class SongsController {
         try {
             const result = await this.allocationRepository.findAll()
 
-            return response.ok(SuccessResponse(`All songs allocation fetched`, result))
+            return response.ok(SuccessResponse(`All songs allocation fetched`, result.map((val) => {
+                return {
+                    id: val.id,
+                    song_id: val.song_id,
+                    song: val.song.title,
+                    worker:  `${val.worker.first_name} ${val.worker.last_name}`,
+                }
+            })))
         } catch (error) {
             Logger.error(error.message)
 
