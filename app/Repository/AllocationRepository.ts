@@ -12,12 +12,18 @@ export default class AllocationRepository {
         }).orderBy('created_at', 'desc').preload('worker')
     }
 
-    public async updateOne(id: string, data: Partial<Allocation>, transaction?: TransactionClientContract): Promise<Allocation> {
+    public async updateOne(id: number, data: Partial<Allocation>, transaction?: TransactionClientContract): Promise<Allocation> {
         return await Allocation.query({ client: transaction }).where('id', id).update(data).first();
     }
 
     public async updateByWorkerIdAndSongId({ song_id, worker_id }, data: Partial<Allocation>, transaction?: TransactionClientContract) {
         return await  Allocation.query({ client: transaction }).where({ song_id, worker_id }).update(data);
+    }
+
+    public async findBySongId(songId: string): Promise<Allocation | null> {
+        return await Allocation.query().where('song_id', songId).preload('song', (songQuery) => {
+            songQuery.preload('ratings')
+        }).orderBy('created_at', 'desc').preload('worker').first()
     }
 
     public async findByWorkerId(workerId: string): Promise<Allocation[]> {

@@ -6,7 +6,7 @@ import { container } from 'tsyringe'
 import { UNSUPPORTED_MEDIA_TYPE, INTERNAL_SERVER_ERROR } from 'http-status'
 import AppError from 'App/Helpers/error'
 import { Roles } from 'App/Enum'
-import { ManualAllocation } from 'App/Types'
+import { ManualAllocation, UpdateSongAnalytics } from 'App/Types'
 import AllocationRepository from 'App/Repository/AllocationRepository'
 import AllocationService from 'App/Services/AllocationService'
 
@@ -76,7 +76,25 @@ export default class SongsController {
         return response.ok(SuccessResponse(`Songs fetched successfully for ${userRole}`, result))
       } catch (error) {
         Logger.error(error.message)
+        
         if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
+        return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not fetch your songs, try again later!', error))
+      }
+    }
+    
+    public async analytics({ request, response }: HttpContextContract){
+      try {
+        const songId = request.param('songId')
+
+        const result = await this.songService.saveSongAnalytics(songId, request.body() as UpdateSongAnalytics)
+         
+        return response.ok(SuccessResponse(`Songs analytics saved successfully`, result))
+      } catch (error) {
+        Logger.error(error.message)
+
+        if (error instanceof AppError)  return response.status(error.statusCode).send(ErrorResponse(error.message))
+
         return response.status(INTERNAL_SERVER_ERROR).send(ErrorResponse('We could not fetch your songs, try again later!', error))
       }
     }

@@ -1,6 +1,6 @@
 import { extname } from 'path'
 import Event from '@ioc:Adonis/Core/Event'
-import { UploadSong } from "App/Types";
+import { UpdateSongAnalytics, UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { SuccessResponse } from "App/Helpers";
@@ -22,6 +22,7 @@ import { RatingLevel, Roles } from 'App/Enum';
 import AllocationService from './AllocationService';
 import AllocationRepository from 'App/Repository/AllocationRepository';
 import AppError from 'App/Helpers/error';
+import Allocation from 'App/Models/Allocation';
 
 @injectable()
 export default class SongService {
@@ -36,7 +37,9 @@ export default class SongService {
     public async saveRecord(userId: string, { request }) {
         const trx = await Database.transaction()
         try {
-            const { title, payment_reference } = request.body() as UploadSong
+            const { title, payment_reference } = request.body() as UploadSong;
+
+            const supportedFiles: string[] = [ 'mp3', 'ogg', 'wav', 'mp4', 'wma', 'm4a' ];
 
             // Check for pending payment reference
             const paymentReference = await this.paymentReferenceRepository.findUnused(userId) as PaymentReference
@@ -45,9 +48,9 @@ export default class SongService {
 
             const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
-            const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames: [ 'mp3', 'ogg', 'wav', 'mp4', 'wma', 'm4a' ] })!
+            const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames:  supportedFiles })!
 
-            if(!file) throw new AppError(UNSUPPORTED_MEDIA_TYPE, "Kindly provide a file!")
+            if(!file) throw new AppError(UNSUPPORTED_MEDIA_TYPE, `Kindly provide a supported file! ${supportedFiles.join(',')}`)
 
             if (!file.isValid) throw file.errors;
 
@@ -79,6 +82,23 @@ export default class SongService {
 
             await trx.commit()
             return SuccessResponse("File uploaded successfully, an adminstrator will get back to you", song)
+        } catch (error) {
+            await trx.rollback()
+            throw error;
+        }
+    }
+
+    public async saveSongAnalytics(songId: string, body: UpdateSongAnalytics) {
+        const trx = await Database.transaction();
+        try {
+            const allocation = await this.allocationRepository.findBySongId(songId) as Allocation
+
+            if(!allocation) throw new AppError(NOT_FOUND, "Song not found");
+
+            const update = await this.allocationRepository.updateOne(allocation.id, body, trx)
+
+            await trx.commit()
+            return SuccessResponse("Song analytics updated successfully", update)
         } catch (error) {
             await trx.rollback()
             throw error;

@@ -9,6 +9,9 @@ export default class extends BaseSchema {
       table.string('worker_id').notNullable()
       table.string('song_id').notNullable()
       table.boolean('pending').defaultTo(false);
+      table.boolean('listened').defaultTo(false);
+      table.string('listening_duration').nullable();
+      table.string('listened_at').nullable();
       table.foreign('worker_id').references('users.id').onUpdate('CASCADE')
       table.foreign('song_id').references('songs.id').onUpdate('CASCADE')
       table.timestamp('created_at', { useTz: true })

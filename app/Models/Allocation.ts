@@ -18,6 +18,15 @@ export default class Allocation extends BaseModel {
   @column()
   public pending: boolean
 
+  @column()
+  public listened: boolean
+
+  @column()
+  public listening_duration: string
+
+  @column()
+  public listened_at: DateTime
+
   @column.dateTime({ autoCreate: true })
   public created_at: DateTime
 
