@@ -98,7 +98,7 @@ export default class SongService {
             const update = await this.allocationRepository.updateOne(allocation.id, body, trx)
 
             await trx.commit()
-            return SuccessResponse("Song analytics updated successfully", update)
+            return update;
         } catch (error) {
             await trx.rollback()
             throw error;

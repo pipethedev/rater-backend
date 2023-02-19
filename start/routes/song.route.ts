@@ -11,7 +11,7 @@ Route.group(() => {
 
     Route.get('/all', 'SongsController.getAllSongs')
 
-    Route.put('/analytics', 'SongsController.analytics').middleware([validate(CreateSongAnalytics), 'role:worker'])
+    Route.post('/analytics/:songId', 'SongsController.analytics').middleware([validate(CreateSongAnalytics), 'role:manager'])
 
     Route.get('/allocations', 'SongsController.allocations').middleware('role:admin')
 
