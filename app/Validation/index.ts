@@ -26,6 +26,11 @@ const ResetPasswordValidation = {
   password: 'required|confirmed'
 }
 
+const CreateSongAnalytics = {
+  listening_duration: 'string|required',
+  listened_at: 'date|required'
+};
+
 const CreateWorker = UpdateUserValidation;
 
 const RateSongValidation = {
@@ -41,5 +46,6 @@ export {
   UpdatePasswordValidation,
   ResetPasswordValidation,
   CreateWorker,
-  RateSongValidation
+  RateSongValidation,
+  CreateSongAnalytics
 }

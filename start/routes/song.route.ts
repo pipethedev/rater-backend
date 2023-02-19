@@ -1,5 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
 import validate from 'App/Helpers'
+import { CreateSongAnalytics } from 'App/Validation'
 
 Route.group(() => {
   // User routes
@@ -9,6 +10,8 @@ Route.group(() => {
     Route.post('/allocate-song', 'SongsController.allocate').middleware([validate({ songId: 'required|string|uuid', workerId: 'required|string|uuid' }),'role:admin'])
 
     Route.get('/all', 'SongsController.getAllSongs')
+
+    Route.put('/analytics', 'SongsController.analytics').middleware([validate(CreateSongAnalytics), 'role:worker'])
 
     Route.get('/allocations', 'SongsController.allocations').middleware('role:admin')
 
