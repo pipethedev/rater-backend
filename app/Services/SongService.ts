@@ -48,6 +48,8 @@ export default class SongService {
 
             if(payment_reference !== paymentReference.reference) throw new AppError(BAD_REQUEST, "Kindly use your un-used payment reference to proceed");
 
+            if(paymentReference.used) throw new AppError(BAD_REQUEST, "You can't use a payment reference multiple times")
+
             const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
             const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames:  supportedFiles })!

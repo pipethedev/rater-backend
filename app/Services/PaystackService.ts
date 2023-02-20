@@ -20,10 +20,8 @@ export default class PaystackService {
             if (response.status !== OK || response.data.data.status == 'failed') throw new AppError(BAD_REQUEST, "Invalid payment reference provided")
 
             const payment = await this.paymentReferenceRepository.findByReference(reference) as PaymentReference
-
-            if(payment.used) throw new AppError(BAD_REQUEST, "You can't use a payment reference multiple times")
-
-            return payment;
+            
+            if(payment) return response.data;
         } catch (error) {
             if (error instanceof AppError) throw new AppError(BAD_REQUEST, error.message)
             throw new Error(error.response.data.message)
