@@ -101,13 +101,11 @@ export default class SongsController {
       }
     }
 
-    public async fetchAnalytics({ auth, request, response }: HttpContextContract){
+    public async fetchAnalytics({ request, response }: HttpContextContract){
       try {
-        const { id } = auth.user!
+        const { workerId, songId } = request.params()
 
-        const songId = request.param('songId')
-
-        const result = await this.songService.fetchSongAnalytics(songId, id)
+        const result = await this.songService.fetchSongAnalytics(songId, workerId)
          
         return response.ok(SuccessResponse(`Songs analytics fetched successfully`, result))
       } catch (error) {

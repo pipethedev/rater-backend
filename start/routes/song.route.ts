@@ -13,6 +13,8 @@ Route.group(() => {
 
     Route.post('/analytics/:songId', 'SongsController.analytics').middleware([validate(CreateSongAnalytics), 'role:manager'])
 
+    Route.get('/analytics/:songId/:workerId', 'SongsController.fetchAnalytics').middleware('role:admin')
+
     Route.get('/allocations', 'SongsController.allocations').middleware('role:admin')
 
     Route.get('/:songId', 'SongsController.fetchSingleSong')
