@@ -3,9 +3,7 @@ import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Song from './Song'
 import User from './User'
 
-export default class Allocation extends BaseModel {
-  public static table = "allocations"
-
+export default class MusicMetric extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -16,13 +14,19 @@ export default class Allocation extends BaseModel {
   public song_id: string
 
   @column()
-  public pending: boolean
+  public listened: boolean
+
+  @column()
+  public listening_duration: string
+
+  @column()
+  public listened_at: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @belongsTo(() => Song, {
     foreignKey: 'song_id',
@@ -33,5 +37,4 @@ export default class Allocation extends BaseModel {
     foreignKey: 'worker_id',
   })
   public worker: BelongsTo<typeof User>
-  
 }

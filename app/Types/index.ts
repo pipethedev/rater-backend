@@ -51,7 +51,7 @@ type UploadSong = {
   payment_reference: string;
 }
 
-type UpdateSongAnalytics = {
+type CreateSongAnalytics = {
   listening_duration: string;
   listened_at: DateTime;
 };
@@ -71,4 +71,4 @@ type AdminFeedbackBody = Omit<RateSongBody, "rating">;
 
 type UpdateSongRating = Omit<RateSongBody, 'song_id'>;
 
-export { Login, Register, ObjectLiteral, Token, UpdateUser, UpdateSongAnalytics, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating, AdminFeedbackBody, ManualAllocation }
+export { Login, Register, ObjectLiteral, Token, UpdateUser, CreateSongAnalytics, ChangePassword, ForgotPassword, ResendVerification, ResetPassword, UpdatePricing, UploadSong, CreateWorker, RateSongBody, UpdateSongRating, AdminFeedbackBody, ManualAllocation }

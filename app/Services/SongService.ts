@@ -1,6 +1,6 @@
 import { extname } from 'path'
 import Event from '@ioc:Adonis/Core/Event'
-import { UpdateSongAnalytics, UploadSong } from "App/Types";
+import { CreateSongAnalytics, UploadSong } from "App/Types";
 import { container, injectable } from "tsyringe";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { SuccessResponse } from "App/Helpers";
@@ -23,6 +23,7 @@ import AllocationService from './AllocationService';
 import AllocationRepository from 'App/Repository/AllocationRepository';
 import AppError from 'App/Helpers/error';
 import Allocation from 'App/Models/Allocation';
+import MusicMetricRepository from 'App/Repository/MusicMetricRepository';
 
 @injectable()
 export default class SongService {
@@ -33,6 +34,7 @@ export default class SongService {
     protected mailService: MailService = container.resolve(MailService)
     protected userRepository: UserRepository = container.resolve(UserRepository)
     protected allocationRepository: AllocationRepository = container.resolve(AllocationRepository)
+    protected musicMetricRepository: MusicMetricRepository = container.resolve(MusicMetricRepository);
 
     public async saveRecord(userId: string, { request }) {
         const trx = await Database.transaction()
@@ -88,16 +90,29 @@ export default class SongService {
         }
     }
 
-    public async saveSongAnalytics(songId: string, body: UpdateSongAnalytics) {
-        const trx = await Database.transaction();
+    public async fetchSongAnalytics(songId: string, workerId: string) {
         try {
-            const allocation = await this.allocationRepository.findBySongId(songId) as Allocation
+            const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(workerId, songId) as Allocation[]
 
             if(!allocation) throw new AppError(NOT_FOUND, "Song not found");
 
-            const update = await this.allocationRepository.updateOne(allocation.id, body, trx)
+            return await this.musicMetricRepository.findBySongIdAndWorkerId(songId, workerId)
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async saveSongAnalytics(songId: string, workerId: string,  body: CreateSongAnalytics) {
+        const trx = await Database.transaction();
+        try {
+            const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(workerId, songId) as Allocation[]
+
+            if(allocation.length <= 0) throw new AppError(NOT_FOUND, "Song not found");
+
+            const update = await this.musicMetricRepository.create({ ...body, song_id: songId, worker_id: workerId, listened_at: String(new Date().toISOString()) }, trx);
 
             await trx.commit()
+
             return update;
         } catch (error) {
             await trx.rollback()

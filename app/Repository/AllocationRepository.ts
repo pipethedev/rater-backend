@@ -36,8 +36,8 @@ export default class AllocationRepository {
         return await Allocation.query().where({ 'worker_id':  workerId, 'pending': false }).andWhere('created_at', '>=', Database.raw('DATE_SUB(NOW(), INTERVAL 1 DAY)'));
     }
 
-    public async findbyWorkerIdAndSongId(workerId: string, songId: string): Promise<Allocation | null> {
-        return await Allocation.query().where({ 'song_id': songId, 'pending': false }).andWhere('worker_id', workerId).first();
+    public async findbyWorkerIdAndSongId(workerId: string, songId: string): Promise<Allocation[]> {
+        return await Allocation.query().where({ 'song_id': songId, 'pending': false }).andWhere('worker_id', workerId);
     }
 
     public async findLowestCount(): Promise<Allocation | null> {
