@@ -10,7 +10,7 @@ export default class MusicMetricRepository {
         return await MusicMetric.query().where('song_id', songId).first();
     }
 
-    public async findBySongIdAndWorkerId(songId: string, workerId: string): Promise<MusicMetric | null> {
-        return await MusicMetric.query().where({ 'song_id': songId, 'worker_id' : workerId }).first();
+    public async findBySongIdAndWorkerId(songId: string, workerId: string): Promise<MusicMetric[]> {
+        return await MusicMetric.query().where({ 'song_id': songId, 'worker_id' : workerId });
     }
 }

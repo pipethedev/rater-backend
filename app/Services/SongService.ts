@@ -103,19 +103,9 @@ export default class SongService {
     }
 
     public async saveSongAnalytics(songId: string, workerId: string,  body: CreateSongAnalytics) {
-        const trx = await Database.transaction();
         try {
-            const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(workerId, songId) as Allocation[]
-
-            if(allocation.length <= 0) throw new AppError(NOT_FOUND, "Song not found");
-
-            const update = await this.musicMetricRepository.create({ ...body, song_id: songId, worker_id: workerId, listened_at: String(new Date().toISOString()) }, trx);
-
-            await trx.commit()
-
-            return update;
+            return await this.musicMetricRepository.create({ ...body, song_id: songId, worker_id: workerId, listened_at: String(new Date().toISOString()) });
         } catch (error) {
-            await trx.rollback()
             throw error;
         }
     }
