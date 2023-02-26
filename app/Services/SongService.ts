@@ -41,12 +41,10 @@ export default class SongService {
         try {
             const { title, payment_reference } = request.body() as UploadSong;
 
-            console.log({ title, payment_reference });
-
             const supportedFiles: string[] = [ 'mp3', 'ogg', 'wav', 'mp4', 'wma', 'm4a' ];
 
             // Check for pending payment reference
-            const paymentReference = await this.paymentReferenceRepository.findUnused(userId) as PaymentReference
+            const paymentReference = await this.paymentReferenceRepository.findByReference(userId, payment_reference) as PaymentReference
 
             if(!paymentReference) throw new AppError(BAD_REQUEST, "You don't have a pending payment reference")
 

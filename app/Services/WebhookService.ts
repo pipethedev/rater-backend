@@ -41,9 +41,8 @@ export default class WebhookService {
                             payment_status: PAYMENT_STATUS.SUCCESSFUL
                         }, trx);
 
-
-
-                        const paymentRef = await this.paymentReferenceRepository.findByReference(data.reference);
+                        const paymentRef = await this.paymentReferenceRepository.findByReference(user.id, data.reference);
+                        
                         if(!paymentRef) {
                             await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: transaction.id, reference: data.reference }, trx);
                         }
