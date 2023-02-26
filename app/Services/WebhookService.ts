@@ -33,7 +33,7 @@ export default class WebhookService {
                     if(data.amount === pricing.price) {
                         // check if transaction exists
 
-                        const payment = await this.transactionRepository.create({
+                        const transaction = await this.transactionRepository.create({
                             user_id: user.id,
                             pricing_id: pricing.id,
                             amount: data.amount,
@@ -41,17 +41,13 @@ export default class WebhookService {
                             payment_status: PAYMENT_STATUS.SUCCESSFUL
                         }, trx);
 
+
+
                         const paymentRef = await this.paymentReferenceRepository.findByReference(data.reference);
                         if(!paymentRef) {
-                            await this.paymentReferenceRepository.create({
-                                user_id: user.id,
-                                transaction_id: payment.id,
-                                reference: data.reference,
-                                used: false
-                            }, trx);
+                            await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: transaction.id, reference: data.reference }, trx);
                         }
-                        // save reference to database
-                        await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id, reference: data.reference }, trx);
+
 
                         Logger.info('Invalid payment transaction');
                     }
