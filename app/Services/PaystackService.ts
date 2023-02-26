@@ -1,7 +1,6 @@
 import Env from '@ioc:Adonis/Core/Env'
 import AppError from 'App/Helpers/error';
 import { HTTPClient } from 'App/Helpers/http'
-import PaymentReference from 'App/Models/PaymentReference';
 import ReferenceRepository from 'App/Repository/ReferenceRepository';
 import { BAD_REQUEST, OK } from 'http-status';
 import { container, injectable } from 'tsyringe';
@@ -19,9 +18,7 @@ export default class PaystackService {
 
             if (response.status !== OK || response.data.data.status == 'failed') throw new AppError(BAD_REQUEST, "Invalid payment reference provided")
 
-            const payment = await this.paymentReferenceRepository.findByReference(reference) as PaymentReference
-            
-            if(payment) return response.data;
+            return response.data;
         } catch (error) {
             if (error instanceof AppError) throw new AppError(BAD_REQUEST, error.message)
             throw new Error(error.response.data.message)

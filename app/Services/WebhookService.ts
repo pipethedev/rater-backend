@@ -29,22 +29,20 @@ export default class WebhookService {
                 // verify if payment valid
                 const paystack = await this.paystackService.verify(data.reference);
 
+                console.log(paystack);
+
                 if(paystack.status && paystack.data.status === 'success') {
                     if(data.amount === pricing.price) {
                         // check if transaction exists
-                        const checkPayment = await this.paymentReferenceRepository.findByReference(data.reference);
-
-                        if(!checkPayment) {
-                            const payment = await this.transactionRepository.create({
-                                user_id: user.id,
-                                pricing_id: pricing.id,
-                                amount: data.amount,
-                                payment_method: this.provider[0],
-                                payment_status: PAYMENT_STATUS.SUCCESSFUL
-                            }, trx)
-                            // save reference to database
-                            await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id, reference: data.reference }, trx);    
-                        }
+                        const payment = await this.transactionRepository.create({
+                            user_id: user.id,
+                            pricing_id: pricing.id,
+                            amount: data.amount,
+                            payment_method: this.provider[0],
+                            payment_status: PAYMENT_STATUS.SUCCESSFUL
+                        }, trx)
+                        // save reference to database
+                        await this.paymentReferenceRepository.create({ user_id: user.id, transaction_id: payment.id, reference: data.reference }, trx);  
                         Logger.info('Invalid payment transaction');
                     }
                 }
