@@ -41,16 +41,16 @@ export default class SongService {
         try {
             const { title, payment_reference } = request.body() as UploadSong;
 
+            console.log({ title, payment_reference });
+
             const supportedFiles: string[] = [ 'mp3', 'ogg', 'wav', 'mp4', 'wma', 'm4a' ];
 
             // Check for pending payment reference
             const paymentReference = await this.paymentReferenceRepository.findUnused(userId) as PaymentReference
 
-            if(payment_reference !== paymentReference.reference) throw new AppError(BAD_REQUEST, "Kindly use your un-used payment reference to proceed");
+            if(!paymentReference) throw new AppError(BAD_REQUEST, "You don't have a pending payment reference")
 
             if(paymentReference.used) throw new AppError(BAD_REQUEST, "You can't use a payment reference multiple times")
-
-            const payment = await this.paystackService.verify(payment_reference) as PaymentReference
 
             const file: MultipartFileContract = request.file('audio', { size: '10mb', extnames:  supportedFiles })!
 
@@ -79,7 +79,7 @@ export default class SongService {
             Event.emit('create:allocation', { song_id: song.id })
 
             await Promise.all([
-                this.paymentReferenceRepository.update(payment.id, { used: true }, trx),
+                this.paymentReferenceRepository.update(paymentReference.id, { used: true }, trx),
 
                 this.mailService.send(email, `${Env.get('APP_NAME')} Sound Submission`, "emails/song_submission", { name: `${last_name} ${first_name}`, ...song}),
             ])
