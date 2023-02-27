@@ -59,7 +59,10 @@ type CreateSongAnalytics = {
 type RateSongBody = {
   song_id: string;
   rating: RatingLevel;
-  comment: string;
+  likeComment: string;
+  disLikeComment: string;
+  improvementComment: string;
+  comment?: string;
 }
 
 type ManualAllocation = {

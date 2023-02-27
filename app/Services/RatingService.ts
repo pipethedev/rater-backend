@@ -78,7 +78,7 @@ export default class RatingService {
 
             if(feedback) throw new AppError(BAD_REQUEST, "You have already provided a feedback for this song")
 
-            const createdFeedback = await this.feedbackRepository.create({ song_id, comment , admin_id: adminId }, trx)
+            const createdFeedback = await this.feedbackRepository.create({ song_id, comment, admin_id: adminId }, trx)
 
             // Send a mail to the song owner
 
