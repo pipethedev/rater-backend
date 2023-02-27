@@ -1,3 +1,5 @@
+import { RatingLevel } from "App/Enum"
+
 const RegisterValidation = {
   first_name: 'required|string',
   last_name: 'required|string',
@@ -34,8 +36,7 @@ const CreateSongAnalytics = {
 const CreateWorker = UpdateUserValidation;
 
 const RateSongValidation = {
-  song_id: 'required|uuid|string',
-  rating: 'required|in:Good,Bad,Fair',
+  rating: `required|in:${Object.values(RatingLevel).join(',')}`,
   likeComment: 'required|string',
   disLikeComment: 'required|string',
   improvementComment: 'required|string'

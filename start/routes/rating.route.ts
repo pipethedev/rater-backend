@@ -7,9 +7,7 @@ Route.group(() => {4
 
   Route.group(() => {
 
-    Route.post('/rate-song', 'RatingsController.rateSong').middleware([validate(RateSongValidation), 'role:manager'])
-
-    Route.put('/rate-song/:songId', 'RatingsController.updateSongRating').middleware(validate({ rating: 'required|in:Good,Bad,Fair', comment: 'string|required' })).middleware('role:manager')
+    Route.route('/rate-song/:songId', ['POST', 'PUT'], 'RatingsController.rateSong').middleware([validate(RateSongValidation), 'role:manager'])
 
     Route.get('/:songId', 'RatingsController.songRating')
 

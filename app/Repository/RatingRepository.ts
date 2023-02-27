@@ -11,15 +11,11 @@ export default class RatingRepository {
         return await Rating.query().where('song_id', songId).andWhere('worker_id', workerId).preload('worker').first();
     }
 
-    public async findFairSong(songId: string): Promise<Rating[]> {
-        return await Rating.query().where({ song_id: songId, rating: RatingLevel.Fair });
+    public async findByRating(songId: string, rating: RatingLevel): Promise<Rating[]> {
+        return await Rating.query().where({ song_id: songId, rating });
     }
 
-    public async updateToAlmostGood(songId: string, transaction?: TransactionClientContract)  {
-        return await Rating.query({ client: transaction }).where({ song_id: songId }).update({ rating: RatingLevel.AlmostGood });
-    }
-
-    public async update(ratingId: string, songId: string, data: Partial<Rating>)  {
-        return await Rating.query().where({ id: ratingId, song_id: songId }).update(data);
+    public async update(ratingId: string, songId: string, data: Partial<Rating>, transaction?: TransactionClientContract): Promise<Rating>  {
+        return await Rating.query({ client: transaction }).where({ id: ratingId, song_id: songId }).update(data).first();
     }
 }

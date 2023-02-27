@@ -1,8 +1,7 @@
 import { container, injectable } from "tsyringe";
 import Database from "@ioc:Adonis/Lucid/Database";
 import RatingRepository from "App/Repository/RatingRepository";
-import { AdminFeedbackBody, RateSongBody, UpdateSongRating } from "App/Types";
-import { SuccessResponse } from "App/Helpers";
+import { AdminFeedbackBody, RateSongBody } from "App/Types";
 import SongRepository from "App/Repository/SongRepository";
 import Song from "App/Models/Song";
 import UserRepository from "App/Repository/UserRepository";
@@ -15,6 +14,7 @@ import MailService from "./MailService";
 import AllocationRepository from "App/Repository/AllocationRepository";
 import AllocationService from "./AllocationService";
 import { RatingLevel } from "App/Enum";
+import OpenAIService from "./OpenAiService";
 
 @injectable()
 export default class RatingService {
@@ -26,12 +26,18 @@ export default class RatingService {
     protected mailService: MailService = container.resolve(MailService)
     protected allocationService: AllocationService = container.resolve(AllocationService)
 
-    public async rate(workerId: string, body: RateSongBody) {
+    protected aiService: OpenAIService = container.resolve(OpenAIService)
+
+    public async rate(workerId: string, method: string, body: RateSongBody) {
+        
         const trx = await Database.transaction()
         try {
+            let rating;
             const worker = await this.userRepository.findByID(workerId) as User
-
+            
             const song = await this.songRepository.findOneById(body.song_id) as Song
+
+            const report = await this.aiService.report(`${song.user.last_name} ${song.user.first_name}`, body);
 
             if(!song) throw new AppError(NOT_FOUND, "Song not found");
 
@@ -40,27 +46,43 @@ export default class RatingService {
             // Check if user has rated the song before
             const ratedSong = await this.ratingRepository.findByWorkerAndSongId(worker.id, body.song_id) as Rating
 
-            if(ratedSong) throw new AppError(BAD_REQUEST, "You have already rated this song")
+            // if(ratedSong) throw new AppError(BAD_REQUEST, "You have already rated this song")
 
             //Check if song is allocated to user
             const allocation = await this.allocationRepository.findbyWorkerIdAndSongId(worker.id, body.song_id)
 
-            if(!allocation) throw new AppError(FORBIDDEN, "This song is not allocated to you for rating")
+            if(!allocation) throw new AppError(FORBIDDEN, "This song is not allocated to you for rating");
 
-            const fairSong = await this.ratingRepository.findFairSong(body.song_id);
+            if(body.rating === RatingLevel.Bad) {
+                // chat gpt generate a report
+                console.log('generate a report')
+            }
 
-            if(fairSong.length > 2) await this.ratingRepository.updateToAlmostGood(body.song_id, trx)
+            const fairSongRating = await this.ratingRepository.findByRating(body.song_id, RatingLevel.Fair);
 
-            console.log({ ...body, worker_id: workerId, user_id })
+            if(fairSongRating.length === 3 || fairSongRating.length > 2) {
+                await this.ratingRepository.update((ratedSong as any).id, song.id, {
+                    rating: RatingLevel.Bad
+                } ,trx);
+                // generate a report with chat got
+                console.log('generate a report')
+            }
 
-            const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
+            if(method === "POST") {
+                rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
+            }else if(method === "PUT") {
+                rating = await this.ratingRepository.update((ratedSong as any).id, song.id, { ...body, worker_id: workerId, user_id }, trx)
+            }
 
             // If song us rated Fair it should be re-assigned to another worker in the allocation service
             if(body.rating === RatingLevel.Fair) await this.allocationService.create(body.song_id, workerId);
 
             await trx.commit()
 
-            return rating;
+            return {
+                rating,
+                report
+            };
         } catch (error) {
             await trx.rollback()
             throw error;
@@ -130,33 +152,6 @@ export default class RatingService {
                 return updatedFeedback;
             }
             throw new AppError(BAD_REQUEST, "Provide a feedback, before this feedback can be edited")
-        } catch (error) {
-            await trx.rollback()
-            throw error;
-        }
-    }
-
-    public async update(workerId: string, songId: string, body: UpdateSongRating) {
-        const trx = await Database.transaction()
-        try {
-            const worker = await this.userRepository.findByID(workerId) as User
-
-            if(!worker) throw new AppError(BAD_REQUEST, "Unable to rate song")
-
-            const song = await this.songRepository.findOneById(songId) as Song
-
-            if(!song) throw new AppError(NOT_FOUND, "This song does not exist")
-
-            // Check if user has rated the song before
-            const ratedSong = await this.ratingRepository.findByWorkerAndSongId(worker.id, songId) as Rating
-
-            if(!ratedSong) throw new AppError(FORBIDDEN, "You don't have the access to update this rating")
-
-            await this.ratingRepository.update(ratedSong.id, ratedSong.song_id, body)
-
-            await trx.commit()
-
-            return SuccessResponse("Song rating updated successfully", null)
         } catch (error) {
             await trx.rollback()
             throw error;
