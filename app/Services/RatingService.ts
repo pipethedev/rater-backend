@@ -34,7 +34,7 @@ export default class RatingService {
             const song = await this.songRepository.findOneById(body.song_id) as Song
 
             if(!song) throw new AppError(NOT_FOUND, "Song not found");
-            
+
             const { user_id } = song;
 
             // Check if user has rated the song before
@@ -50,6 +50,8 @@ export default class RatingService {
             const fairSong = await this.ratingRepository.findFairSong(body.song_id);
 
             if(fairSong.length > 2) await this.ratingRepository.updateToAlmostGood(body.song_id, trx)
+
+            console.log({ ...body, worker_id: workerId, user_id })
 
             const rating = await this.ratingRepository.create({ ...body, worker_id: workerId, user_id }, trx)
 

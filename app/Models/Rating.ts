@@ -21,15 +21,14 @@ export default class Rating extends BaseModel {
   @column()
   public rating: RatingLevel
 
-  @column()
+  @column({ columnName: 'likeComment' })
   public likeComment: string
 
-  @column()
+  @column({ columnName: 'disLikeComment' })
   public disLikeComment: string
 
-  @column()
+  @column({ columnName: 'improvementComment'})
   public improvementComment: string
-
 
   @column.dateTime()
   public createdAt: DateTime
