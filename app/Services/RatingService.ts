@@ -31,7 +31,11 @@ export default class RatingService {
         try {
             const worker = await this.userRepository.findByID(workerId) as User
 
-            const { user_id } = await this.songRepository.findOneById(body.song_id) as Song
+            const song = await this.songRepository.findOneById(body.song_id) as Song
+
+            if(!song) throw new AppError(NOT_FOUND, "Song not found");
+            
+            const { user_id } = song;
 
             // Check if user has rated the song before
             const ratedSong = await this.ratingRepository.findByWorkerAndSongId(worker.id, body.song_id) as Rating
