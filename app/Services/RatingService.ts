@@ -79,10 +79,7 @@ export default class RatingService {
 
             await trx.commit()
 
-            return {
-                rating,
-                report
-            };
+            return rating;
         } catch (error) {
             await trx.rollback()
             throw error;
