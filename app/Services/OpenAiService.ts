@@ -13,24 +13,22 @@ class OpenAIService {
         this.openAi = new OpenAIApi(this.configuration);
     }
 
-    public async report(artisteName: string, body: Omit<RateSongBody, 'song_id'>): Promise<any> {
+    public async report(body: Omit<RateSongBody, 'song_id'>): Promise<any> {
         const response = await this.openAi.createCompletion({
             model: "text-davinci-003",
-            prompt: this.generatePrompt(artisteName, body),
+            prompt: this.generatePrompt(body),
             temperature: 0.9,
             max_tokens: 2313,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0.6,
-            stop: ["\n"]
+            stop: [" Human:", " AI:"],
         });
         return response.data;
     }
 
-    private generatePrompt(artisteName: string, body: Omit<RateSongBody, 'song_id'>): string {
+    private generatePrompt(body: Omit<RateSongBody, 'song_id'>): string {
         return `Provide a concise and professional summary in a mail-like response that eliminates spelling errors or informal language? The answer will specify what we like about the song, what we don't like, and what the artiste needs to do to improve the music.
-        Note: The minimum size of this email should be 300 words, do not include the subject of the mail in the response and the organisation name sending this mail is soundseek.
-        Artist name: ${artisteName}
         What do you like about the song?
         response: ${body.likeComment}
         What don't you like about the song?

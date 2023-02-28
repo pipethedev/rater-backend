@@ -37,7 +37,7 @@ export default class RatingService {
             
             const song = await this.songRepository.findOneById(body.song_id) as Song
 
-            const report = await this.aiService.report(`${song.user.last_name} ${song.user.first_name}`, body);
+            const report = await this.aiService.report(body);
 
             if(!song) throw new AppError(NOT_FOUND, "Song not found");
 
