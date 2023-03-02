@@ -37,7 +37,7 @@ export default class RatingService {
             
             const song = await this.songRepository.findOneById(body.song_id) as Song
 
-            const report = await this.aiService.report(body);
+            const userData = { first_name: song.user.first_name, last_name: song.user.last_name, email: worker.email }
 
             if(!song) throw new AppError(NOT_FOUND, "Song not found");
 
@@ -55,7 +55,7 @@ export default class RatingService {
 
             if(body.rating === RatingLevel.Bad) {
                 // chat gpt generate a report
-                console.log('generate a report')
+                await this.aiService.report(userData, body);
             }
 
             const fairSongRating = await this.ratingRepository.findByRating(body.song_id, RatingLevel.Fair);
@@ -65,7 +65,7 @@ export default class RatingService {
                     rating: RatingLevel.Bad
                 } ,trx);
                 // generate a report with chat got
-                console.log('generate a report')
+                await this.aiService.report(userData, body);
             }
 
             if(method === "POST") {
@@ -109,7 +109,7 @@ export default class RatingService {
 
             const { last_name, first_name } = song.user;
 
-            await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback", "emails/admin_feedback", { last_name, first_name, comment: createdFeedback.comment })
+            await this.mailService.send(song.user.email, "SoundSeek Administrator Feedback", "emails/admin_feedback", { last_name, first_name, comment: createdFeedback.comment, isAdmin: true })
 
             await trx.commit()
 

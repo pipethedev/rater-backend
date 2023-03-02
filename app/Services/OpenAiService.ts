@@ -1,41 +1,46 @@
 import { Configuration, OpenAIApi } from "openai";
 import Env from '@ioc:Adonis/Core/Env'
 import { RateSongBody } from "App/Types";
+import { container, injectable } from "tsyringe";
+import MailService from "./MailService";
 
+@injectable()
 class OpenAIService {
     private configuration: Configuration;
     private openAi: OpenAIApi;   
 
-    constructor() {
+    constructor(private readonly mailService: MailService) {
+        this.mailService = container.resolve(MailService);
+
         this.configuration = new Configuration({
             apiKey: Env.get("OPENAI_API_KEY"),
         });
         this.openAi = new OpenAIApi(this.configuration);
     }
 
-    public async report(body: Omit<RateSongBody, 'song_id'>): Promise<any> {
+    public async report(user: { first_name: string, last_name: string, email: string}, body: Omit<RateSongBody, 'song_id'>): Promise<any> {
         const response = await this.openAi.createCompletion({
             model: "text-davinci-003",
             prompt: this.generatePrompt(body),
-            temperature: 0.9,
-            max_tokens: 2313,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0.6,
-            stop: [" Human:", " AI:"],
+            max_tokens: 2048,
         });
-        return response.data;
+        const comment = response.data.choices[0].text;
+
+        await this.mailService.send(user.email, 'Soundseek Report', 'emails/admin_feedback', {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            isAdmin: false,
+            comment
+        });
     }
 
+    
+
     private generatePrompt(body: Omit<RateSongBody, 'song_id'>): string {
-        return `Provide a concise and professional summary in a mail-like response that eliminates spelling errors or informal language? The answer will specify what we like about the song, what we don't like, and what the artiste needs to do to improve the music.
-        What do you like about the song?
-        response: ${body.likeComment}
-        What don't you like about the song?
-        response: ${body.disLikeComment}
-        Is the song perfect as It is? if not, what could be done to improve the song?
-        response: ${body.improvementComment}`;
+        return `Provide a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named David and the sender name is Soundseek. 
+        ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}`;
     }
 }
 
 export default OpenAIService;
+
