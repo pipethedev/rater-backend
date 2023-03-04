@@ -21,7 +21,7 @@ class OpenAIService {
     public async report(user: { first_name: string, last_name: string, email: string}, body: Omit<RateSongBody, 'song_id'>): Promise<any> {
         const response = await this.openAi.createCompletion({
             model: "text-davinci-003",
-            prompt: this.generatePrompt(body),
+            prompt: this.generatePrompt(user.first_name, body),
             max_tokens: 2048,
         });
         const comment = response.data.choices[0].text;
@@ -36,9 +36,9 @@ class OpenAIService {
 
     
 
-    private generatePrompt(body: Omit<RateSongBody, 'song_id'>): string {
-        return `Provide a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named David and the sender name is Soundseek. 
-        ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}`;
+    private generatePrompt(name: string, body: Omit<RateSongBody, 'song_id'>): string {
+        return `Provide a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. 
+        ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}. Starting with Dear ${name}`;
     }
 }
 
