@@ -37,7 +37,7 @@ class OpenAIService {
     
 
     private generatePrompt(name: string, body: Omit<RateSongBody, 'song_id'>): string {
-        return `Provide a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. 
+        return `Generate a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. 
         ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}. Starting with Dear ${name}`;
     }
 }
