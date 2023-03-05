@@ -21,6 +21,9 @@ export default class Rating extends BaseModel {
   @column()
   public rating: RatingLevel
 
+  @column({ columnName: 'aiComment' })
+  public aiComment: string;
+
   @column({ columnName: 'likeComment' })
   public likeComment: string
 

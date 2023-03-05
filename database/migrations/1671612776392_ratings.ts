@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.uuid('worker_id').notNullable()
       table.uuid('song_id').notNullable()
       table.enum('rating', [RatingLevel.Bad, RatingLevel.Fair, RatingLevel.Good, RatingLevel.AlmostGood]).notNullable()
+      table.text('aiComment').nullable();
       table.text('likeComment').notNullable()
       table.text('disLikeComment').notNullable()
       table.text('improvementComment').notNullable()

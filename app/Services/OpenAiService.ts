@@ -3,13 +3,14 @@ import Env from '@ioc:Adonis/Core/Env'
 import { RateSongBody } from "App/Types";
 import { container, injectable } from "tsyringe";
 import MailService from "./MailService";
+import RatingRepository from "App/Repository/RatingRepository";
 
 @injectable()
 class OpenAIService {
     private configuration: Configuration;
     private openAi: OpenAIApi;   
 
-    constructor(private readonly mailService: MailService) {
+    constructor(private readonly mailService: MailService, private readonly ratingRepo: RatingRepository) {
         this.mailService = container.resolve(MailService);
 
         this.configuration = new Configuration({
@@ -18,7 +19,13 @@ class OpenAIService {
         this.openAi = new OpenAIApi(this.configuration);
     }
 
-    public async report(user: { first_name: string, last_name: string, email: string}, body: Omit<RateSongBody, 'song_id'>): Promise<any> {
+    public async report(user: { first_name: string, last_name: string, email: string}, details: {
+        ratingId: string,
+        songId: string,
+    },body: Omit<RateSongBody, 'song_id'>): Promise<any> {
+        
+        const { ratingId, songId } = details;
+
         const response = await this.openAi.createCompletion({
             model: "text-davinci-003",
             prompt: this.generatePrompt(user.first_name, body),
@@ -26,12 +33,19 @@ class OpenAIService {
         });
         const comment = response.data.choices[0].text;
 
-        await this.mailService.send(user.email, 'Soundseek Report', 'emails/admin_feedback', {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            isAdmin: false,
-            comment
-        });
+        // save comment to db
+        await Promise.all([
+            this.ratingRepo.update(ratingId, songId, {
+                aiComment: comment
+            }),
+    
+            this.mailService.send(user.email, 'Soundseek Report', 'emails/admin_feedback', {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                isAdmin: false,
+                comment
+            })
+        ]);
     }
 
     
