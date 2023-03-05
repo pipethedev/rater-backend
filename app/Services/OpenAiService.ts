@@ -23,7 +23,7 @@ class OpenAIService {
         ratingId: string,
         songId: string,
     },body: Omit<RateSongBody, 'song_id'>): Promise<any> {
-        
+
         const { ratingId, songId } = details;
 
         const response = await this.openAi.createCompletion({
@@ -51,7 +51,7 @@ class OpenAIService {
     
 
     private generatePrompt(name: string, body: Omit<RateSongBody, 'song_id'>): string {
-        return `Generate a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. 
+        return `Generate a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. Based on a staff review as follows:
         ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}. Starting with Dear ${name}`;
     }
 }
