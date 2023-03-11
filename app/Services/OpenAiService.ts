@@ -33,7 +33,6 @@ class OpenAIService {
         });
         const comment = response.data.choices[0].text;
 
-        // save comment to db
         await Promise.all([
             this.ratingRepo.update(ratingId, songId, {
                 aiComment: comment
@@ -48,11 +47,8 @@ class OpenAIService {
         ]);
     }
 
-    
-
     private generatePrompt(name: string, body: Omit<RateSongBody, 'song_id'>): string {
-        return `Generate a concise and professional summary in a mail-like response of a song that eliminates spelling errors or informal language based on these remarks for a reciepient named ${name} and the sender name is Soundseek. Based on a staff review as follows:
-        ${body.likeComment}, ${body.improvementComment}, ${body.disLikeComment}. Starting with Dear ${name}`;
+        return `Generate a professional email from the CEO of Soundseek to ${name} regarding their latest release, "Sample Song". Use feedback collected from a form that asked users three questions: "What do you like about the song?", "What don't you like about the song?", and "Is the song perfect as it is? If not, what could be done to improve the song?" Incorporate user feedback from the forms, including ${body.likeComment}, ${body.improvementComment} ${body.disLikeComment}, into the email. Encourage the artiste moving forward and ensure the email is directly addressed to them`
     }
 }
 
