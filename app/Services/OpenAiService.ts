@@ -22,13 +22,14 @@ class OpenAIService {
     public async report(user: { first_name: string, last_name: string, email: string}, details: {
         ratingId: string,
         songId: string,
+        songName: string
     },body: Omit<RateSongBody, 'song_id'>): Promise<any> {
 
-        const { ratingId, songId } = details;
+        const { ratingId, songId, songName } = details;
 
         const response = await this.openAi.createCompletion({
             model: "text-davinci-003",
-            prompt: this.generatePrompt(user.first_name, body),
+            prompt: this.generatePrompt(user.first_name, songName, body),
             max_tokens: 2048,
         });
         const comment = response.data.choices[0].text;
@@ -47,8 +48,8 @@ class OpenAIService {
         ]);
     }
 
-    private generatePrompt(name: string, body: Omit<RateSongBody, 'song_id'>): string {
-        return `Generate a professional email from the CEO of Soundseek to ${name} regarding their latest release, "Sample Song". Use feedback collected from a form that asked users three questions: "What do you like about the song?", "What don't you like about the song?", and "Is the song perfect as it is? If not, what could be done to improve the song?" Incorporate user feedback from the forms, including ${body.likeComment}, ${body.improvementComment} ${body.disLikeComment}, into the email. Encourage the artiste moving forward and ensure the email is directly addressed to them`
+    private generatePrompt(name: string, songName: string,body: Omit<RateSongBody, 'song_id'>): string {
+        return `Generate a professional email from the CEO of Soundseek to ${name} regarding their latest release, "${songName}". Use feedback collected from a form that asked users three questions: "What do you like about the song?", "What don't you like about the song?", and "Is the song perfect as it is? If not, what could be done to improve the song?" Incorporate user feedback from the forms, including ${body.likeComment}, ${body.improvementComment} ${body.disLikeComment}, into the email. Encourage the artiste moving forward and ensure the email is directly addressed to them`
     }
 }
 

@@ -55,7 +55,7 @@ export default class RatingService {
 
             if(body.rating === RatingLevel.Bad) {
                 // chat gpt generate a report
-                await this.aiService.report(userData, { ratingId: ratedSong.id, songId: ratedSong.song_id },body);
+                await this.aiService.report(userData, { ratingId: ratedSong.id, songId: ratedSong.song_id, songName: song.title },body);
             }
 
             const fairSongRating = await this.ratingRepository.findByRating(body.song_id, RatingLevel.Fair);
@@ -65,7 +65,7 @@ export default class RatingService {
                     rating: RatingLevel.Bad
                 } ,trx);
                 // generate a report with chat got
-                await this.aiService.report(userData, { ratingId: ratedSong.id, songId: ratedSong.song_id },body);
+                await this.aiService.report(userData, { ratingId: ratedSong.id, songId: ratedSong.song_id, songName: song.title },body);
             }
 
             if(method === "POST") {
