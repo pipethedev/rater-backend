@@ -55,7 +55,10 @@ const corsConfig: CorsConfig = {
     'http://localhost:5173', 
     'https://soundseek-user.brimble.app', 
     'https://soundseek-worker.vercel.app',
-    'https://soundseek-worker.brimble.app'
+    'https://soundseek-worker.brimble.app',
+    'https://user.findcrest.com',
+    'https://admin.findcrest.com',
+    'https://worker.findcrest.com',
   ],
 
   /*
