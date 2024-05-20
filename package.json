@@ -68,7 +68,6 @@
     "@adonisjs/redis": "^7.3.2",
     "@adonisjs/repl": "^3.1.0",
     "@adonisjs/view": "^6.2.0",
-    "@types/": "adonisjs/auth",
     "@types/axios": "^0.14.0",
     "@types/http-status": "^1.1.2",
     "@types/node-cron": "^3.0.7",
